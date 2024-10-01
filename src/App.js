@@ -178,7 +178,8 @@ const App = () => {
         <div style={mainContainerStyles}>
           <motion.div
             style={{
-              top: "40%",
+              top: isMobile ? "30%" : "40%",
+              margin: isMobile ? 0 : 10,
               left: 0,
               position: "absolute",
               // transform: "translateY(-50%)",
@@ -204,7 +205,8 @@ const App = () => {
           </AnimatePresence>
           <motion.div
             style={{
-              top: "40%",
+              top: isMobile ? "30%" : "40%",
+              margin: isMobile ? 0 : 10,
               right: 0,
               position: "absolute",
               // transform: "translateY(-50%)",
@@ -281,7 +283,7 @@ const arrowStyles = {
   zIndex: 1000,
   fontSize: "1.5rem",
   color: "#007bff",
-  margin: 10,
+
   boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
 };
 
