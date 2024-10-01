@@ -15,7 +15,7 @@ export default function reducer(state, { type, payload }) {
     case "TOGGLE_NAV_DRAWER":
       return { ...state, isNavDrawerOpen: !state.isNavDrawerOpen };
 
-    // Other cases... bullshit
+    // Other cases...
     default:
       return state;
   }
