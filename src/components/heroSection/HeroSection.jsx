@@ -8,7 +8,7 @@ const HeroSection = ({ state, dispatch }) => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: isMobile ? "80vh" : "90vh", // Reduced height for desktop
+    height: isMobile ? "100%" : "90vh", // Use full height for mobile
     backgroundSize: "cover",
     backgroundPosition: "center",
     position: "relative",
@@ -26,7 +26,7 @@ const HeroSection = ({ state, dispatch }) => {
   // Adjust content styles to be positioned correctly for mobile and desktop
   const contentStyles = {
     position: "absolute",
-    top: isMobile ? "5%" : "35%", // Move closer to the top for mobile and desktop
+    top: isMobile ? "30%" : "35%", // Adjust top positioning for mobile
     left: "50%",
     transform: "translate(-50%, -50%)",
     zIndex: 1,
