@@ -8,7 +8,7 @@ const Component2 = () => {
       <div
         style={{
           position: "absolute", // Use absolute positioning
-          top: isMobile ? "15%" : "40%", // 20% from the top for mobile, 50% for desktop
+          top: isMobile ? "5%" : "40%", // 20% from the top for mobile, 50% for desktop
           left: "50%",
           transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)", // Adjust translation for mobile
           zIndex: 1,

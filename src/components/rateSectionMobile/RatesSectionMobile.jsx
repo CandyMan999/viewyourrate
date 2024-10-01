@@ -1,4 +1,3 @@
-// components/RatesSectionMobile.js
 import React from "react";
 
 const RatesSectionMobile = () => {
@@ -9,8 +8,7 @@ const RatesSectionMobile = () => {
     left: 0,
     width: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.5)", // Set opacity for background
-    paddingTop: "1rem",
-    paddingBottom: "1rem",
+    paddingTop: "0.5rem", // Reduced padding
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -25,26 +23,26 @@ const RatesSectionMobile = () => {
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginBottom: "1rem",
-    paddingLeft: "1rem",
+    marginBottom: "0.5rem", // Reduced margin
+    paddingLeft: "0.5rem", // Reduced padding
   };
 
   const headerStyles = {
     color: "#007bff",
-    fontSize: "0.9rem",
+    fontSize: "0.8rem", // Slightly smaller font
     fontWeight: "bold",
     textTransform: "uppercase",
   };
 
   const buttonStyles = {
-    padding: "0.5rem 1rem",
+    padding: "0.4rem 0.8rem", // Smaller padding
     backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
     borderRadius: "8px",
-    fontSize: "0.9rem",
+    fontSize: "0.8rem", // Smaller font size
     cursor: "pointer",
-    marginRight: "1rem",
+    marginRight: "0.5rem", // Reduced margin
   };
 
   // Styling for the rate cards container
@@ -59,9 +57,9 @@ const RatesSectionMobile = () => {
 
   // Styling for individual rate cards
   const rateCardStyles = {
-    minWidth: "150px",
-    marginRight: "1rem",
-    padding: "1rem",
+    minWidth: "120px", // Reduced width
+    marginRight: "0.5rem", // Reduced margin
+    padding: "0.8rem", // Reduced padding
     border: "1px solid #ddd",
     borderRadius: "8px",
     backgroundColor: "#fff", // Keep cards fully opaque
@@ -71,20 +69,20 @@ const RatesSectionMobile = () => {
   };
 
   const rateHeaderStyles = {
-    fontSize: "0.8rem",
+    fontSize: "0.7rem", // Slightly smaller font
     fontWeight: "bold",
     color: "#666",
-    marginBottom: "0.5rem",
+    marginBottom: "0.3rem", // Reduced margin
   };
 
   const rateInfoStyles = {
-    fontSize: "1rem",
+    fontSize: "0.9rem", // Slightly smaller font
     fontWeight: "bold",
-    margin: "0.5rem 0",
+    margin: "0.3rem 0", // Reduced margin
   };
 
   const rateDetailsStyles = {
-    fontSize: "0.8rem",
+    fontSize: "0.7rem", // Slightly smaller font
     color: "#666",
   };
 
