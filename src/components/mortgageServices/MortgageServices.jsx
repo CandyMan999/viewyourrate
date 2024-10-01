@@ -1,0 +1,257 @@
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  FaHome,
+  FaUniversity,
+  FaLandmark,
+  FaDollarSign,
+  FaBalanceScale,
+  FaUser,
+  FaHorseHead,
+  FaUndo,
+} from "react-icons/fa"; // Import relevant icons
+import { isMobile } from "react-device-detect"; // Import mobile detection
+
+const services = [
+  {
+    title: "Fixed-Rate Mortgage",
+    description: "Stable monthly payments for the life of your loan.",
+    icon: <FaHome />,
+  },
+  {
+    title: "FHA Mortgage",
+    description:
+      "(FHA) Loans designed to assist homebuyers with lenient credit and down payment requirements.",
+    icon: <FaUniversity />,
+  },
+  {
+    title: "VA Mortgage",
+    description:
+      "Exclusive benefits for veterans and active-duty military personnel.",
+    icon: <FaLandmark />,
+  },
+  {
+    title: "Jumbo Mortgage",
+    description:
+      "Financing for high-value properties exceeding conventional loan limits.",
+    icon: <FaHorseHead />,
+  },
+  {
+    title: "Adjustable Rate Mortgages",
+    description:
+      "Variable interest rates that may change over time based on market conditions.",
+    icon: <FaBalanceScale />,
+  },
+  {
+    title: "USDA Mortgages",
+    description:
+      "Loans for rural homebuyers with low-interest rates and zero down payment options.",
+    icon: <FaHome />,
+  },
+  {
+    title: "First Time Home Buyer Mortgages",
+    description:
+      "Special loans tailored for new homebuyers with reduced down payments.",
+    icon: <FaUser />,
+  },
+  {
+    title: "Reverse Mortgages",
+    description:
+      "Convert your home's equity into cash without monthly payments.",
+    icon: <FaUndo />,
+  },
+  {
+    title: "Interest Only Mortgages",
+    description:
+      "Pay only interest for an initial period, reducing your monthly payment.",
+    icon: <FaBalanceScale />,
+  },
+];
+
+const MortgageServices = () => {
+  return (
+    <div style={isMobile ? mobileSectionStyles : sectionStyles}>
+      <h2 style={isMobile ? mobileHeaderStyles : headerStyles}>
+        Mortgage Services
+      </h2>
+      <div style={scrollContainerStyles}>
+        <div style={cardsContainerStyles}>
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              style={isMobile ? mobileCardStyles : cardStyles}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div
+                style={
+                  isMobile ? mobileIconContainerStyles : iconContainerStyles
+                }
+              >
+                {service.icon}
+              </div>
+              <h3 style={isMobile ? mobileCardTitleStyles : cardTitleStyles}>
+                {service.title}
+              </h3>
+              <p
+                style={
+                  isMobile ? mobileCardDescriptionStyles : cardDescriptionStyles
+                }
+              >
+                {service.description}
+              </p>
+              <motion.button
+                style={isMobile ? mobileButtonStyles : buttonStyles}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Get a Free Quote
+              </motion.button>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Desktop Styles
+const sectionStyles = {
+  padding: "2rem 1rem",
+  backgroundColor: "rgb(248, 249, 250)", // Dark theme background
+  textAlign: "center",
+};
+
+const headerStyles = {
+  fontSize: "2rem",
+  color: "#007bff",
+  marginBottom: "1.5rem",
+};
+
+const scrollContainerStyles = {
+  overflowX: "auto",
+  paddingBottom: "1rem",
+};
+
+const cardsContainerStyles = {
+  display: "flex",
+  gap: "1.5rem",
+  padding: "1rem",
+  flexWrap: "nowrap",
+  minWidth: "100%",
+};
+
+const cardStyles = {
+  minWidth: "250px",
+  backgroundColor: "#333", // Dark card background
+  padding: "1.5rem",
+  borderRadius: "10px",
+  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)", // Enhanced shadow for a dark theme
+  transition: "transform 0.3s ease",
+  textAlign: "center",
+  width: 350,
+  flex: "0 0 auto",
+};
+
+const iconContainerStyles = {
+  backgroundColor: "#007bff",
+  borderRadius: "50%",
+  padding: "1rem",
+  marginBottom: "1rem",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "2rem",
+  color: "#fff",
+  boxShadow: "0 0 0 4px rgba(255, 255, 255, 1), 0 0 0 6px #007bff",
+};
+
+const cardTitleStyles = {
+  fontSize: "1.25rem",
+  margin: "0.5rem 0",
+  color: "#fff", // White text for dark theme
+};
+
+const cardDescriptionStyles = {
+  fontSize: "0.9rem",
+  color: "#aaa", // Light grey for the description
+  marginBottom: "1rem",
+};
+
+const buttonStyles = {
+  padding: "0.75rem 1.5rem",
+  backgroundColor: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "1rem",
+  cursor: "pointer",
+  transition: "background-color 0.3s ease",
+  marginTop: "1rem",
+  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)", // Button shadow
+};
+
+// Mobile Styles (20% smaller)
+const mobileSectionStyles = {
+  padding: "1.5rem 0.8rem",
+  backgroundColor: "rgb(248, 249, 250)",
+  textAlign: "center",
+};
+
+const mobileHeaderStyles = {
+  fontSize: "1.6rem",
+  color: "#007bff",
+  marginBottom: "1.2rem",
+};
+
+const mobileCardStyles = {
+  minWidth: "200px",
+  backgroundColor: "#333",
+  padding: "1.2rem",
+  borderRadius: "8px",
+  boxShadow: "0 3px 6px rgba(0, 0, 0, 0.5)",
+  transition: "transform 0.3s ease",
+  textAlign: "center",
+  width: 280,
+  flex: "0 0 auto",
+};
+
+const mobileIconContainerStyles = {
+  backgroundColor: "#007bff",
+  borderRadius: "50%",
+  padding: "0.8rem",
+  marginBottom: "0.8rem",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "1.6rem",
+  color: "#fff",
+  boxShadow: "0 0 0 3px rgba(255, 255, 255, 1), 0 0 0 4px #007bff",
+};
+
+const mobileCardTitleStyles = {
+  fontSize: "1rem",
+  margin: "0.4rem 0",
+  color: "#fff",
+};
+
+const mobileCardDescriptionStyles = {
+  fontSize: "0.75rem",
+  color: "#aaa",
+  marginBottom: "0.8rem",
+};
+
+const mobileButtonStyles = {
+  padding: "0.6rem 1.2rem",
+  backgroundColor: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "0.9rem",
+  cursor: "pointer",
+  transition: "background-color 0.3s ease",
+  marginTop: "0.8rem",
+  boxShadow: "0 3px 12px rgba(0, 0, 0, 0.3)",
+};
+
+export default MortgageServices;
