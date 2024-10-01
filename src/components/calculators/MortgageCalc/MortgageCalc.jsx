@@ -2,7 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiX } from "react-icons/fi";
 
-const PricingWidget = ({ isVisible, onClose }) => {
+const MortgageCalc = ({ isVisible, onClose }) => {
   // Animation variants for the widget
   const widgetVariants = {
     hidden: {
@@ -72,7 +72,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
           <FiX style={closeIconStyles} onClick={onClose} />
 
           <motion.div style={widgetStyles}>
-            <h2 style={{ color: "#007bff" }}>Pricing Widget</h2>
+            <h2 style={{ color: "#007bff" }}>Mortgage Calc</h2>
             <button onClick={onClose}>Close</button>
           </motion.div>
         </motion.div>
@@ -81,4 +81,4 @@ const PricingWidget = ({ isVisible, onClose }) => {
   );
 };
 
-export default PricingWidget;
+export default MortgageCalc;

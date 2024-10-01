@@ -20,6 +20,8 @@ import {
   Header,
   MortgageServices,
   RateDropNotification,
+  AffordabilityCalc,
+  MortgageCalc,
 } from "./components";
 import Context from "./context";
 import reducer from "./reducer";
@@ -38,7 +40,7 @@ const componentsList = [
 
 const navItems = [
   { name: "Home", index: 0 },
-  { name: "Calculator", index: 1 },
+  { name: "Calculators", index: 1 },
   { name: "Component1", index: 2 },
   { name: "Component2", index: 3 },
   { name: "Component3", index: 4 },
@@ -106,7 +108,7 @@ const App = () => {
       case "HeroSection":
         return <HeroSection state={state} dispatch={dispatch} />;
       case "Calculator":
-        return <Calculator />;
+        return <Calculator dispatch={dispatch} />;
       case "Component1":
         return <Component1 />;
       case "Component2":
@@ -233,6 +235,18 @@ const App = () => {
           isVisible={state.showPricingWidget}
           onClose={() =>
             dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
+          }
+        />
+        <AffordabilityCalc
+          isVisible={state.showAffordabilityCalculator}
+          onClose={() =>
+            dispatch({ type: "SHOW_AFFORDABILTY_CALCULATOR", payload: false })
+          }
+        />
+        <MortgageCalc
+          isVisible={state.showMortgageCalculator}
+          onClose={() =>
+            dispatch({ type: "SHOW_MORTGAGE_CALCULATOR", payload: false })
           }
         />
       </div>

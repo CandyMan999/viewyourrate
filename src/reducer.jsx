@@ -5,6 +5,16 @@ export default function reducer(state, { type, payload }) {
         ...state,
         showPricingWidget: payload,
       };
+    case "SHOW_MORTGAGE_CALCULATOR":
+      return {
+        ...state,
+        showMortgageCalculator: payload,
+      };
+    case "SHOW_AFFORDABILTY_CALCULATOR":
+      return {
+        ...state,
+        showAffordabilityCalculator: payload,
+      };
     case "LOGIN_USER":
       return {
         ...state,

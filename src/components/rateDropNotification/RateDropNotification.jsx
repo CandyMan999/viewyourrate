@@ -29,7 +29,8 @@ const RateDropNotification = () => {
         <motion.button
           style={isMobile ? mobileButtonStyles : buttonStyles}
           whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.2 }}
+          transition={{ duration: 0.3 }}
         >
           Notify me of rate drops
         </motion.button>
@@ -46,7 +47,7 @@ const containerStyles = {
   padding: "2rem",
   backgroundColor: "#f8f9fa",
   borderRadius: "10px",
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
+  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Updated box shadow
   margin: "2rem 0",
 };
 
@@ -108,7 +109,7 @@ const mobileContainerStyles = {
   padding: "1rem",
   backgroundColor: "#f8f9fa",
   borderRadius: "10px",
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
+  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)",
   margin: "2rem 0",
   textAlign: "center",
 };

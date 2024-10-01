@@ -61,6 +61,7 @@ const Footer = forwardRef((props, ref) => {
     padding: isMobile ? "1rem" : "2rem",
     backgroundColor: "#f9f9f9",
     borderTop: "1px solid #ddd",
+    boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Top and bottom shadows
   };
 
   const logosContainerStyles = {

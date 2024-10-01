@@ -80,7 +80,7 @@ const MortgageServices = () => {
             <motion.div
               key={index}
               style={isMobile ? mobileCardStyles : cardStyles}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 6px 15px #007bff" }}
               transition={{ duration: 0.3 }}
             >
               <div
@@ -103,7 +103,8 @@ const MortgageServices = () => {
               <motion.button
                 style={isMobile ? mobileButtonStyles : buttonStyles}
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.2 }}
+                transition={{ duration: 0.3 }}
               >
                 Get a Free Quote
               </motion.button>
@@ -120,6 +121,8 @@ const sectionStyles = {
   padding: "2rem 1rem",
   backgroundColor: "rgb(248, 249, 250)", // Dark theme background
   textAlign: "center",
+  marginBottom: "2rem",
+  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)",
 };
 
 const headerStyles = {
@@ -196,6 +199,8 @@ const mobileSectionStyles = {
   padding: "1.5rem 0.8rem",
   backgroundColor: "rgb(248, 249, 250)",
   textAlign: "center",
+  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Top and bottom shadows
+  marginBottom: "2rem",
 };
 
 const mobileHeaderStyles = {

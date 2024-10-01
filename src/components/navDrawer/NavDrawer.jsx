@@ -70,7 +70,7 @@ const NavDrawer = ({
     switch (name) {
       case "Home":
         return <FiHome />;
-      case "Calculator":
+      case "Calculators":
         return <FaCalculator />;
       case "Component1":
         return <FiPieChart />;

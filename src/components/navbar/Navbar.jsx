@@ -139,18 +139,6 @@ const Navbar = ({
 };
 
 // Inline Styles
-const navbarStyles = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "1rem 2rem",
-  backgroundColor: "#fff",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  // position: "sticky",
-  position: "relative",
-  top: 0,
-  zIndex: 1000,
-};
 
 const logoStyles = {
   fontSize: "1.5rem",
