@@ -178,7 +178,6 @@ const App = () => {
         <div style={mainContainerStyles}>
           <motion.div
             style={{
-              top: isMobile ? "30%" : "40%",
               margin: isMobile ? 0 : 10,
               left: 0,
               position: "absolute",
@@ -205,7 +204,6 @@ const App = () => {
           </AnimatePresence>
           <motion.div
             style={{
-              top: isMobile ? "30%" : "40%",
               margin: isMobile ? 0 : 10,
               right: 0,
               position: "absolute",
@@ -274,6 +272,7 @@ const mainContainerStyles = {
 const arrowStyles = {
   width: "40px",
   height: "40px",
+  top: "30%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",

@@ -8,7 +8,7 @@ const HeroSection = ({ state, dispatch }) => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: isMobile ? "80vh" : "100vh", // Smaller height for mobile
+    height: isMobile ? "80vh" : "90vh", // Reduced height for desktop
     backgroundSize: "cover",
     backgroundPosition: "center",
     position: "relative",
@@ -23,17 +23,17 @@ const HeroSection = ({ state, dispatch }) => {
     height: "100%",
   };
 
-  // Adjust content styles to be positioned correctly for mobile
+  // Adjust content styles to be positioned correctly for mobile and desktop
   const contentStyles = {
     position: "absolute",
-    top: isMobile ? "5%" : "40%", // Move closer to the top for mobile
+    top: isMobile ? "5%" : "35%", // Move closer to the top for mobile and desktop
     left: "50%",
-    transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
+    transform: "translate(-50%, -50%)",
     zIndex: 1,
     color: "#f0f0f0",
     textAlign: "center",
-    padding: isMobile ? "1rem" : "2rem", // Smaller padding for mobile
-    maxWidth: isMobile ? "90%" : "600px", // Adjust width for mobile
+    padding: isMobile ? "1rem" : "1.8rem", // Slightly reduced padding for desktop
+    maxWidth: isMobile ? "90%" : "540px", // Reduced width for desktop
     width: "80%",
     borderRadius: "10px",
     background: "rgba(30, 30, 30, 0.85)",
@@ -41,7 +41,7 @@ const HeroSection = ({ state, dispatch }) => {
   };
 
   const buttonContainerStyles = {
-    marginTop: isMobile ? "1rem" : "2rem", // Reduce margin for mobile
+    marginTop: isMobile ? "1rem" : "1.8rem", // Reduced margin for desktop
   };
 
   const buttonStyles = {
@@ -49,9 +49,9 @@ const HeroSection = ({ state, dispatch }) => {
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
-    padding: isMobile ? "0.75rem" : "1rem", // Smaller padding for mobile
+    padding: isMobile ? "0.75rem" : "0.9rem", // Slightly reduced padding for desktop
     margin: "0.5rem 0",
-    fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+    fontSize: isMobile ? "1rem" : "1.1rem", // Reduced font size for desktop
     borderRadius: "10px",
     border: "none",
     cursor: "pointer",
@@ -76,10 +76,10 @@ const HeroSection = ({ state, dispatch }) => {
 
       {/* Content */}
       <div style={contentStyles}>
-        <h1 style={{ fontSize: isMobile ? "1.5rem" : "2.5rem" }}>
+        <h1 style={{ fontSize: isMobile ? "1.5rem" : "2.25rem" }}>
           Unlock Your Best Rate
         </h1>
-        <p style={{ fontSize: isMobile ? "0.9rem" : "1rem" }}>
+        <p style={{ fontSize: isMobile ? "0.9rem" : "0.95rem" }}>
           We provide real-time access to premier wholesale lenders, delivering
           wholesale pricing instantly. No Credit Checks, just transparency and
           speed.
@@ -87,7 +87,7 @@ const HeroSection = ({ state, dispatch }) => {
         <p
           style={{
             fontStyle: "italic",
-            fontSize: isMobile ? "0.8rem" : "1rem",
+            fontSize: isMobile ? "0.8rem" : "0.9rem",
           }}
         >
           Get a free custom rate quote in seconds ⟶
@@ -121,7 +121,7 @@ const HeroSection = ({ state, dispatch }) => {
         <div
           style={{
             marginTop: "1rem",
-            fontSize: isMobile ? "0.8rem" : "0.9rem",
+            fontSize: isMobile ? "0.8rem" : "0.85rem", // Slightly reduced font size for desktop
             color: "#ccc",
           }}
         >

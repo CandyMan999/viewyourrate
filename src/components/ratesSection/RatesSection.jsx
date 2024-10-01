@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { FaChartLine } from "react-icons/fa";
 
 const RatesSection = () => {
@@ -7,11 +6,11 @@ const RatesSection = () => {
     position: "fixed",
     bottom: 0,
     left: 0,
-    width: "105%",
+    width: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     padding: "1rem 2rem",
     display: "flex",
-    justifyContent: "space-between",
+
     alignItems: "center",
     boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.1)",
     zIndex: 1000,
@@ -21,6 +20,7 @@ const RatesSection = () => {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+    width: "20%",
   };
 
   const headerStyles = {
@@ -49,8 +49,9 @@ const RatesSection = () => {
   const ratesContainerStyles = {
     display: "flex",
     alignItems: "center",
-    overflow: "hidden",
-    width: "60%",
+    overflowX: "auto", // Enable horizontal scrolling
+    width: "100%",
+    marginLeft: 40,
   };
 
   const rateCardStyles = {
@@ -99,18 +100,6 @@ const RatesSection = () => {
     fontSize: "1.5rem",
   };
 
-  // Animation control state
-  const [isPaused, setIsPaused] = React.useState(false);
-
-  const scrollAnimation = {
-    animate: isPaused ? {} : { x: ["0%", "-50%", "0%"] },
-    transition: {
-      duration: 10,
-      repeat: Infinity,
-      ease: "linear",
-    },
-  };
-
   return (
     <div style={sectionStyles}>
       <div style={leftContentStyles}>
@@ -119,13 +108,8 @@ const RatesSection = () => {
         <button style={buttonStyles}>Compare</button>
       </div>
 
-      {/* Rates Container with Scroll Animation */}
-      <motion.div
-        style={ratesContainerStyles}
-        {...scrollAnimation}
-        onHoverStart={() => setIsPaused(true)}
-        onHoverEnd={() => setIsPaused(false)}
-      >
+      {/* Rates Container with Horizontal Scroll */}
+      <div style={ratesContainerStyles}>
         {/* Example Rate Card */}
         <div style={rateCardStyles}>
           <FaChartLine style={iconStyles} />
@@ -171,7 +155,7 @@ const RatesSection = () => {
             Customize this rate ➝
           </a>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
