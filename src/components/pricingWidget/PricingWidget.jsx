@@ -32,7 +32,13 @@ const PricingWidget = ({ isVisible, onClose }) => {
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,
-    backdropFilter: "blur(4px)", // Apply blur effect
+    backdropFilter: "blur(5px)",
+    WebkitBackdropFilter: "blur(5px)",
+    WebkitFilter: "blur(5px)",
+    MozFilter: "blur(5px)",
+    OFilter: "blur(5px)",
+    msFilter: "blur(5px)",
+    filter: "blur(5px)",
   };
 
   const widgetStyles = {

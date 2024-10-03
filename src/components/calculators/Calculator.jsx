@@ -20,14 +20,14 @@ const Calculator = ({ dispatch }) => {
       <div
         style={{
           position: "absolute",
-          top: isMobile ? "5%" : "40%",
+          top: isMobile ? "10%" : "40%",
           left: "50%",
           transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
           zIndex: 1,
           color: "#f0f0f0",
           textAlign: "center",
-          padding: "2rem",
-          maxWidth: "600px",
+          padding: isMobile ? "1rem" : "2rem", // Reduced padding for mobile
+          maxWidth: isMobile ? "90%" : "600px", // Adjusted width for mobile
           width: "80%",
           borderRadius: "10px",
           background: "rgba(30, 30, 30, 0.85)",
@@ -35,15 +35,18 @@ const Calculator = ({ dispatch }) => {
         }}
       >
         <FaCalculator
-          size={isMobile ? 80 : 120}
+          size={isMobile ? 60 : 120} // Smaller icon size for mobile
           style={{ marginBottom: "1rem" }}
-        />{" "}
-        {/* Big calculator icon */}
-        <h2>Mortgage Calculators</h2>
+        />
+        <h2 style={{ fontSize: isMobile ? "1.5rem" : "2rem" }}>Calculators</h2>
         {/* Buttons */}
         <div style={buttonContainerStyles}>
           <motion.button
-            style={buttonStyles}
+            style={{
+              ...buttonStyles,
+              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
+              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+            }}
             onClick={handleMortgageClick}
             whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
             whileTap={{ scale: 0.95 }}
@@ -52,13 +55,23 @@ const Calculator = ({ dispatch }) => {
             Mortgage Calculator
             <FiArrowRight style={iconStyles} />
           </motion.button>
-          <p style={descriptionStyles}>
+          <p
+            style={{
+              ...descriptionStyles,
+              fontSize: isMobile ? "0.9rem" : "1rem",
+              textAlign: isMobile ? "center" : "left",
+            }}
+          >
             🏠 Calculate monthly payments based on loan amount, interest rates,
             and loan term.
           </p>
 
           <motion.button
-            style={buttonStyles}
+            style={{
+              ...buttonStyles,
+              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
+              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+            }}
             onClick={handleAffordClick}
             whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
             whileTap={{ scale: 0.95 }}
@@ -67,7 +80,13 @@ const Calculator = ({ dispatch }) => {
             Affordability Calculator
             <FiArrowRight style={iconStyles} />
           </motion.button>
-          <p style={descriptionStyles}>
+          <p
+            style={{
+              ...descriptionStyles,
+              fontSize: isMobile ? "0.9rem" : "1rem",
+              textAlign: isMobile ? "center" : "left",
+            }}
+          >
             💰 Assess your budget and find out how much house you can afford.
           </p>
         </div>
@@ -93,9 +112,7 @@ const buttonStyles = {
   alignItems: "center",
   justifyContent: "space-between",
   width: "100%",
-  padding: "1rem",
   margin: "0.5rem 0",
-  fontSize: "1.2rem",
   borderRadius: "10px",
   border: "none",
   cursor: "pointer",
@@ -109,10 +126,8 @@ const iconStyles = {
 };
 
 const descriptionStyles = {
-  fontSize: "1rem",
   color: "#ccc",
   margin: "0.5rem 0 1.5rem",
-  textAlign: "left",
 };
 
 export default Calculator;
