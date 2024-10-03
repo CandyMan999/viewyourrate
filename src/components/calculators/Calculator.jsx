@@ -20,7 +20,7 @@ const Calculator = ({ dispatch }) => {
       <div
         style={{
           position: "absolute",
-          top: isMobile ? "10%" : "40%",
+          top: isMobile ? "5%" : "40%",
           left: "50%",
           transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
           zIndex: 1,

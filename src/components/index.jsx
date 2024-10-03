@@ -14,3 +14,4 @@ export { default as MortgageServices } from "./mortgageServices";
 export { default as RateDropNotification } from "./rateDropNotification";
 export { default as AffordabilityCalc } from "./calculators/AffordabliityCalc";
 export { default as MortgageCalc } from "./calculators/MortgageCalc";
+export { default as BackDrop } from "./backdrop";

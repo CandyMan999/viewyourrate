@@ -34,11 +34,6 @@ const AffordabilityCalc = ({ isVisible, onClose }) => {
     zIndex: 1000,
     backdropFilter: "blur(5px)",
     WebkitBackdropFilter: "blur(5px)",
-    WebkitFilter: "blur(5px)",
-    MozFilter: "blur(5px)",
-    OFilter: "blur(5px)",
-    msFilter: "blur(5px)",
-    filter: "blur(5px)",
   };
 
   const widgetStyles = {
