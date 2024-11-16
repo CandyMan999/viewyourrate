@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { isMobile } from "react-device-detect";
 import Context from "../../context"; // Import the global context
+import ApplyButton from "../applyButton/ApplyButton";
 
 // MenuToggle Component for the animated menu button
 const Path = (props) => (
@@ -101,7 +102,11 @@ const Navbar = ({
         zIndex: 1000,
       }}
     >
-      <div style={logoStyles}>ViewYourRate</div>
+      <div style={leftContainerStyles}>
+        <div style={logoStyles}>ViewYourRate</div>
+        <ApplyButton mobile={isMobile} />{" "}
+        {/* Use the ApplyNowButton component here */}
+      </div>
 
       {/* Navigation Links for desktop */}
       {!isMobile && (
@@ -144,6 +149,12 @@ const logoStyles = {
   fontSize: "1.5rem",
   fontWeight: "bold",
   cursor: "pointer",
+};
+// Inline Styles (remain the same)
+const leftContainerStyles = {
+  display: "flex",
+  alignItems: "center",
+  gap: "1rem",
 };
 
 const navLinksContainerStyles = {

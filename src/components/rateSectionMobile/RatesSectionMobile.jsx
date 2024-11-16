@@ -1,5 +1,6 @@
 import React from "react";
-
+import applyButton from "../applyButton";
+import ApplyButton from "../applyButton";
 const RatesSectionMobile = () => {
   // Styling for the entire section
   const sectionStyles = {
@@ -91,6 +92,7 @@ const RatesSectionMobile = () => {
       {/* Top Row: Header and Button */}
       <div style={topRowStyles}>
         <div style={headerStyles}>Today's Rates</div>
+        <ApplyButton mobile={true} />
         <button style={buttonStyles}>Compare</button>
       </div>
 

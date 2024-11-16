@@ -1,5 +1,7 @@
 import React from "react";
 import { FaChartLine } from "react-icons/fa";
+import applyButton from "../applyButton";
+import ApplyButton from "../applyButton";
 
 const RatesSection = () => {
   const sectionStyles = {
@@ -111,6 +113,9 @@ const RatesSection = () => {
       {/* Rates Container with Horizontal Scroll */}
       <div style={ratesContainerStyles}>
         {/* Example Rate Card */}
+        <div style={{ position: "absolute", top: -10, left: "8%" }}>
+          <ApplyButton />
+        </div>
         <div style={rateCardStyles}>
           <FaChartLine style={iconStyles} />
           <div style={rateHeaderStyles}>PURCHASE</div>

@@ -8,7 +8,7 @@ const Header = () => {
     color: "#fff",
 
     display: "flex",
-
+    justifyContent: "flex-end",
     alignItems: "center",
     height: 35,
     top: 0,
