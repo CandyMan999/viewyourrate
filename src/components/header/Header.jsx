@@ -37,17 +37,17 @@ const Header = () => {
       <div style={headerContentStyles}>
         {/* Email Link */}
         <a
-          href="https://mail.google.com/mail/?view=cm&fs=1&to=cgarrido@viewyourrate.com"
+          href="https://mail.google.com/mail/?view=cm&fs=1&to=tmanriquez@viewyourrate.com"
           style={headerLinkStyles}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FaEnvelope /> cgarrido@viewyourrate.com
+          <FaEnvelope /> tmanriquez@viewyourrate.com
         </a>
 
         {/* Phone Link */}
-        <a href="tel:+14698773808" style={headerLinkStyles}>
-          <FaPhoneAlt /> (469) 877-3803
+        <a href="tel:+12146754530" style={headerLinkStyles}>
+          <FaPhoneAlt /> (214) 675-4530
         </a>
       </div>
     </div>

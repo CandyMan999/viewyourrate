@@ -87,10 +87,8 @@ const Footer = forwardRef((props, ref) => {
       {/* Column 1: Company Information */}
       <div style={columnStyles}>
         <div style={logoPlaceholderStyles}></div> {/* Placeholder for logo */}
-        <div>NMLS #123456</div>
-        <p>
-          Settle down in your new home without a loan you had to settle for.
-        </p>
+        <div>NMLS #2625844</div>
+        <p>Your Home, Your Rate, Your Way.</p>
         <div style={socialIconsStyles}>
           <FaInstagram style={iconStyles} />
           <FaYoutube style={iconStyles} />
@@ -140,16 +138,27 @@ const Footer = forwardRef((props, ref) => {
       <div style={columnStyles}>
         <h4>Contact us</h4>
         <p>
-          <FaMapMarkerAlt /> 5960 Fairview Road, Suite 106
+          <FaMapMarkerAlt /> 8004 Springmoss Drive
           <br />
-          Charlotte, NC 28210
+          Plano, TX 75025
         </p>
         <p>
-          <FaEnvelope /> cgarrido@viewyourrate.com
+          <FaEnvelope />{" "}
+          <a
+            style={{ color: "inherit", textDecoration: "none" }}
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=tmanriquez@viewyourrate.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            tmanriquez@viewyourrate.com
+          </a>
         </p>
-        <p>
-          <FaPhone /> (469) 877-3803
-        </p>
+        <a
+          href="tel:+12146754530"
+          style={{ color: "#000", textDecoration: "none" }}
+        >
+          <FaPhone /> (214) 675-4530
+        </a>
 
         {/* Container for NMLS logo and house SVG */}
         <div style={logosContainerStyles}>
