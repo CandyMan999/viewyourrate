@@ -91,7 +91,7 @@ const ApplyNowButton = ({ mobile }) => {
 
       {/* Apply Now Button */}
       <motion.a
-        href="https://auth.lendwize.io/login?state=hKFo2SBv..."
+        href="https://2625844.my1003app.com?time=1731789634795"
         style={applyButtonStyles}
         animate="animate"
         variants={buttonVariants}
