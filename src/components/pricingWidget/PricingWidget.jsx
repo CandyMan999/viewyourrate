@@ -42,7 +42,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
     borderRadius: "12px",
     textAlign: "center",
     width: "80%",
-    maxWidth: "400px",
+    maxWidth: "500px",
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
     position: "relative", // Needed for the close button
   };
@@ -73,7 +73,18 @@ const PricingWidget = ({ isVisible, onClose }) => {
           <FiX style={closeIconStyles} onClick={onClose} />
 
           <motion.div style={widgetStyles}>
-            <h2 style={{ color: "#007bff" }}>Pricing Widget</h2>
+            {/* This container will let the iFrame resize with the screen */}
+            <div style={{ width: "100%", height: "80vh" }}>
+              <iframe
+                src="https://loansifternow.optimalblue.com/consumer/quick-quotes/5f49e500-c905-4d24-9e84-c0d354187e13"
+                frameBorder="0"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  border: "none",
+                }}
+              ></iframe>
+            </div>
             <button onClick={onClose}>Close</button>
           </motion.div>
         </motion.div>

@@ -95,13 +95,7 @@ const HeroSection = ({ state, dispatch }) => {
 
         {/* Buttons */}
         <div style={buttonContainerStyles}>
-          <motion.button
-            style={buttonStyles}
-            onClick={handleButtonClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-          >
+          <motion.button style={buttonStyles} onClick={handleButtonClick}>
             I'm looking to purchase
             <FiArrowRight style={iconStyles} />
           </motion.button>

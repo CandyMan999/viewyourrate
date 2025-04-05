@@ -24,6 +24,11 @@ export default function reducer(state, { type, payload }) {
       return { ...state, activeComponent: payload };
     case "TOGGLE_NAV_DRAWER":
       return { ...state, isNavDrawerOpen: !state.isNavDrawerOpen };
+    case "SHOW_APPLY_NOW_WIDGET":
+      return {
+        ...state,
+        showApplyNowWidget: payload,
+      };
 
     // Other cases...
     default:

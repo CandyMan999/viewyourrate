@@ -8,7 +8,8 @@ const Context = createContext({
   isNavDrawerOpen: false,
   showMortgageCalculator: false,
   showAffordabilityCalculator: false,
-  showPricingWidget: false, // New state to handle the Pricing Widget visibility
+  showPricingWidget: false,
+  showApplyNowWidget: false,
 });
 
 export default Context;

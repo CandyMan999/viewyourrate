@@ -16,3 +16,4 @@ export { default as AffordabilityCalc } from "./calculators/AffordabliityCalc";
 export { default as MortgageCalc } from "./calculators/MortgageCalc";
 export { default as BackDrop } from "./backdrop";
 export { default as ApplyNow } from "./applyButton";
+export { default as ApplyNowWidget } from "./applyNowWidget/index";

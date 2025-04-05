@@ -3,7 +3,7 @@ import { FaChartLine } from "react-icons/fa";
 import applyButton from "../applyButton";
 import ApplyButton from "../applyButton";
 
-const RatesSection = () => {
+const RatesSection = ({ dispatch }) => {
   const sectionStyles = {
     position: "fixed",
     bottom: 0,
@@ -101,13 +101,18 @@ const RatesSection = () => {
     color: "#007bff",
     fontSize: "1.5rem",
   };
+  const handleButtonClick = () => {
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+  };
 
   return (
     <div style={sectionStyles}>
       <div style={leftContentStyles}>
         <div style={headerStyles}>Today's Rates</div>
         <h2 style={titleStyles}>View Rates</h2>
-        <button style={buttonStyles}>Compare</button>
+        <button onClick={handleButtonClick} style={buttonStyles}>
+          Compare
+        </button>
       </div>
 
       {/* Rates Container with Horizontal Scroll */}

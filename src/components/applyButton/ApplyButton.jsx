@@ -1,11 +1,11 @@
-// ApplyNowButton.jsx
-
-import React from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { ImPencil2 } from "react-icons/im"; // Import the icon
+import Context from "../../context"; // ⬅️ Import your global context
 
 const ApplyNowButton = ({ mobile }) => {
-  // Adjust styles based on the 'mobile' prop
+  const { dispatch } = useContext(Context); // ⬅️ Grab dispatch
+
   const containerStyles = {
     position: "relative",
     display: "inline-block",
@@ -44,14 +44,8 @@ const ApplyNowButton = ({ mobile }) => {
         "linear-gradient(45deg, #ff9900, #ff00cc)",
       ],
       borderImageSlice: 1,
-      color: ["#ff00cc", "#333399", "#00ffcc", "#ff9900", "#ff00cc"],
-      boxShadow: [
-        mobile ? "0 0 10px #ff00cc" : "0 0 20px #ff00cc",
-        mobile ? "0 0 10px #333399" : "0 0 20px #333399",
-        mobile ? "0 0 10px #00ffcc" : "0 0 20px #00ffcc",
-        mobile ? "0 0 10px #ff9900" : "0 0 20px #ff9900",
-        mobile ? "0 0 10px #ff00cc" : "0 0 20px #ff00cc",
-      ],
+      color: ["#007bff"],
+      boxShadow: [" #007bff"],
       transition: {
         duration: 10,
         ease: "linear",
@@ -68,13 +62,17 @@ const ApplyNowButton = ({ mobile }) => {
 
   const iconVariants = {
     animate: {
-      color: ["#ff00cc", "#333399", "#00ffcc", "#ff9900", "#ff00cc"],
+      color: ["#007bff"],
       transition: {
         duration: 10,
         ease: "linear",
         repeat: Infinity,
       },
     },
+  };
+
+  const handleClick = () => {
+    dispatch({ type: "SHOW_APPLY_NOW_WIDGET", payload: true });
   };
 
   return (
@@ -89,15 +87,15 @@ const ApplyNowButton = ({ mobile }) => {
         <ImPencil2 />
       </motion.div>
 
-      {/* Apply Now Button */}
-      <motion.a
-        href="https://2625844.my1003app.com?time=1731789634795"
+      {/* Apply Now Button (now a button not an anchor) */}
+      <motion.button
         style={applyButtonStyles}
         animate="animate"
         variants={buttonVariants}
+        onClick={handleClick}
       >
         Apply Now
-      </motion.a>
+      </motion.button>
     </motion.div>
   );
 };
