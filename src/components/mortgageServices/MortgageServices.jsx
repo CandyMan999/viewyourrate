@@ -121,11 +121,11 @@ const MortgageServices = () => {
 
 // Desktop Styles
 const sectionStyles = {
-  padding: "2rem 1rem",
-  backgroundColor: "rgb(248, 249, 250)", // Dark theme background
+  padding: "3rem 1.5rem",
+  background:
+    "linear-gradient(160deg, rgba(0, 123, 255, 0.08), rgba(255, 255, 255, 0.95))",
   textAlign: "center",
   marginBottom: "2rem",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)",
 };
 
 const headerStyles = {
@@ -148,61 +148,64 @@ const cardsContainerStyles = {
 };
 
 const cardStyles = {
-  minWidth: "250px",
-  backgroundColor: "#333", // Dark card background
-  padding: "1.5rem",
-  borderRadius: "10px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)", // Enhanced shadow for a dark theme
-  transition: "transform 0.3s ease",
+  minWidth: "260px",
+  backgroundColor: "#fff",
+  padding: "1.75rem",
+  borderRadius: "18px",
+  border: "1px solid rgba(0, 123, 255, 0.12)",
+  boxShadow: "0 22px 40px rgba(15, 33, 60, 0.12)",
+  transition: "transform 0.3s ease, box-shadow 0.3s ease",
   textAlign: "center",
-  width: 350,
+  width: 340,
   flex: "0 0 auto",
 };
 
 const iconContainerStyles = {
-  backgroundColor: "#007bff",
-  borderRadius: "50%",
+  backgroundColor: "rgba(0, 123, 255, 0.12)",
+  borderRadius: "16px",
   padding: "1rem",
   marginBottom: "1rem",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  fontSize: "2rem",
-  color: "#fff",
-  boxShadow: "0 0 0 4px rgba(255, 255, 255, 1), 0 0 0 6px #007bff",
+  fontSize: "1.8rem",
+  color: "#007bff",
+  boxShadow: "0 12px 24px rgba(0, 123, 255, 0.18)",
 };
 
 const cardTitleStyles = {
   fontSize: "1.25rem",
   margin: "0.5rem 0",
-  color: "#fff", // White text for dark theme
+  color: "#1f2933",
+  fontWeight: 700,
 };
 
 const cardDescriptionStyles = {
-  fontSize: "0.9rem",
-  color: "#aaa", // Light grey for the description
+  fontSize: "0.95rem",
+  color: "#516379",
   marginBottom: "1rem",
+  lineHeight: 1.6,
 };
 
 const buttonStyles = {
-  padding: "0.75rem 1.5rem",
+  padding: "0.75rem 1.7rem",
   backgroundColor: "#007bff",
   color: "#fff",
   border: "none",
-  borderRadius: "8px",
-  fontSize: "1rem",
+  borderRadius: "999px",
+  fontSize: "0.95rem",
   cursor: "pointer",
   transition: "background-color 0.3s ease",
   marginTop: "1rem",
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)", // Button shadow
+  boxShadow: "0 16px 32px rgba(0, 123, 255, 0.25)",
 };
 
 // Mobile Styles (20% smaller)
 const mobileSectionStyles = {
-  padding: "1.5rem 0.8rem",
-  backgroundColor: "rgb(248, 249, 250)",
+  padding: "2rem 1rem",
+  background:
+    "linear-gradient(160deg, rgba(0, 123, 255, 0.08), rgba(255, 255, 255, 0.95))",
   textAlign: "center",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Top and bottom shadows
   marginBottom: "2rem",
 };
 
@@ -213,11 +216,12 @@ const mobileHeaderStyles = {
 };
 
 const mobileCardStyles = {
-  minWidth: "200px",
-  backgroundColor: "#333",
-  padding: "1.2rem",
-  borderRadius: "8px",
-  boxShadow: "0 3px 6px rgba(0, 0, 0, 0.5)",
+  minWidth: "220px",
+  backgroundColor: "#fff",
+  padding: "1.4rem",
+  borderRadius: "16px",
+  border: "1px solid rgba(0, 123, 255, 0.12)",
+  boxShadow: "0 18px 32px rgba(15, 33, 60, 0.12)",
   transition: "transform 0.3s ease",
   textAlign: "center",
   width: 280,
@@ -225,41 +229,43 @@ const mobileCardStyles = {
 };
 
 const mobileIconContainerStyles = {
-  backgroundColor: "#007bff",
-  borderRadius: "50%",
-  padding: "0.8rem",
+  backgroundColor: "rgba(0, 123, 255, 0.12)",
+  borderRadius: "14px",
+  padding: "0.9rem",
   marginBottom: "0.8rem",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  fontSize: "1.6rem",
-  color: "#fff",
-  boxShadow: "0 0 0 3px rgba(255, 255, 255, 1), 0 0 0 4px #007bff",
+  fontSize: "1.5rem",
+  color: "#007bff",
+  boxShadow: "0 10px 20px rgba(0, 123, 255, 0.18)",
 };
 
 const mobileCardTitleStyles = {
-  fontSize: "1rem",
+  fontSize: "1.05rem",
   margin: "0.4rem 0",
-  color: "#fff",
+  color: "#1f2933",
+  fontWeight: 700,
 };
 
 const mobileCardDescriptionStyles = {
-  fontSize: "0.75rem",
-  color: "#aaa",
+  fontSize: "0.85rem",
+  color: "#516379",
   marginBottom: "0.8rem",
+  lineHeight: 1.6,
 };
 
 const mobileButtonStyles = {
-  padding: "0.6rem 1.2rem",
+  padding: "0.65rem 1.4rem",
   backgroundColor: "#007bff",
   color: "#fff",
   border: "none",
-  borderRadius: "8px",
+  borderRadius: "999px",
   fontSize: "0.9rem",
   cursor: "pointer",
   transition: "background-color 0.3s ease",
   marginTop: "0.8rem",
-  boxShadow: "0 3px 12px rgba(0, 0, 0, 0.3)",
+  boxShadow: "0 14px 28px rgba(0, 123, 255, 0.22)",
 };
 
 export default MortgageServices;

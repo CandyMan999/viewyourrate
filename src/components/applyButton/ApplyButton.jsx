@@ -1,74 +1,37 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import { ImPencil2 } from "react-icons/im"; // Import the icon
-import Context from "../../context"; // ⬅️ Import your global context
+import { ImPencil2 } from "react-icons/im";
+import Context from "../../context";
 
 const ApplyNowButton = ({ mobile }) => {
   const { dispatch } = useContext(Context); // ⬅️ Grab dispatch
 
   const containerStyles = {
-    position: "relative",
-    display: "inline-block",
+    display: "inline-flex",
+    alignItems: "center",
     marginLeft: mobile ? "0.5rem" : "1.5rem",
   };
 
   const applyButtonStyles = {
-    backgroundColor: "#fff",
+    backgroundColor: "#007bff",
     color: "#fff",
-    padding: mobile ? "0.3rem 0.6rem" : "0.5rem 1rem",
-    borderRadius: "5px",
+    padding: mobile ? "0.45rem 1.1rem" : "0.65rem 1.6rem",
+    borderRadius: "999px",
     cursor: "pointer",
-    fontSize: mobile ? "0.8rem" : "1rem",
+    fontSize: mobile ? "0.85rem" : "1rem",
     textDecoration: "none",
-    overflow: "hidden",
-    boxShadow: mobile
-      ? "0 0 10px rgba(0, 0, 0, 0.5)"
-      : "0 0 20px rgba(0, 0, 0, 0.5)",
     border: "none",
-    fontWeight: "bold",
+    fontWeight: 600,
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    boxShadow: "0 15px 30px rgba(0, 123, 255, 0.3)",
+    transition: "box-shadow 0.2s ease",
   };
 
   const iconStyles = {
-    position: "absolute",
-    top: mobile ? "-1rem" : "-1.5rem",
-    right: mobile ? "-1rem" : "-1.3rem",
-    fontSize: mobile ? "1.5rem" : "2rem",
-  };
-
-  const buttonVariants = {
-    animate: {
-      borderImageSource: [
-        "linear-gradient(45deg, #ff00cc, #333399)",
-        "linear-gradient(45deg, #333399, #00ffcc)",
-        "linear-gradient(45deg, #00ffcc, #ff9900)",
-        "linear-gradient(45deg, #ff9900, #ff00cc)",
-      ],
-      borderImageSlice: 1,
-      color: ["#007bff"],
-      boxShadow: [" #007bff"],
-      transition: {
-        duration: 10,
-        ease: "linear",
-        repeat: Infinity,
-      },
-    },
-    hover: {
-      scale: mobile ? 1.2 : 1.35,
-    },
-    whileTap: {
-      scale: 0.95,
-    },
-  };
-
-  const iconVariants = {
-    animate: {
-      color: ["#007bff"],
-      transition: {
-        duration: 10,
-        ease: "linear",
-        repeat: Infinity,
-      },
-    },
+    fontSize: mobile ? "0.95rem" : "1.1rem",
+    color: "#fff",
   };
 
   const handleClick = () => {
@@ -76,24 +39,18 @@ const ApplyNowButton = ({ mobile }) => {
   };
 
   return (
-    <motion.div
-      style={containerStyles}
-      whileHover="hover"
-      whileTap="whileTap"
-      variants={buttonVariants}
-    >
-      {/* Pencil Icon positioned above the button */}
-      <motion.div style={iconStyles} animate="animate" variants={iconVariants}>
-        <ImPencil2 />
-      </motion.div>
-
-      {/* Apply Now Button (now a button not an anchor) */}
+    <motion.div style={containerStyles}>
       <motion.button
         style={applyButtonStyles}
-        animate="animate"
-        variants={buttonVariants}
         onClick={handleClick}
+        whileHover={{
+          scale: 1.05,
+          boxShadow: "0 20px 36px rgba(0, 123, 255, 0.35)",
+        }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.2 }}
       >
+        <ImPencil2 style={iconStyles} />
         Apply Now
       </motion.button>
     </motion.div>

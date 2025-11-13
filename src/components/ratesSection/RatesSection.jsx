@@ -21,11 +21,13 @@ const RatesSection = ({ dispatch, state }) => {
     bottom: 0,
     left: 0,
     width: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    padding: "1rem 2rem",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    padding: "1.25rem 2.5rem",
     display: "flex",
     alignItems: "center",
-    boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 -12px 30px rgba(15, 33, 60, 0.12)",
+    backdropFilter: "blur(8px)",
+    borderTop: "1px solid rgba(0, 123, 255, 0.15)",
     zIndex: 1000,
   };
 
@@ -34,6 +36,8 @@ const RatesSection = ({ dispatch, state }) => {
     flexDirection: "column",
     alignItems: "flex-start",
     width: "20%",
+    minWidth: "220px",
+    gap: "0.4rem",
   };
 
   const headerStyles = {
@@ -44,19 +48,22 @@ const RatesSection = ({ dispatch, state }) => {
   };
 
   const titleStyles = {
-    fontSize: "1.5rem",
+    fontSize: "1.6rem",
     fontWeight: "bold",
-    margin: "0.5rem 0",
+    margin: "0.3rem 0",
+    color: "#1f2933",
   };
 
   const buttonStyles = {
-    padding: "0.5rem 1.5rem",
+    padding: "0.6rem 1.8rem",
     backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
-    borderRadius: "8px",
-    fontSize: "0.9rem",
+    borderRadius: "999px",
+    fontSize: "0.95rem",
     cursor: "pointer",
+    boxShadow: "0 12px 24px rgba(0, 123, 255, 0.25)",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
   };
 
   const ratesContainerStyles = {
@@ -64,17 +71,18 @@ const RatesSection = ({ dispatch, state }) => {
     alignItems: "center",
     overflowX: "auto",
     width: "100%",
+    gap: "1rem",
     marginLeft: 40,
+    paddingBottom: "0.5rem",
   };
 
   const rateCardStyles = {
     minWidth: "200px",
-    marginRight: "1rem",
-    padding: "1rem",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
+    padding: "1.2rem 1.4rem",
+    border: "1px solid rgba(0, 123, 255, 0.12)",
+    borderRadius: "14px",
     backgroundColor: "#fff",
-    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+    boxShadow: "0 18px 35px rgba(15, 33, 60, 0.12)",
     textAlign: "center",
     position: "relative",
   };
@@ -82,35 +90,38 @@ const RatesSection = ({ dispatch, state }) => {
   const rateHeaderStyles = {
     fontSize: "0.8rem",
     fontWeight: "bold",
-    color: "#666",
+    color: "#007bff",
     marginBottom: "0.5rem",
+    letterSpacing: "0.08em",
   };
 
   const rateInfoStyles = {
-    fontSize: "1rem",
+    fontSize: "1.1rem",
     fontWeight: "bold",
     margin: "0.5rem 0",
+    color: "#1f2933",
   };
 
   const rateDetailsStyles = {
-    fontSize: "0.8rem",
-    color: "#666",
+    fontSize: "0.85rem",
+    color: "#5b6b82",
   };
 
   const customizeLinkStyles = {
     color: "#007bff",
     fontSize: "0.9rem",
-    marginTop: "1rem",
+    marginTop: "1.2rem",
     display: "block",
     textDecoration: "none",
+    fontWeight: 600,
   };
 
   const iconStyles = {
     position: "absolute",
-    top: "10px",
-    right: "10px",
+    top: "12px",
+    right: "12px",
     color: "#007bff",
-    fontSize: "1.5rem",
+    fontSize: "1.6rem",
   };
 
   return (
@@ -127,7 +138,7 @@ const RatesSection = ({ dispatch, state }) => {
       {/* Rates Container */}
       <div style={ratesContainerStyles}>
         {/* Bring back original Apply Button Location */}
-        <div style={{ position: "absolute", top: -10, left: "8%" }}>
+        <div style={{ position: "absolute", top: -20, left: "8%" }}>
           <ApplyButton />
         </div>
 

@@ -19,38 +19,36 @@ const Calculator = ({ dispatch }) => {
     <div style={calculatorStyles}>
       <div
         style={{
-          position: "absolute",
-          top: isMobile ? "5%" : "40%",
-          left: "50%",
-          transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
-          zIndex: 1,
-          color: "#f0f0f0",
-          textAlign: "center",
-          padding: isMobile ? "1rem" : "2rem", // Reduced padding for mobile
-          maxWidth: isMobile ? "90%" : "600px", // Adjusted width for mobile
-          width: "80%",
-          borderRadius: "10px",
-          background: "rgba(30, 30, 30, 0.85)",
-          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+          ...cardStyles,
+          padding: isMobile ? "1.5rem" : "2.5rem",
+          gap: isMobile ? "1rem" : "1.5rem",
         }}
       >
         <FaCalculator
-          size={isMobile ? 60 : 120} // Smaller icon size for mobile
-          style={{ marginBottom: "1rem" }}
+          size={isMobile ? 60 : 120}
+          style={{ color: "#007bff" }}
         />
-        <h2 style={{ fontSize: isMobile ? "1.5rem" : "2rem" }}>Calculators</h2>
+        <h2
+          style={{
+            fontSize: isMobile ? "1.8rem" : "2.2rem",
+            color: "#1f2933",
+            margin: 0,
+          }}
+        >
+          Calculators
+        </h2>
         {/* Buttons */}
         <div style={buttonContainerStyles}>
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
-              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+              padding: isMobile ? "0.85rem 1.1rem" : "1rem 1.4rem",
+              fontSize: isMobile ? "1rem" : "1.1rem",
             }}
             onClick={handleMortgageClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.02, backgroundColor: "#0066d6" }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ duration: 0.2 }}
           >
             Mortgage Calculator
             <FiArrowRight style={iconStyles} />
@@ -58,8 +56,8 @@ const Calculator = ({ dispatch }) => {
           <p
             style={{
               ...descriptionStyles,
-              fontSize: isMobile ? "0.9rem" : "1rem",
-              textAlign: isMobile ? "center" : "left",
+              fontSize: isMobile ? "0.95rem" : "1rem",
+              textAlign: "left",
             }}
           >
             🏠 Calculate monthly payments based on loan amount, interest rates,
@@ -69,13 +67,13 @@ const Calculator = ({ dispatch }) => {
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
-              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+              padding: isMobile ? "0.85rem 1.1rem" : "1rem 1.4rem",
+              fontSize: isMobile ? "1rem" : "1.1rem",
             }}
             onClick={handleAffordClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.02, backgroundColor: "#0066d6" }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ duration: 0.2 }}
           >
             Affordability Calculator
             <FiArrowRight style={iconStyles} />
@@ -83,8 +81,8 @@ const Calculator = ({ dispatch }) => {
           <p
             style={{
               ...descriptionStyles,
-              fontSize: isMobile ? "0.9rem" : "1rem",
-              textAlign: isMobile ? "center" : "left",
+              fontSize: isMobile ? "0.95rem" : "1rem",
+              textAlign: "left",
             }}
           >
             💰 Assess your budget and find out how much house you can afford.
@@ -101,6 +99,9 @@ const calculatorStyles = {
   alignItems: "center",
   height: "100vh",
   width: "100%",
+  padding: "2rem 1rem",
+  background:
+    "linear-gradient(145deg, rgba(0, 123, 255, 0.08), rgba(255, 255, 255, 0.95))",
 };
 
 const buttonContainerStyles = {
@@ -114,11 +115,11 @@ const buttonStyles = {
   width: "100%",
   margin: "0.5rem 0",
   borderRadius: "10px",
-  border: "none",
+  border: "1px solid rgba(0, 123, 255, 0.2)",
   cursor: "pointer",
   background: "#007bff",
   color: "#fff",
-  boxShadow: "0 2px 12px white",
+  boxShadow: "0 18px 32px rgba(0, 123, 255, 0.25)",
 };
 
 const iconStyles = {
@@ -126,8 +127,21 @@ const iconStyles = {
 };
 
 const descriptionStyles = {
-  color: "#ccc",
+  color: "#52637d",
   margin: "0.5rem 0 1.5rem",
+};
+
+const cardStyles = {
+  backgroundColor: "rgba(255, 255, 255, 0.95)",
+  borderRadius: "20px",
+  border: "1px solid rgba(0, 123, 255, 0.15)",
+  boxShadow: "0 25px 55px rgba(15, 33, 60, 0.18)",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  textAlign: "left",
+  maxWidth: "620px",
+  width: "100%",
 };
 
 export default Calculator;

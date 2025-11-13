@@ -4,37 +4,47 @@ import { isMobile } from "react-device-detect";
 
 const Component2 = () => {
   return (
-    <div style={calculatorStyles}>
-      <div
-        style={{
-          position: "absolute", // Use absolute positioning
-          top: isMobile ? "5%" : "40%", // 20% from the top for mobile, 50% for desktop
-          left: "50%",
-          transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)", // Adjust translation for mobile
-          zIndex: 1,
-          color: "#f0f0f0",
-          textAlign: "center",
-          padding: "2rem",
-          maxWidth: "600px",
-          width: "80%", // Ensure it has a reasonable width for mobile
-          borderRadius: "10px",
-          background: "rgba(30, 30, 30, 0.85)",
-          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
-        }}
-      >
-        <h2>Component 2</h2>
-        <p>Add a Widget here</p>
+    <div style={containerStyles}>
+      <div style={cardStyles}>
+        <h2 style={titleStyles}>Component 2</h2>
+        <p style={subtitleStyles}>Add a Widget here</p>
       </div>
     </div>
   );
 };
 
-const calculatorStyles = {
+const containerStyles = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   height: "100vh",
   width: "100%",
+  padding: "2rem 1rem",
+  background:
+    "linear-gradient(140deg, rgba(0, 123, 255, 0.08), rgba(255, 255, 255, 0.95))",
+};
+
+const cardStyles = {
+  backgroundColor: "rgba(255, 255, 255, 0.95)",
+  borderRadius: "20px",
+  border: "1px solid rgba(0, 123, 255, 0.15)",
+  boxShadow: "0 25px 55px rgba(15, 33, 60, 0.18)",
+  padding: "2.5rem",
+  maxWidth: "520px",
+  width: "100%",
+  textAlign: "center",
+};
+
+const titleStyles = {
+  fontSize: isMobile ? "1.8rem" : "2.1rem",
+  color: "#1f2933",
+  marginBottom: "0.75rem",
+};
+
+const subtitleStyles = {
+  fontSize: isMobile ? "1rem" : "1.05rem",
+  color: "#52637d",
+  margin: 0,
 };
 
 export default Component2;

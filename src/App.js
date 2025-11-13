@@ -28,7 +28,6 @@ import reducer from "./reducer";
 import { isMobile } from "react-device-detect";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import background from "./pics/background.jpg";
 import { FiX } from "react-icons/fi";
 import axios from "axios";
 import * as cheerio from "cheerio";
@@ -140,8 +139,10 @@ const App = () => {
   const navbarRef = useRef(null);
 
   const appStyles = {
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "'Inter', sans-serif",
     position: "relative",
+    backgroundColor: "rgba(243, 246, 255, 0.8)",
+    color: "#1f2933",
   };
 
   useEffect(() => {
@@ -376,7 +377,7 @@ const App = () => {
   );
 };
 
-// Styles for main container with background image
+// Styles for main container with a light gradient backdrop
 const mainContainerStyles = {
   display: "flex",
   justifyContent: "center",
@@ -384,10 +385,8 @@ const mainContainerStyles = {
   position: "relative",
   height: "100vh",
   overflow: "hidden",
-  backgroundImage: `url(${background})`,
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
+  background:
+    "linear-gradient(120deg, rgba(0, 123, 255, 0.08), rgba(255, 255, 255, 0.95))",
 };
 
 // Styles for arrows
@@ -398,14 +397,13 @@ const arrowStyles = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
+  backgroundColor: "rgba(255, 255, 255, 0.9)",
   borderRadius: "50%",
   cursor: "pointer",
   zIndex: 1000,
   fontSize: "1.5rem",
   color: "#007bff",
-
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+  boxShadow: "0 10px 25px rgba(0, 123, 255, 0.15)",
 };
 
 export default App;

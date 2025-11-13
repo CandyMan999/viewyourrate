@@ -44,11 +44,12 @@ const containerStyles = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "2rem",
-  backgroundColor: "#f8f9fa",
-  borderRadius: "10px",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Updated box shadow
-  margin: "2rem 0",
+  padding: "2.5rem",
+  backgroundColor: "rgba(255, 255, 255, 0.95)",
+  borderRadius: "20px",
+  boxShadow: "0 28px 55px rgba(15, 33, 60, 0.14)",
+  margin: "2.5rem 0",
+  border: "1px solid rgba(0, 123, 255, 0.12)",
 };
 
 const imageContainerStyles = {
@@ -77,28 +78,29 @@ const smallHeaderStyles = {
 };
 
 const largeHeaderStyles = {
-  fontSize: "2rem",
+  fontSize: "2.1rem",
   fontWeight: "bold",
   margin: "1rem 0",
-  color: "#333",
+  color: "#1f2933",
 };
 
 const descriptionStyles = {
-  fontSize: "1rem",
-  color: "#666",
+  fontSize: "1.05rem",
+  color: "#516379",
   marginBottom: "1.5rem",
+  lineHeight: 1.7,
 };
 
 const buttonStyles = {
-  padding: "0.75rem 1.5rem",
+  padding: "0.8rem 1.8rem",
   backgroundColor: "#007bff",
   color: "#fff",
   border: "none",
-  borderRadius: "8px",
-  fontSize: "1rem",
+  borderRadius: "999px",
+  fontSize: "0.95rem",
   cursor: "pointer",
   transition: "background-color 0.3s ease",
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+  boxShadow: "0 18px 32px rgba(0, 123, 255, 0.25)",
 };
 
 // Mobile Styles
@@ -106,12 +108,13 @@ const mobileContainerStyles = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  padding: "1rem",
-  backgroundColor: "#f8f9fa",
-  borderRadius: "10px",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)",
-  margin: "2rem 0",
+  padding: "1.5rem",
+  backgroundColor: "rgba(255, 255, 255, 0.95)",
+  borderRadius: "18px",
+  boxShadow: "0 24px 48px rgba(15, 33, 60, 0.14)",
+  margin: "2.5rem 0",
   textAlign: "center",
+  border: "1px solid rgba(0, 123, 255, 0.12)",
 };
 
 const mobileImageContainerStyles = {
@@ -130,28 +133,29 @@ const mobileTextContainerStyles = {
 };
 
 const mobileLargeHeaderStyles = {
-  fontSize: "1.5rem",
+  fontSize: "1.65rem",
   fontWeight: "bold",
-  margin: "0.5rem 0",
-  color: "#333",
+  margin: "0.75rem 0",
+  color: "#1f2933",
 };
 
 const mobileDescriptionStyles = {
-  fontSize: "0.9rem",
-  color: "#666",
-  marginBottom: "1rem",
+  fontSize: "0.95rem",
+  color: "#516379",
+  marginBottom: "1.1rem",
+  lineHeight: 1.6,
 };
 
 const mobileButtonStyles = {
-  padding: "0.5rem 1rem",
+  padding: "0.6rem 1.4rem",
   backgroundColor: "#007bff",
   color: "#fff",
   border: "none",
-  borderRadius: "8px",
-  fontSize: "1rem",
+  borderRadius: "999px",
+  fontSize: "0.95rem",
   cursor: "pointer",
   transition: "background-color 0.3s ease",
-  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+  boxShadow: "0 16px 28px rgba(0, 123, 255, 0.22)",
 };
 
 export default RateDropNotification;
