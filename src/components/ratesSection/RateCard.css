@@ -11,7 +11,7 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   color: #f8fafc;
   gap: 0.6rem;
-  height: 100%;
+  height: 20vh;
   max-height: 100%;
 }
 

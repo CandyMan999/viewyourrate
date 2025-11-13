@@ -10,9 +10,7 @@ const RatesSection = ({ dispatch, state }) => {
     dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
   };
 
-  const rates = state?.mortgageRates?.length
-    ? state.mortgageRates
-    : dummyRates;
+  const rates = state?.mortgageRates?.length ? state.mortgageRates : dummyRates;
 
   const timestampLabel = useMemo(() => {
     const timestamp = new Date();
@@ -25,7 +23,11 @@ const RatesSection = ({ dispatch, state }) => {
   }, []);
 
   return (
-    <section className="rates-section" aria-labelledby="rates-section-heading">
+    <section
+      className="rates-section"
+      aria-labelledby="rates-section-heading"
+      style={{ display: "flex", flexDirection: "row" }}
+    >
       <div className="rates-section__apply">
         <ApplyButton className="rates-section__apply-button" />
       </div>
@@ -36,8 +38,8 @@ const RatesSection = ({ dispatch, state }) => {
             Track mortgage market movement in real time
           </h2>
           <p className="rates-section__subtitle">
-            Preview a curated snapshot of our most requested programs before
-            you tailor a quote with live Optimal Blue pricing.
+            Preview a curated snapshot of our most requested programs before you
+            tailor a quote with live Optimal Blue pricing.
           </p>
           <div className="rates-section__actions">
             <button
@@ -45,17 +47,8 @@ const RatesSection = ({ dispatch, state }) => {
               className="rates-section__cta"
               onClick={handleCustomizeClick}
             >
-              Customize my scenario
+              Customize My Scenario
             </button>
-          </div>
-          <div className="rates-section__meta">
-            <span className="rates-section__timestamp">
-              <FiClock aria-hidden="true" /> Updated {timestampLabel} ET
-            </span>
-            <span className="rates-section__disclaimer">
-              Scenario assumes 740 FICO, 20% down, and $400k loan amount. Your
-              rate may vary based on credit profile and program details.
-            </span>
           </div>
         </aside>
 
@@ -66,6 +59,22 @@ const RatesSection = ({ dispatch, state }) => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="rates-section__meta" style={{ textAlign: "center" }}>
+        <span
+          className="rates-section__timestamp"
+          style={{
+            alignContent: "center",
+            fontWeight: "bold",
+            justifyContent: "center",
+          }}
+        >
+          <FiClock aria-hidden="true" /> Updated {timestampLabel} ET
+        </span>
+        <span className="rates-section__disclaimer">
+          Scenario assumes 740 FICO, 20% down, and $400k loan amount. Your rate
+          may vary based on credit profile and program details.
+        </span>
       </div>
     </section>
   );
