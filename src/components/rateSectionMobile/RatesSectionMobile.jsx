@@ -45,6 +45,10 @@ const RatesSectionMobile = ({ state, dispatch }) => {
           <ApplyButton mobile={true} />
         </div>
       </div>
+      <p className="rates-mobile__helper">
+        Scenario assumes 740 FICO, 20% down, and $400k loan amount. Your rate
+        may vary based on credit profile and program details.
+      </p>
       <div className="rates-mobile__cards" role="list">
         {rates.map((rate) => (
           <div key={rate.id} role="listitem" className="rates-mobile__card">

@@ -301,17 +301,16 @@ const App = () => {
             <FiArrowRight />
           </motion.div>
         </div>
-        {showRatesSection && (
-          <div style={{ transition: "opacity 0.5s ease", opacity: opacity }}>
-            {state.activeComponent === 0 ? (
-              isMobile ? (
-                <RatesSectionMobile dispatch={dispatch} state={state} />
-              ) : (
+        {state.activeComponent === 0 &&
+          (isMobile ? (
+            <RatesSectionMobile dispatch={dispatch} state={state} />
+          ) : (
+            showRatesSection && (
+              <div style={{ transition: "opacity 0.5s ease", opacity }}>
                 <RatesSection dispatch={dispatch} state={state} />
-              )
-            ) : null}
-          </div>
-        )}
+              </div>
+            )
+          ))}
         <RateDropNotification />
         <MortgageServices />
         <ApplyNowWidget
