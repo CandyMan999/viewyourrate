@@ -65,9 +65,9 @@ const RateCard = ({
         <div className="rate-card__figures">
           <div className="rate-card__figure">
             <span className="rate-card__label">Rate</span>
-              <span className="rate-card__value">
-                {formatPercentage(rateValue)}
-              </span>
+            <span className="rate-card__value">
+              {formatPercentage(rateValue)}
+            </span>
           </div>
           <div className="rate-card__divider" aria-hidden="true" />
           <div className="rate-card__figure">

@@ -26,6 +26,9 @@ const RatesSection = ({ dispatch, state }) => {
 
   return (
     <section className="rates-section" aria-labelledby="rates-section-heading">
+      <div className="rates-section__apply">
+        <ApplyButton className="rates-section__apply-button" />
+      </div>
       <div className="rates-section__content">
         <aside className="rates-section__sidebar">
           <span className="rates-section__eyebrow">Today's Pricing</span>
@@ -44,7 +47,6 @@ const RatesSection = ({ dispatch, state }) => {
             >
               Customize my scenario
             </button>
-            <ApplyButton />
           </div>
           <div className="rates-section__meta">
             <span className="rates-section__timestamp">
