@@ -1,70 +1,73 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { isMobile } from "react-device-detect"; // Import mobile detection
 import {
   FaHome,
   FaUniversity,
   FaLandmark,
-  FaDollarSign,
+  FaPiggyBank,
   FaBalanceScale,
-  FaUser,
+  FaUserGraduate,
   FaHorseHead,
   FaUndo,
-} from "react-icons/fa"; // Import relevant icons
-import { isMobile } from "react-device-detect"; // Import mobile detection
+  FaCoins,
+  FaSeedling,
+  FaRegHandshake,
+} from "react-icons/fa";
 
 const services = [
   {
     title: "Fixed-Rate Mortgage",
     description: "Stable monthly payments for the life of your loan.",
-    icon: <FaHome />,
+    icon: <FaHome />, // Solid, reliable
   },
   {
     title: "FHA Mortgage",
     description:
       "(FHA) Loans designed to assist homebuyers with lenient credit and down payment requirements.",
-    icon: <FaUniversity />,
+    icon: <FaUniversity />, // Government-backed, established
   },
   {
     title: "VA Mortgage",
     description:
       "Exclusive benefits for veterans and active-duty military personnel.",
-    icon: <FaLandmark />,
+    icon: <FaLandmark />, // Honors military/government connection
   },
   {
     title: "Jumbo Mortgage",
     description:
       "Financing for high-value properties exceeding conventional loan limits.",
-    icon: <FaHorseHead />,
+    icon: <FaHorseHead />, // Luxury/specialty symbol
   },
   {
     title: "Adjustable Rate Mortgages",
     description:
       "Variable interest rates that may change over time based on market conditions.",
-    icon: <FaBalanceScale />,
+    icon: <FaBalanceScale />, // Balance/flexibility over time
   },
   {
     title: "USDA Mortgages",
     description:
       "Loans for rural homebuyers with low-interest rates and zero down payment options.",
-    icon: <FaHome />,
+    icon: <FaSeedling />, // Growth, farmland, green/rural
   },
   {
     title: "First Time Home Buyer Mortgages",
     description:
       "Special loans tailored for new homebuyers with reduced down payments.",
-    icon: <FaUser />,
+    icon: <FaUserGraduate />, // Youth/new beginnings
   },
   {
     title: "Reverse Mortgages",
     description:
       "Convert your home's equity into cash without monthly payments.",
-    icon: <FaUndo />,
+    icon: <FaUndo />, // Reversal concept
   },
   {
     title: "Interest Only Mortgages",
     description:
       "Pay only interest for an initial period, reducing your monthly payment.",
-    icon: <FaBalanceScale />,
+    icon: <FaCoins />, // Cash flow emphasis
   },
 ];
 

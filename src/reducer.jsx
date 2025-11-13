@@ -29,6 +29,8 @@ export default function reducer(state, { type, payload }) {
         ...state,
         showApplyNowWidget: payload,
       };
+    case "SET_MORTGAGE_RATES":
+      return { ...state, mortgageRates: payload };
 
     // Other cases...
     default:

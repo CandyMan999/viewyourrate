@@ -30,6 +30,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import background from "./pics/background.jpg";
 import { FiX } from "react-icons/fi";
+import axios from "axios";
+import * as cheerio from "cheerio";
 
 const componentsList = [
   "HeroSection",
@@ -141,6 +143,40 @@ const App = () => {
     fontFamily: "Arial, sans-serif",
     position: "relative",
   };
+
+  useEffect(() => {
+    const fetchMortgageRates = async () => {
+      try {
+        const targetUrl = "https://www.mortgagenewsdaily.com/mortgage-rates";
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+
+        const { data } = await axios.get(proxyUrl + targetUrl);
+        const $ = cheerio.load(data);
+        const rates = [];
+
+        $("td.rate-product").each((_, element) => {
+          const rateType = $(element).find("a").text().trim();
+          const rate = $(element).next("td.rate").text().trim();
+          const points = $(element).next("td.rate").next("td").text().trim();
+          const change = $(element)
+            .next("td.rate")
+            .next("td")
+            .next("td.change")
+            .text()
+            .trim();
+
+          rates.push({ rateType, rate, points, change });
+        });
+
+        console.log("Mortgage Rates:", rates);
+        dispatch({ type: "SET_MORTGAGE_RATES", payload: rates });
+      } catch (error) {
+        console.error("Error fetching mortgage rates:", error);
+      }
+    };
+
+    fetchMortgageRates();
+  }, [dispatch]);
 
   const scrollToFooter = () => {
     if (footerRef.current) {
@@ -300,9 +336,9 @@ const App = () => {
           <div style={{ transition: "opacity 0.5s ease", opacity: opacity }}>
             {state.activeComponent === 0 ? (
               isMobile ? (
-                <RatesSectionMobile dispatch={dispatch} />
+                <RatesSectionMobile dispatch={dispatch} state={state} />
               ) : (
-                <RatesSection dispatch={dispatch} />
+                <RatesSection dispatch={dispatch} state={state} />
               )
             ) : null}
           </div>
