@@ -24,8 +24,10 @@ const Footer = forwardRef((props, ref) => {
   const logoPlaceholderStyles = {
     width: "150px",
     height: "50px",
-    backgroundColor: "#ccc",
+    background: "var(--accent-gradient)",
+    borderRadius: "14px",
     marginBottom: "1rem",
+    boxShadow: "0 18px 40px rgba(56, 189, 248, 0.25)",
   };
 
   const resourcesListStyles = {
@@ -36,8 +38,9 @@ const Footer = forwardRef((props, ref) => {
 
   const resourceLinkStyles = {
     marginBottom: "0.5rem",
-    color: "#333",
+    color: "var(--text-secondary)",
     textDecoration: "none",
+    transition: "color 0.2s ease",
   };
 
   const socialIconsStyles = {
@@ -48,8 +51,8 @@ const Footer = forwardRef((props, ref) => {
   };
 
   const iconStyles = {
-    color: "#666",
-    fontSize: "1.5rem",
+    color: "var(--accent)",
+    fontSize: "1.45rem",
   };
 
   // Conditional styles for mobile and desktop
@@ -58,10 +61,13 @@ const Footer = forwardRef((props, ref) => {
     flexDirection: isMobile ? "column" : "row",
     justifyContent: isMobile ? "center" : "space-between",
     alignItems: isMobile ? "center" : "flex-start",
-    padding: isMobile ? "1rem" : "2rem",
-    backgroundColor: "#f9f9f9",
-    borderTop: "1px solid #ddd",
-    boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Top and bottom shadows
+    padding: isMobile ? "1.5rem" : "3rem",
+    background: "var(--surface-elevated)",
+    borderTop: "1px solid var(--border-subtle)",
+    boxShadow: "0 -18px 46px rgba(8, 18, 35, 0.45)",
+    borderRadius: isMobile ? "24px 24px 0 0" : "48px 48px 0 0",
+    color: "var(--text-primary)",
+    gap: isMobile ? "2rem" : "3rem",
   };
 
   const logosContainerStyles = {
@@ -87,8 +93,12 @@ const Footer = forwardRef((props, ref) => {
       {/* Column 1: Company Information */}
       <div style={columnStyles}>
         <div style={logoPlaceholderStyles}></div> {/* Placeholder for logo */}
-        <div>NMLS #2625844</div>
-        <p>Your Home, Your Rate, Your Way.</p>
+        <div style={{ color: "var(--text-secondary)", fontWeight: 600 }}>
+          NMLS #2625844
+        </div>
+        <p style={{ color: "var(--text-secondary)", marginTop: "0.5rem" }}>
+          Your Home, Your Rate, Your Way.
+        </p>
         <div style={socialIconsStyles}>
           <FaInstagram style={iconStyles} />
           <FaYoutube style={iconStyles} />
@@ -99,7 +109,9 @@ const Footer = forwardRef((props, ref) => {
 
       {/* Column 2: Resources */}
       <div style={columnStyles}>
-        <h4>Resources</h4>
+        <h4 style={{ color: "var(--text-primary)", marginBottom: "0.75rem" }}>
+          Resources
+        </h4>
         <ul style={resourcesListStyles}>
           <li>
             <a href="#" style={resourceLinkStyles}>
@@ -136,16 +148,19 @@ const Footer = forwardRef((props, ref) => {
 
       {/* Column 3: Contact Information */}
       <div style={columnStyles}>
-        <h4>Contact us</h4>
-        <p>
-          <FaMapMarkerAlt /> 8004 Springmoss Drive
+        <h4 style={{ color: "var(--text-primary)", marginBottom: "0.75rem" }}>
+          Contact us
+        </h4>
+        <p style={{ color: "var(--text-secondary)", lineHeight: 1.6 }}>
+          <FaMapMarkerAlt style={{ color: "var(--accent)", marginRight: 8 }} />
+          8004 Springmoss Drive
           <br />
           Plano, TX 75025
         </p>
         <p>
-          <FaEnvelope />{" "}
+          <FaEnvelope style={{ color: "var(--accent)", marginRight: 8 }} />{" "}
           <a
-            style={{ color: "inherit", textDecoration: "none" }}
+            style={{ color: "var(--accent)", textDecoration: "none" }}
             href="https://mail.google.com/mail/?view=cm&fs=1&to=tmanriquez@viewyourrate.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -155,9 +170,15 @@ const Footer = forwardRef((props, ref) => {
         </p>
         <a
           href="tel:+12146754530"
-          style={{ color: "#000", textDecoration: "none" }}
+          style={{
+            color: "var(--text-secondary)",
+            textDecoration: "none",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
         >
-          <FaPhone /> (214) 675-4530
+          <FaPhone style={{ color: "var(--accent)" }} /> (214) 675-4530
         </a>
 
         {/* Container for NMLS logo and house SVG */}

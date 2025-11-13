@@ -9,7 +9,7 @@ const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#333"
+    stroke="var(--text-primary)"
     strokeLinecap="round"
     {...props}
   />
@@ -73,7 +73,7 @@ const Navbar = ({
 
   // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.1, color: "#007bff" },
+    hover: { scale: 1.05, color: "var(--accent-strong)" },
   };
 
   // Handle navigation clicks
@@ -92,14 +92,15 @@ const Navbar = ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "1rem 2rem",
-        backgroundColor: "#fff",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        padding: "0.85rem 2.5rem",
+        background: "var(--surface-base)",
+        boxShadow: "0 16px 40px rgba(8, 18, 35, 0.45)",
         position: "sticky",
-        // position: showHeader ? "relative" : "sticky",
-
         top: 0,
         zIndex: 1000,
+        borderBottom: "1px solid var(--border-subtle)",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
       }}
     >
       <div style={leftContainerStyles}>
@@ -146,15 +147,17 @@ const Navbar = ({
 // Inline Styles
 
 const logoStyles = {
-  fontSize: "1.5rem",
-  fontWeight: "bold",
+  fontSize: "1.45rem",
+  fontWeight: "700",
   cursor: "pointer",
+  letterSpacing: "0.06em",
+  color: "var(--text-primary)",
 };
 // Inline Styles (remain the same)
 const leftContainerStyles = {
   display: "flex",
   alignItems: "center",
-  gap: "1rem",
+  gap: "1.1rem",
 };
 
 const navLinksContainerStyles = {
@@ -166,16 +169,16 @@ const navLinksContainerStyles = {
 const navLinksStyles = {
   listStyle: "none",
   display: "flex",
-  gap: "2rem",
+  gap: "1.75rem",
   position: "relative",
   margin: 0,
   padding: 0,
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#007bff" : "#333",
+  color: isActive ? "var(--accent-strong)" : "var(--text-secondary)",
   cursor: "pointer",
-  padding: "0.5rem 1rem",
+  padding: "0.4rem 0.9rem",
   position: "relative",
   textDecoration: "none",
   transition: "color 0.3s ease",
@@ -185,18 +188,20 @@ const indicatorBaseStyles = {
   position: "absolute",
   bottom: 0,
   height: "3px",
-  backgroundColor: "#007bff",
+  background: "var(--accent-gradient)",
   borderRadius: "4px",
 };
 
 const menuButtonStyles = {
-  background: "none",
-  border: "none",
+  background: "rgba(15, 23, 42, 0.65)",
+  border: "1px solid var(--border-subtle)",
+  borderRadius: "999px",
   cursor: "pointer",
-  padding: 0,
+  padding: "0.45rem 0.75rem",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  boxShadow: "var(--shadow-soft)",
 };
 
 export default Navbar;

@@ -83,8 +83,11 @@ const MortgageServices = () => {
             <motion.div
               key={index}
               style={isMobile ? mobileCardStyles : cardStyles}
-              whileHover={{ scale: 1.05, boxShadow: "0 6px 15px #007bff" }}
-              transition={{ duration: 0.3 }}
+              whileHover={{
+                scale: 1.03,
+                boxShadow: "0 28px 60px rgba(56, 189, 248, 0.28)",
+              }}
+              transition={{ duration: 0.25 }}
             >
               <div
                 style={
@@ -105,9 +108,12 @@ const MortgageServices = () => {
               </p>
               <motion.button
                 style={isMobile ? mobileButtonStyles : buttonStyles}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.2 }}
-                transition={{ duration: 0.3 }}
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 20px 42px rgba(56, 189, 248, 0.26)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.25 }}
               >
                 Get a Free Quote
               </motion.button>
@@ -121,22 +127,24 @@ const MortgageServices = () => {
 
 // Desktop Styles
 const sectionStyles = {
-  padding: "2rem 1rem",
-  backgroundColor: "rgb(248, 249, 250)", // Dark theme background
+  padding: "3rem 2rem",
+  background: "transparent",
   textAlign: "center",
-  marginBottom: "2rem",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)",
+  margin: "0 auto 3rem",
+  maxWidth: "1200px",
+  color: "var(--text-primary)",
 };
 
 const headerStyles = {
-  fontSize: "2rem",
-  color: "#007bff",
-  marginBottom: "1.5rem",
+  fontSize: "2.2rem",
+  color: "var(--text-primary)",
+  marginBottom: "1.75rem",
+  letterSpacing: "0.02em",
 };
 
 const scrollContainerStyles = {
   overflowX: "auto",
-  paddingBottom: "1rem",
+  paddingBottom: "1.25rem",
 };
 
 const cardsContainerStyles = {
@@ -148,118 +156,129 @@ const cardsContainerStyles = {
 };
 
 const cardStyles = {
-  minWidth: "250px",
-  backgroundColor: "#333", // Dark card background
-  padding: "1.5rem",
-  borderRadius: "10px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)", // Enhanced shadow for a dark theme
-  transition: "transform 0.3s ease",
+  minWidth: "260px",
+  background:
+    "linear-gradient(160deg, rgba(15, 23, 42, 0.95), rgba(9, 14, 28, 0.88))",
+  padding: "1.85rem",
+  borderRadius: "26px",
+  border: "1px solid var(--border-subtle)",
+  boxShadow: "0 22px 50px rgba(8, 18, 35, 0.55)",
+  transition: "transform 0.25s ease",
   textAlign: "center",
-  width: 350,
+  width: 340,
   flex: "0 0 auto",
+  color: "var(--text-primary)",
 };
 
 const iconContainerStyles = {
-  backgroundColor: "#007bff",
-  borderRadius: "50%",
+  background: "rgba(15, 23, 42, 0.75)",
+  borderRadius: "18px",
   padding: "1rem",
-  marginBottom: "1rem",
+  marginBottom: "1.1rem",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
   fontSize: "2rem",
-  color: "#fff",
-  boxShadow: "0 0 0 4px rgba(255, 255, 255, 1), 0 0 0 6px #007bff",
+  color: "var(--accent-strong)",
+  border: "1px solid rgba(148, 163, 184, 0.25)",
+  boxShadow: "0 18px 38px rgba(56, 189, 248, 0.25)",
 };
 
 const cardTitleStyles = {
   fontSize: "1.25rem",
   margin: "0.5rem 0",
-  color: "#fff", // White text for dark theme
+  color: "var(--text-primary)",
 };
 
 const cardDescriptionStyles = {
-  fontSize: "0.9rem",
-  color: "#aaa", // Light grey for the description
-  marginBottom: "1rem",
+  fontSize: "0.92rem",
+  color: "var(--text-secondary)",
+  marginBottom: "1.1rem",
+  lineHeight: 1.5,
 };
 
 const buttonStyles = {
-  padding: "0.75rem 1.5rem",
-  backgroundColor: "#007bff",
-  color: "#fff",
-  border: "none",
-  borderRadius: "8px",
-  fontSize: "1rem",
+  padding: "0.8rem 1.6rem",
+  background: "var(--accent-gradient)",
+  color: "#0f172a",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  borderRadius: "999px",
+  fontSize: "0.95rem",
+  fontWeight: 600,
   cursor: "pointer",
-  transition: "background-color 0.3s ease",
-  marginTop: "1rem",
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)", // Button shadow
+  transition: "transform 0.2s ease",
+  marginTop: "0.75rem",
+  boxShadow: "0 16px 38px rgba(56, 189, 248, 0.25)",
 };
 
 // Mobile Styles (20% smaller)
 const mobileSectionStyles = {
-  padding: "1.5rem 0.8rem",
-  backgroundColor: "rgb(248, 249, 250)",
+  padding: "2rem 1rem",
+  background: "transparent",
   textAlign: "center",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Top and bottom shadows
   marginBottom: "2rem",
 };
 
 const mobileHeaderStyles = {
-  fontSize: "1.6rem",
-  color: "#007bff",
-  marginBottom: "1.2rem",
+  fontSize: "1.7rem",
+  color: "var(--text-primary)",
+  marginBottom: "1.25rem",
 };
 
 const mobileCardStyles = {
-  minWidth: "200px",
-  backgroundColor: "#333",
-  padding: "1.2rem",
-  borderRadius: "8px",
-  boxShadow: "0 3px 6px rgba(0, 0, 0, 0.5)",
-  transition: "transform 0.3s ease",
+  minWidth: "220px",
+  background:
+    "linear-gradient(160deg, rgba(15, 23, 42, 0.95), rgba(9, 14, 28, 0.88))",
+  padding: "1.4rem",
+  borderRadius: "22px",
+  border: "1px solid var(--border-subtle)",
+  boxShadow: "0 20px 45px rgba(8, 18, 35, 0.55)",
+  transition: "transform 0.25s ease",
   textAlign: "center",
   width: 280,
   flex: "0 0 auto",
+  color: "var(--text-primary)",
 };
 
 const mobileIconContainerStyles = {
-  backgroundColor: "#007bff",
-  borderRadius: "50%",
-  padding: "0.8rem",
+  background: "rgba(15, 23, 42, 0.75)",
+  borderRadius: "16px",
+  padding: "0.85rem",
   marginBottom: "0.8rem",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
   fontSize: "1.6rem",
-  color: "#fff",
-  boxShadow: "0 0 0 3px rgba(255, 255, 255, 1), 0 0 0 4px #007bff",
+  color: "var(--accent-strong)",
+  border: "1px solid rgba(148, 163, 184, 0.25)",
+  boxShadow: "0 12px 28px rgba(56, 189, 248, 0.25)",
 };
 
 const mobileCardTitleStyles = {
-  fontSize: "1rem",
+  fontSize: "1.05rem",
   margin: "0.4rem 0",
-  color: "#fff",
+  color: "var(--text-primary)",
 };
 
 const mobileCardDescriptionStyles = {
-  fontSize: "0.75rem",
-  color: "#aaa",
-  marginBottom: "0.8rem",
+  fontSize: "0.8rem",
+  color: "var(--text-secondary)",
+  marginBottom: "0.9rem",
+  lineHeight: 1.45,
 };
 
 const mobileButtonStyles = {
-  padding: "0.6rem 1.2rem",
-  backgroundColor: "#007bff",
-  color: "#fff",
-  border: "none",
-  borderRadius: "8px",
-  fontSize: "0.9rem",
+  padding: "0.65rem 1.25rem",
+  background: "var(--accent-gradient)",
+  color: "#0f172a",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  borderRadius: "999px",
+  fontSize: "0.92rem",
+  fontWeight: 600,
   cursor: "pointer",
-  transition: "background-color 0.3s ease",
+  transition: "transform 0.2s ease",
   marginTop: "0.8rem",
-  boxShadow: "0 3px 12px rgba(0, 0, 0, 0.3)",
+  boxShadow: "0 14px 32px rgba(56, 189, 248, 0.25)",
 };
 
 export default MortgageServices;

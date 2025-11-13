@@ -24,19 +24,23 @@ const Calculator = ({ dispatch }) => {
           left: "50%",
           transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
           zIndex: 1,
-          color: "#f0f0f0",
+          color: "var(--text-primary)",
           textAlign: "center",
-          padding: isMobile ? "1rem" : "2rem", // Reduced padding for mobile
-          maxWidth: isMobile ? "90%" : "600px", // Adjusted width for mobile
-          width: "80%",
-          borderRadius: "10px",
-          background: "rgba(30, 30, 30, 0.85)",
-          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+          padding: isMobile ? "1.2rem" : "2.25rem",
+          maxWidth: isMobile ? "92%" : "560px",
+          width: "88%",
+          borderRadius: "28px",
+          background:
+            "linear-gradient(145deg, rgba(13, 23, 42, 0.92), rgba(8, 14, 28, 0.88))",
+          border: "1px solid var(--border-subtle)",
+          boxShadow: "0 28px 60px rgba(8, 18, 35, 0.55)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
         }}
       >
         <FaCalculator
           size={isMobile ? 60 : 120} // Smaller icon size for mobile
-          style={{ marginBottom: "1rem" }}
+          style={{ marginBottom: "1rem", color: "var(--accent-strong)" }}
         />
         <h2 style={{ fontSize: isMobile ? "1.5rem" : "2rem" }}>Calculators</h2>
         {/* Buttons */}
@@ -44,13 +48,16 @@ const Calculator = ({ dispatch }) => {
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
-              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+              padding: isMobile ? "0.85rem 1.05rem" : "1rem 1.2rem",
+              fontSize: isMobile ? "0.95rem" : "1.05rem",
             }}
             onClick={handleMortgageClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            whileHover={{
+              scale: 1.02,
+              boxShadow: "0 24px 48px rgba(56, 189, 248, 0.32)",
+            }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.25 }}
           >
             Mortgage Calculator
             <FiArrowRight style={iconStyles} />
@@ -58,7 +65,7 @@ const Calculator = ({ dispatch }) => {
           <p
             style={{
               ...descriptionStyles,
-              fontSize: isMobile ? "0.9rem" : "1rem",
+              fontSize: isMobile ? "0.86rem" : "0.95rem",
               textAlign: isMobile ? "center" : "left",
             }}
           >
@@ -69,13 +76,16 @@ const Calculator = ({ dispatch }) => {
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
-              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+              padding: isMobile ? "0.85rem 1.05rem" : "1rem 1.2rem",
+              fontSize: isMobile ? "0.95rem" : "1.05rem",
             }}
             onClick={handleAffordClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            whileHover={{
+              scale: 1.02,
+              boxShadow: "0 24px 48px rgba(56, 189, 248, 0.32)",
+            }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.25 }}
           >
             Affordability Calculator
             <FiArrowRight style={iconStyles} />
@@ -83,7 +93,7 @@ const Calculator = ({ dispatch }) => {
           <p
             style={{
               ...descriptionStyles,
-              fontSize: isMobile ? "0.9rem" : "1rem",
+              fontSize: isMobile ? "0.86rem" : "0.95rem",
               textAlign: isMobile ? "center" : "left",
             }}
           >
@@ -104,7 +114,10 @@ const calculatorStyles = {
 };
 
 const buttonContainerStyles = {
-  marginTop: "2rem",
+  marginTop: "1.75rem",
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.9rem",
 };
 
 const buttonStyles = {
@@ -112,22 +125,24 @@ const buttonStyles = {
   alignItems: "center",
   justifyContent: "space-between",
   width: "100%",
-  margin: "0.5rem 0",
-  borderRadius: "10px",
-  border: "none",
+  borderRadius: "16px",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
   cursor: "pointer",
-  background: "#007bff",
-  color: "#fff",
-  boxShadow: "0 2px 12px white",
+  background: "var(--accent-gradient)",
+  color: "#0f172a",
+  fontWeight: 600,
+  letterSpacing: "0.02em",
+  boxShadow: "0 20px 42px rgba(56, 189, 248, 0.26)",
 };
 
 const iconStyles = {
-  marginLeft: "0.5rem",
+  marginLeft: "0.65rem",
+  color: "#0f172a",
 };
 
 const descriptionStyles = {
-  color: "#ccc",
-  margin: "0.5rem 0 1.5rem",
+  color: "var(--text-secondary)",
+  margin: "0.35rem 0 0.5rem",
 };
 
 export default Calculator;

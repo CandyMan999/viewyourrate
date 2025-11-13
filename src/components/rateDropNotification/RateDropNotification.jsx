@@ -28,9 +28,12 @@ const RateDropNotification = () => {
         </p>
         <motion.button
           style={isMobile ? mobileButtonStyles : buttonStyles}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.2 }}
-          transition={{ duration: 0.3 }}
+          whileHover={{
+            scale: 1.02,
+            boxShadow: "0 20px 42px rgba(56, 189, 248, 0.26)",
+          }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.25 }}
         >
           Notify me of rate drops
         </motion.button>
@@ -44,11 +47,14 @@ const containerStyles = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "2rem",
-  backgroundColor: "#f8f9fa",
-  borderRadius: "10px",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Updated box shadow
-  margin: "2rem 0",
+  padding: "2.5rem",
+  background:
+    "linear-gradient(150deg, rgba(15, 23, 42, 0.95), rgba(8, 14, 28, 0.9))",
+  borderRadius: "32px",
+  border: "1px solid var(--border-subtle)",
+  boxShadow: "0 26px 60px rgba(8, 18, 35, 0.55)",
+  margin: "3rem 0",
+  color: "var(--text-primary)",
 };
 
 const imageContainerStyles = {
@@ -70,35 +76,38 @@ const textContainerStyles = {
 };
 
 const smallHeaderStyles = {
-  color: "#007bff",
-  fontSize: "0.9rem",
-  fontWeight: "bold",
+  color: "var(--accent)",
+  fontSize: "0.85rem",
+  fontWeight: 700,
   textTransform: "uppercase",
+  letterSpacing: "0.18em",
 };
 
 const largeHeaderStyles = {
-  fontSize: "2rem",
-  fontWeight: "bold",
+  fontSize: "2.2rem",
+  fontWeight: 700,
   margin: "1rem 0",
-  color: "#333",
+  color: "var(--text-primary)",
 };
 
 const descriptionStyles = {
-  fontSize: "1rem",
-  color: "#666",
-  marginBottom: "1.5rem",
+  fontSize: "0.98rem",
+  color: "var(--text-secondary)",
+  marginBottom: "1.75rem",
+  lineHeight: 1.6,
 };
 
 const buttonStyles = {
-  padding: "0.75rem 1.5rem",
-  backgroundColor: "#007bff",
-  color: "#fff",
-  border: "none",
-  borderRadius: "8px",
-  fontSize: "1rem",
+  padding: "0.85rem 1.65rem",
+  background: "var(--accent-gradient)",
+  color: "#0f172a",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  borderRadius: "999px",
+  fontSize: "0.95rem",
+  fontWeight: 600,
   cursor: "pointer",
-  transition: "background-color 0.3s ease",
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+  transition: "transform 0.2s ease",
+  boxShadow: "0 18px 40px rgba(56, 189, 248, 0.25)",
 };
 
 // Mobile Styles
@@ -106,12 +115,15 @@ const mobileContainerStyles = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  padding: "1rem",
-  backgroundColor: "#f8f9fa",
-  borderRadius: "10px",
-  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)",
-  margin: "2rem 0",
+  padding: "1.5rem",
+  background:
+    "linear-gradient(150deg, rgba(15, 23, 42, 0.95), rgba(8, 14, 28, 0.9))",
+  borderRadius: "28px",
+  border: "1px solid var(--border-subtle)",
+  boxShadow: "0 24px 55px rgba(8, 18, 35, 0.55)",
+  margin: "2.5rem 0",
   textAlign: "center",
+  color: "var(--text-primary)",
 };
 
 const mobileImageContainerStyles = {
@@ -130,28 +142,30 @@ const mobileTextContainerStyles = {
 };
 
 const mobileLargeHeaderStyles = {
-  fontSize: "1.5rem",
-  fontWeight: "bold",
-  margin: "0.5rem 0",
-  color: "#333",
+  fontSize: "1.65rem",
+  fontWeight: 700,
+  margin: "0.75rem 0",
+  color: "var(--text-primary)",
 };
 
 const mobileDescriptionStyles = {
-  fontSize: "0.9rem",
-  color: "#666",
-  marginBottom: "1rem",
+  fontSize: "0.86rem",
+  color: "var(--text-secondary)",
+  marginBottom: "1.2rem",
+  lineHeight: 1.5,
 };
 
 const mobileButtonStyles = {
-  padding: "0.5rem 1rem",
-  backgroundColor: "#007bff",
-  color: "#fff",
-  border: "none",
-  borderRadius: "8px",
-  fontSize: "1rem",
+  padding: "0.65rem 1.25rem",
+  background: "var(--accent-gradient)",
+  color: "#0f172a",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  borderRadius: "999px",
+  fontSize: "0.92rem",
+  fontWeight: 600,
   cursor: "pointer",
-  transition: "background-color 0.3s ease",
-  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+  transition: "transform 0.2s ease",
+  boxShadow: "0 16px 36px rgba(56, 189, 248, 0.22)",
 };
 
 export default RateDropNotification;

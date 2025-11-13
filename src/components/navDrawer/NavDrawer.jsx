@@ -20,33 +20,40 @@ const NavDrawer = ({
     position: "fixed",
     top: 60,
     right: 0,
-    width: "50%",
+    width: "70%",
+    maxWidth: 360,
     height: "100%",
-    backgroundColor: "#fff",
-    boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.3)",
+    background: "var(--surface-highlight)",
+    boxShadow: "-12px 0 35px rgba(8, 18, 35, 0.45)",
     zIndex: 2001,
-    padding: "2rem",
-    borderRadius: "10px 0px 0px 0px",
+    padding: "2.5rem 2rem",
+    borderRadius: "24px 0 0 0",
+    borderLeft: "1px solid var(--border-subtle)",
+    color: "var(--text-primary)",
+    backdropFilter: "blur(18px)",
+    WebkitBackdropFilter: "blur(18px)",
   };
 
   const sidebarNavLinksStyles = {
     listStyle: "none",
     display: "flex",
     flexDirection: "column",
-
     height: "100%",
     padding: 0,
     margin: 0,
+    gap: "1rem",
   };
 
   const linkStyles = (isActive) => ({
-    color: isActive ? "#007bff" : "#333",
+    color: isActive ? "var(--accent-strong)" : "var(--text-secondary)",
     cursor: "pointer",
-    padding: "0.5rem 1rem",
+    padding: "0.6rem 0.85rem",
     textDecoration: "none",
     transition: "color 0.3s ease",
     display: "flex",
     alignItems: "center",
+    borderRadius: "14px",
+    background: isActive ? "rgba(56, 189, 248, 0.12)" : "transparent",
   });
 
   const iconContainerStyles = (isActive) => ({
@@ -55,13 +62,12 @@ const NavDrawer = ({
     alignItems: "center",
     width: "40px",
     height: "40px",
-    borderRadius: "50%",
-    backgroundColor: "rgba(30, 30, 30, 0.85)", // Dark scale background
-    border: `2px solid ${isActive ? "#007bff" : "#fff"}`, // Blue ring if active, white otherwise
-
-    boxShadow: isActive ? "0 0 0 2px #007bff" : "none", // Blue outer ring if active
-    color: "#fff", // White for icons
-    fontSize: "1.5rem", // Increased icon size
+    borderRadius: "14px",
+    background: "rgba(15, 23, 42, 0.75)",
+    border: `1px solid ${isActive ? "var(--accent)" : "rgba(148, 163, 184, 0.25)"}`,
+    boxShadow: isActive ? "0 10px 25px rgba(56, 189, 248, 0.35)" : "var(--shadow-soft)",
+    color: "var(--accent-strong)",
+    fontSize: "1.35rem",
     marginRight: 20,
   });
 
