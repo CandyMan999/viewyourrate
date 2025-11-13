@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiHome, FiPhone, FiPieChart, FiUsers } from "react-icons/fi";
-import { FaCalculator } from "react-icons/fa"; // Actual calculator icon
+import { FaCalculator } from "react-icons/fa";
 
 const NavDrawer = ({
   isOpen,
@@ -11,6 +11,11 @@ const NavDrawer = ({
   navItems,
   linkVariants,
 }) => {
+  const motionVariants =
+    linkVariants || {
+      hover: { scale: 1.05, color: "#86efac" },
+    };
+
   const sidebarVariants = {
     open: { x: 0, transition: { stiffness: 200 } },
     closed: { x: "100%", transition: { stiffness: 200 } },
@@ -18,42 +23,41 @@ const NavDrawer = ({
 
   const sidebarStyles = {
     position: "fixed",
-    top: 60,
+    top: 64,
     right: 0,
-    width: "70%",
+    width: "60%",
     maxWidth: 360,
     height: "100%",
-    background: "var(--surface-highlight)",
-    boxShadow: "-12px 0 35px rgba(8, 18, 35, 0.45)",
+    background: "linear-gradient(160deg, rgba(4, 27, 31, 0.97), rgba(5, 22, 25, 0.94))",
+    boxShadow: "-18px 0 40px rgba(4, 27, 31, 0.35)",
     zIndex: 2001,
-    padding: "2.5rem 2rem",
-    borderRadius: "24px 0 0 0",
-    borderLeft: "1px solid var(--border-subtle)",
-    color: "var(--text-primary)",
-    backdropFilter: "blur(18px)",
-    WebkitBackdropFilter: "blur(18px)",
+    padding: "2rem 1.75rem",
+    borderRadius: "18px 0 0 18px",
+    borderLeft: "1px solid rgba(34, 197, 94, 0.3)",
+    color: "#ecfdf5",
+    backdropFilter: "blur(10px)",
   };
 
   const sidebarNavLinksStyles = {
     listStyle: "none",
     display: "flex",
     flexDirection: "column",
+    gap: "1.25rem",
     height: "100%",
     padding: 0,
     margin: 0,
-    gap: "1rem",
   };
 
   const linkStyles = (isActive) => ({
-    color: isActive ? "var(--accent-strong)" : "var(--text-secondary)",
+    color: isActive ? "#4ade80" : "rgba(232, 252, 243, 0.85)",
     cursor: "pointer",
-    padding: "0.6rem 0.85rem",
+    padding: "0.65rem 0.5rem",
     textDecoration: "none",
     transition: "color 0.3s ease",
     display: "flex",
     alignItems: "center",
-    borderRadius: "14px",
-    background: isActive ? "rgba(56, 189, 248, 0.12)" : "transparent",
+    fontWeight: isActive ? 700 : 500,
+    letterSpacing: "0.04em",
   });
 
   const iconContainerStyles = (isActive) => ({
@@ -62,16 +66,15 @@ const NavDrawer = ({
     alignItems: "center",
     width: "40px",
     height: "40px",
-    borderRadius: "14px",
-    background: "rgba(15, 23, 42, 0.75)",
-    border: `1px solid ${isActive ? "var(--accent)" : "rgba(148, 163, 184, 0.25)"}`,
-    boxShadow: isActive ? "0 10px 25px rgba(56, 189, 248, 0.35)" : "var(--shadow-soft)",
-    color: "var(--accent-strong)",
-    fontSize: "1.35rem",
-    marginRight: 20,
+    borderRadius: "12px",
+    backgroundColor: isActive ? "rgba(34, 197, 94, 0.18)" : "rgba(15, 44, 41, 0.65)",
+    border: `1px solid ${isActive ? "rgba(34, 197, 94, 0.7)" : "rgba(148, 163, 184, 0.25)"}`,
+    color: isActive ? "#4ade80" : "#e2f7ef",
+    fontSize: "1.25rem",
+    marginRight: 16,
+    boxShadow: isActive ? "0 0 14px rgba(34, 197, 94, 0.45)" : "none",
   });
 
-  // Example icons mapping based on names
   const getIcon = (name) => {
     switch (name) {
       case "Home":
@@ -103,18 +106,15 @@ const NavDrawer = ({
             {navItems.map(({ name, index }) => (
               <motion.li
                 key={index}
-                variants={linkVariants}
+                variants={motionVariants}
                 whileHover="hover"
-                style={linkStyles(index === active)} // Check if the index is active
+                style={linkStyles(index === active)}
                 onClick={() => {
-                  handleNavClick(index); // Use the index for navigation
-                  toggleDrawer(); // Close the drawer after navigation
+                  handleNavClick(index);
+                  toggleDrawer();
                 }}
               >
-                {/* Icon Container */}
-                <div style={iconContainerStyles(index === active)}>
-                  {getIcon(name)}
-                </div>
+                <div style={iconContainerStyles(index === active)}>{getIcon(name)}</div>
                 {name}
               </motion.li>
             ))}

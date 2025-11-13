@@ -27,30 +27,27 @@ const MortgageCalc = ({ isVisible, onClose }) => {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(4, 8, 18, 0.75)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,
-    backdropFilter: "blur(14px)",
-    WebkitBackdropFilter: "blur(14px)",
-    padding: "1.5rem",
+    backdropFilter: "blur(5px)",
+    WebkitBackdropFilter: "blur(5px)",
+    padding: "1rem",
   };
 
   const widgetStyles = {
-    background:
-      "linear-gradient(160deg, rgba(13, 23, 42, 0.96), rgba(6, 11, 24, 0.9))",
-    padding: "2.5rem",
-    borderRadius: "32px",
+    backgroundColor: "#fff",
+    padding: "2rem",
+    borderRadius: "16px",
     textAlign: "center",
     width: "100%",
     maxWidth: "1100px",
     minHeight: "700px",
-    boxShadow: "0 40px 85px rgba(8, 18, 35, 0.6)",
+    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
     position: "relative",
     overflow: "hidden",
-    border: "1px solid var(--border-subtle)",
-    color: "var(--text-primary)",
   };
 
   const closeIconStyles = {
@@ -58,14 +55,12 @@ const MortgageCalc = ({ isVisible, onClose }) => {
     top: "16px",
     right: "16px",
     fontSize: "1.5rem",
-    color: "var(--text-primary)",
+    color: "#fff",
     cursor: "pointer",
-    backgroundColor: "rgba(15, 23, 42, 0.75)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     borderRadius: "50%",
     padding: "8px",
     zIndex: 10,
-    border: "1px solid var(--border-subtle)",
-    boxShadow: "0 18px 40px rgba(8, 18, 35, 0.45)",
   };
 
   useEffect(() => {
@@ -112,24 +107,12 @@ const MortgageCalc = ({ isVisible, onClose }) => {
         >
           <motion.div style={widgetStyles}>
             <FiX style={closeIconStyles} onClick={onClose} />
-            <h2
-              style={{
-                color: "var(--text-primary)",
-                marginBottom: "1.5rem",
-                fontSize: "2rem",
-              }}
-            >
+            <h2 style={{ color: "#007bff", marginBottom: "1.5rem" }}>
               Mortgage Calculator
             </h2>
 
             {loading && (
-              <div
-                style={{
-                  paddingTop: "200px",
-                  fontSize: "1.1rem",
-                  color: "var(--text-secondary)",
-                }}
-              >
+              <div style={{ paddingTop: "200px", fontSize: "1.2rem" }}>
                 <div className="spinner" />
                 Loading calculator...
               </div>
@@ -150,15 +133,13 @@ const MortgageCalc = ({ isVisible, onClose }) => {
               onClick={onClose}
               style={{
                 marginTop: "2rem",
-                padding: "0.75rem 1.6rem",
-                background: "var(--accent-gradient)",
-                color: "#0f172a",
-                border: "1px solid rgba(148, 163, 184, 0.18)",
-                borderRadius: "999px",
+                padding: "0.75rem 1.5rem",
+                background: "#007bff",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
                 fontSize: "1rem",
-                fontWeight: 600,
                 cursor: "pointer",
-                boxShadow: "0 18px 40px rgba(56, 189, 248, 0.25)",
               }}
             >
               Close

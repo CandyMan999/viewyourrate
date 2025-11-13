@@ -28,6 +28,7 @@ import reducer from "./reducer";
 import { isMobile } from "react-device-detect";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import background from "./pics/background.jpg";
 import { FiX } from "react-icons/fi";
 import { dummyRates } from "./data/dummyRates";
 
@@ -59,26 +60,24 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(4, 8, 18, 0.75)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     zIndex: 1000,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backdropFilter: "blur(14px)",
-    WebkitBackdropFilter: "blur(14px)",
+    backdropFilter: "blur(5px)",
+    WebkitBackdropFilter: "blur(5px)",
   };
 
   const widget = {
-    background:
-      "linear-gradient(160deg, rgba(13, 23, 42, 0.96), rgba(6, 11, 24, 0.9))",
+    backgroundColor: "#fff",
     width: "95%",
     maxWidth: "1100px",
     height: "90vh",
-    borderRadius: "28px",
+    borderRadius: "12px",
     overflow: "hidden",
     position: "relative",
-    boxShadow: "0 40px 85px rgba(8, 18, 35, 0.6)",
-    border: "1px solid var(--border-subtle)",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
   };
 
   const closeStyle = {
@@ -87,13 +86,11 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
     right: 10,
     zIndex: 10,
     fontSize: "1.5rem",
-    color: "var(--text-primary)",
+    color: "#fff",
     cursor: "pointer",
-    backgroundColor: "rgba(15, 23, 42, 0.7)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     padding: "6px",
     borderRadius: "50%",
-    border: "1px solid var(--border-subtle)",
-    boxShadow: "0 18px 40px rgba(8, 18, 35, 0.45)",
   };
 
   return (
@@ -142,11 +139,8 @@ const App = () => {
   const navbarRef = useRef(null);
 
   const appStyles = {
-    fontFamily: "var(--font-base)",
+    fontFamily: "Arial, sans-serif",
     position: "relative",
-    color: "var(--text-primary)",
-    background: "transparent",
-    minHeight: "100vh",
   };
 
   useEffect(() => {
@@ -358,35 +352,28 @@ const mainContainerStyles = {
   position: "relative",
   height: "100vh",
   overflow: "hidden",
-  width: "min(1200px, 100%)",
-  margin: "0 auto",
-  padding: "2rem 2.5rem 6rem",
-  background:
-    "radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 55%), var(--surface-elevated)",
-  borderRadius: "32px",
-  border: "1px solid var(--border-subtle)",
-  boxShadow: "var(--shadow-soft)",
+  backgroundImage: `url(${background})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
 };
 
 // Styles for arrows
 const arrowStyles = {
-  width: "42px",
-  height: "42px",
+  width: "40px",
+  height: "40px",
   top: "30%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "var(--surface-base)",
+  backgroundColor: "rgba(255, 255, 255, 0.8)",
   borderRadius: "50%",
   cursor: "pointer",
   zIndex: 1000,
   fontSize: "1.5rem",
-  color: "var(--accent)",
-  border: "1px solid var(--border-subtle)",
-  backdropFilter: "blur(10px)",
-  WebkitBackdropFilter: "blur(10px)",
-  boxShadow: "var(--shadow-soft)",
-  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+  color: "#007bff",
+
+  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
 };
 
 export default App;

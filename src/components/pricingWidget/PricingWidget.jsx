@@ -37,22 +37,20 @@ const DotToggle = ({
     gap: "0.5rem",
     padding: "0.55rem 0.9rem",
     borderRadius: "999px",
-    border: "1px solid var(--border-subtle)",
-    backgroundColor: "rgba(15, 23, 42, 0.6)",
-    color: "var(--text-secondary)",
+    border: "1px solid #d7deeb",
+    backgroundColor: "#ffffff",
+    color: "#13223a",
     fontWeight: 600,
     cursor: "pointer",
     transition: "all 0.15s ease",
     userSelect: "none",
-    backdropFilter: "blur(8px)",
   };
 
   const activePill = {
     ...basePill,
-    borderColor: "var(--accent)",
-    backgroundColor: "rgba(56, 189, 248, 0.12)",
-    boxShadow: "0 0 0 3px rgba(56, 189, 248, 0.18)",
-    color: "var(--text-primary)",
+    borderColor: "#1a6bff",
+    backgroundColor: "#eef5ff",
+    boxShadow: "0 0 0 3px rgba(26,107,255,0.12)",
   };
 
   const Dot = ({ active }) => (
@@ -62,12 +60,12 @@ const DotToggle = ({
         width: 18,
         height: 18,
         borderRadius: "50%",
-        border: `2px solid ${active ? "var(--accent)" : "rgba(148, 163, 184, 0.35)"}`,
+        border: `2px solid ${active ? "#1a6bff" : "#9fb3d6"}`,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         transition: "all 0.15s ease",
-        background: "rgba(15, 23, 42, 0.75)",
+        background: "#fff",
       }}
     >
       <span
@@ -75,7 +73,7 @@ const DotToggle = ({
           width: 8,
           height: 8,
           borderRadius: "50%",
-          backgroundColor: active ? "var(--accent)" : "transparent",
+          backgroundColor: active ? "#1a6bff" : "transparent",
           transition: "all 0.15s ease",
         }}
       />
@@ -84,9 +82,7 @@ const DotToggle = ({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-      <label style={{ fontWeight: 600, color: "var(--text-primary)" }}>
-        {label}
-      </label>
+      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>{label}</label>
       <div
         style={{ display: "flex", gap: "0.75rem" }}
         role="radiogroup"
@@ -159,25 +155,23 @@ const PricingWidget = ({ isVisible, onClose }) => {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(4, 8, 18, 0.75)",
+    backgroundColor: "rgba(0, 0, 0, 0.55)",
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-end",
     zIndex: 1000,
     padding: "2rem 1rem",
     boxSizing: "border-box",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
+    backdropFilter: "blur(4px)",
+    WebkitBackdropFilter: "blur(4px)",
   };
 
   const widgetStyles = {
     width: "100%",
     maxWidth: "1100px",
-    borderRadius: "28px",
+    borderRadius: "18px",
     overflow: "hidden",
-    boxShadow: "0 36px 80px rgba(8, 18, 35, 0.55)",
-    border: "1px solid var(--border-subtle)",
-    background: "var(--surface-highlight)",
+    boxShadow: "0 20px 45px rgba(15, 33, 60, 0.25)",
   };
 
   const closeIconStyles = {
@@ -185,7 +179,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
     top: "18px",
     right: "18px",
     fontSize: "1.5rem",
-    color: "var(--text-primary)",
+    color: "#fff",
     cursor: "pointer",
   };
 
@@ -213,8 +207,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                background: "transparent",
-                color: "var(--text-primary)",
+                backgroundColor: "#f5f7fb",
               }}
             >
               <div
@@ -222,10 +215,8 @@ const PricingWidget = ({ isVisible, onClose }) => {
                   display: "flex",
                   flexDirection: "column",
                   gap: "2rem",
-                  padding: "2.75rem",
-                  background:
-                    "linear-gradient(160deg, rgba(13, 23, 42, 0.96), rgba(6, 11, 24, 0.88))",
-                  color: "var(--text-primary)",
+                  padding: "2.5rem",
+                  backgroundColor: "#fff",
                 }}
               >
                 <div
@@ -239,7 +230,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                     <p
                       style={{
                         textTransform: "uppercase",
-                        color: "var(--text-secondary)",
+                        color: "#5a6a85",
                         fontWeight: 700,
                         fontSize: "0.75rem",
                         letterSpacing: "0.12em",
@@ -251,9 +242,9 @@ const PricingWidget = ({ isVisible, onClose }) => {
                     <h2
                       style={{
                         margin: "0.4rem 0 0",
-                        fontSize: "2rem",
+                        fontSize: "1.75rem",
                         fontWeight: 800,
-                        color: "var(--text-primary)",
+                        color: "#13223a",
                       }}
                     >
                       Customize Your Rate
@@ -262,11 +253,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                   <div
                     style={{
                       display: "flex",
-                      backgroundColor: "rgba(15, 23, 42, 0.65)",
+                      backgroundColor: "#eef2ff",
                       borderRadius: "999px",
                       padding: "0.25rem",
-                      gap: "0.35rem",
-                      border: "1px solid var(--border-subtle)",
+                      gap: "0.25rem",
                     }}
                   >
                     {["Purchase", "Refinance"].map((type) => {
@@ -282,11 +272,9 @@ const PricingWidget = ({ isVisible, onClose }) => {
                             padding: "0.5rem 1.5rem",
                             fontWeight: 600,
                             backgroundColor: isActive
-                              ? "var(--accent)"
+                              ? "#1a6bff"
                               : "transparent",
-                            color: isActive
-                              ? "#0f172a"
-                              : "var(--text-secondary)",
+                            color: isActive ? "#fff" : "#1a3b6d",
                             cursor: "pointer",
                             transition: "all 0.2s ease",
                           }}
@@ -322,7 +310,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
                         Purchase Price
                       </label>
                       <input
@@ -335,10 +323,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                           width: "90%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid var(--border-subtle)",
+                          border: "1px solid #d7deeb",
                           fontSize: "1rem",
-                          color: "var(--text-primary)",
-                          backgroundColor: "rgba(15, 23, 42, 0.65)",
+                          color: "#13223a",
+                          backgroundColor: "#f7f9ff",
                         }}
                       />
                     </div>
@@ -351,7 +339,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
                         Down Payment
                       </label>
                       <select
@@ -361,10 +349,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid var(--border-subtle)",
+                          border: "1px solid #d7deeb",
                           fontSize: "1rem",
-                          color: "var(--text-primary)",
-                          backgroundColor: "rgba(15, 23, 42, 0.65)",
+                          color: "#13223a",
+                          backgroundColor: "#f7f9ff",
                           appearance: "none",
                         }}
                       >
@@ -385,7 +373,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
                         Loan Amount
                       </label>
                       <input
@@ -396,10 +384,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                           width: "90%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid var(--border-subtle)",
+                          border: "1px solid #d7deeb",
                           fontSize: "1rem",
-                          color: "var(--text-secondary)",
-                          backgroundColor: "rgba(56, 189, 248, 0.08)",
+                          color: "#1a3b6d",
+                          backgroundColor: "#eaf1ff",
                           fontWeight: 600,
                         }}
                       />
@@ -420,7 +408,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
                         Occupancy Type
                       </label>
                       <select
@@ -430,10 +418,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid var(--border-subtle)",
+                          border: "1px solid #d7deeb",
                           fontSize: "1rem",
-                          color: "var(--text-primary)",
-                          backgroundColor: "rgba(15, 23, 42, 0.65)",
+                          color: "#13223a",
+                          backgroundColor: "#f7f9ff",
                           appearance: "none",
                         }}
                       >
@@ -453,7 +441,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
                         Property Type
                       </label>
                       <select
@@ -463,10 +451,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid var(--border-subtle)",
+                          border: "1px solid #d7deeb",
                           fontSize: "1rem",
-                          color: "var(--text-primary)",
-                          backgroundColor: "rgba(15, 23, 42, 0.65)",
+                          color: "#13223a",
+                          backgroundColor: "#f7f9ff",
                           appearance: "none",
                         }}
                       >
@@ -486,7 +474,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
                         State
                       </label>
                       <select
@@ -496,10 +484,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid var(--border-subtle)",
+                          border: "1px solid #d7deeb",
                           fontSize: "1rem",
-                          color: "var(--text-primary)",
-                          backgroundColor: "rgba(15, 23, 42, 0.65)",
+                          color: "#13223a",
+                          backgroundColor: "#f7f9ff",
                           appearance: "none",
                         }}
                       >
@@ -525,16 +513,17 @@ const PricingWidget = ({ isVisible, onClose }) => {
                     type="submit"
                     style={{
                       padding: "0.95rem 1.5rem",
-                      background: "var(--accent-gradient)",
-                      color: "#0f172a",
-                      border: "1px solid rgba(148, 163, 184, 0.2)",
-                      borderRadius: "999px",
+                      background:
+                        "linear-gradient(90deg, #1a6bff 0%, #4c8dff 100%)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "12px",
                       fontSize: "1.05rem",
                       fontWeight: 700,
                       cursor: "pointer",
                       textTransform: "uppercase",
                       letterSpacing: "0.05em",
-                      boxShadow: "0 20px 42px rgba(56, 189, 248, 0.3)",
+                      boxShadow: "0 15px 25px rgba(26, 107, 255, 0.25)",
                     }}
                   >
                     Get Rates
@@ -548,10 +537,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                   flexDirection: "column",
                   justifyContent: "center",
                   gap: "1.25rem",
-                  padding: "2.75rem",
+                  padding: "2.5rem",
                   background:
-                    "linear-gradient(140deg, rgba(56, 189, 248, 0.35), rgba(59, 130, 246, 0.25))",
-                  color: "var(--text-primary)",
+                    "linear-gradient(135deg, #1b4dff 0%, #0f8bff 100%)",
+                  color: "#fff",
                 }}
               >
                 <div style={{ position: "relative" }}>
@@ -565,7 +554,6 @@ const PricingWidget = ({ isVisible, onClose }) => {
                       marginBottom: 0,
                       fontSize: "1rem",
                       lineHeight: 1.6,
-                      color: "var(--text-primary)",
                     }}
                   >
                     Get a real quote in seconds. Customize your scenario and
@@ -594,20 +582,13 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         display: "flex",
                         alignItems: "flex-start",
                         gap: "0.75rem",
-                        color: "var(--text-primary)",
                       }}
                     >
                       <FiCheckCircle
                         size={22}
-                        style={{ marginTop: 2, color: "var(--accent)" }}
+                        style={{ marginTop: 2, color: "#fff" }}
                       />
-                      <span
-                        style={{
-                          fontSize: "1rem",
-                          lineHeight: 1.6,
-                          color: "var(--text-primary)",
-                        }}
-                      >
+                      <span style={{ fontSize: "1rem", lineHeight: 1.6 }}>
                         {benefit}
                       </span>
                     </li>

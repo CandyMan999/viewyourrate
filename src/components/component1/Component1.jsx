@@ -12,18 +12,14 @@ const Component1 = () => {
           left: "50%",
           transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)", // Adjust translation for mobile
           zIndex: 1,
-          color: "var(--text-primary)",
+          color: "#f0f0f0",
           textAlign: "center",
-          padding: isMobile ? "1.2rem" : "2.1rem",
-          maxWidth: isMobile ? "92%" : "560px",
-          width: "88%", // Ensure it has a reasonable width for mobile
-          borderRadius: "28px",
-          background:
-            "linear-gradient(145deg, rgba(13, 23, 42, 0.92), rgba(8, 14, 28, 0.88))",
-          border: "1px solid var(--border-subtle)",
-          boxShadow: "0 28px 60px rgba(8, 18, 35, 0.55)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
+          padding: "2rem",
+          maxWidth: "600px",
+          width: "80%", // Ensure it has a reasonable width for mobile
+          borderRadius: "10px",
+          background: "rgba(30, 30, 30, 0.85)",
+          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
         }}
       >
         <h2>Component 1</h2>

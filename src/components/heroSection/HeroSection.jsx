@@ -8,42 +8,40 @@ const HeroSection = ({ state, dispatch }) => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: isMobile ? "100%" : "90vh",
+    height: isMobile ? "100%" : "90vh", // Use full height for mobile
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     position: "relative",
     overflow: "hidden",
-    width: "100%",
   };
 
   const overlayStyles = {
     position: "absolute",
-    inset: 0,
-    background:
-      "radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.25), transparent 45%), rgba(6, 11, 24, 0.6)",
-    filter: "blur(0)",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
   };
 
+  // Adjust content styles to be positioned correctly for mobile and desktop
   const contentStyles = {
-    position: "relative",
+    position: "absolute",
+    top: isMobile ? "30%" : "35%", // Adjust top positioning for mobile
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     zIndex: 1,
-    color: "var(--text-primary)",
+    color: "#f0f0f0",
     textAlign: "center",
-    padding: isMobile ? "1.4rem" : "2rem",
-    maxWidth: isMobile ? "92%" : "520px",
-    width: "100%",
-    borderRadius: "28px",
-    background:
-      "linear-gradient(145deg, rgba(13, 23, 42, 0.92), rgba(9, 15, 30, 0.88))",
-    border: "1px solid var(--border-subtle)",
-    boxShadow: "0 28px 60px rgba(8, 18, 35, 0.55)",
-    backdropFilter: "blur(6px)",
-    WebkitBackdropFilter: "blur(6px)",
+    padding: isMobile ? "1rem" : "1.8rem", // Slightly reduced padding for desktop
+    maxWidth: isMobile ? "90%" : "540px", // Reduced width for desktop
+    width: "80%",
+    borderRadius: "10px",
+    background: "rgba(30, 30, 30, 0.85)",
+    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
   };
 
   const buttonContainerStyles = {
-    marginTop: isMobile ? "1.1rem" : "1.8rem",
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.85rem",
+    marginTop: isMobile ? "1rem" : "1.8rem", // Reduced margin for desktop
   };
 
   const buttonStyles = {
@@ -51,16 +49,15 @@ const HeroSection = ({ state, dispatch }) => {
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
-    padding: isMobile ? "0.85rem 1.1rem" : "1rem 1.3rem",
-    borderRadius: "16px",
-    border: "1px solid rgba(148, 163, 184, 0.18)",
+    padding: isMobile ? "0.75rem" : "0.9rem", // Slightly reduced padding for desktop
+    margin: "0.5rem 0",
+    fontSize: isMobile ? "1rem" : "1.1rem", // Reduced font size for desktop
+    borderRadius: "10px",
+    border: "none",
     cursor: "pointer",
-    background: "var(--accent-gradient)",
-    color: "#0f172a",
-    fontWeight: 600,
-    letterSpacing: "0.02em",
-    fontSize: isMobile ? "0.95rem" : "1.05rem",
-    boxShadow: "0 18px 38px rgba(56, 189, 248, 0.25)",
+    background: "#007bff",
+    color: "#fff",
+    boxShadow: "0 2px 12px white",
   };
 
   const iconStyles = {
@@ -79,21 +76,10 @@ const HeroSection = ({ state, dispatch }) => {
 
       {/* Content */}
       <div style={contentStyles}>
-        <h1
-          style={{
-            fontSize: isMobile ? "1.6rem" : "2.35rem",
-            marginBottom: "0.75rem",
-          }}
-        >
+        <h1 style={{ fontSize: isMobile ? "1.5rem" : "2.25rem" }}>
           Unlock Your Best Rate
         </h1>
-        <p
-          style={{
-            fontSize: isMobile ? "0.9rem" : "0.95rem",
-            color: "var(--text-secondary)",
-            marginBottom: "0.75rem",
-          }}
-        >
+        <p style={{ fontSize: isMobile ? "0.9rem" : "0.95rem" }}>
           We provide real-time access to premier wholesale lenders, delivering
           wholesale pricing instantly. No Credit Checks, just transparency and
           speed.
@@ -101,8 +87,7 @@ const HeroSection = ({ state, dispatch }) => {
         <p
           style={{
             fontStyle: "italic",
-            fontSize: isMobile ? "0.82rem" : "0.92rem",
-            color: "var(--accent)",
+            fontSize: isMobile ? "0.8rem" : "0.9rem",
           }}
         >
           Get a free custom rate quote in seconds ⟶
@@ -110,21 +95,16 @@ const HeroSection = ({ state, dispatch }) => {
 
         {/* Buttons */}
         <div style={buttonContainerStyles}>
-          <motion.button
-            style={buttonStyles}
-            onClick={handleButtonClick}
-            whileHover={{ scale: 1.02, boxShadow: "0 22px 44px rgba(56, 189, 248, 0.35)" }}
-            whileTap={{ scale: 0.97 }}
-          >
+          <motion.button style={buttonStyles} onClick={handleButtonClick}>
             I'm looking to purchase
             <FiArrowRight style={iconStyles} />
           </motion.button>
           <motion.button
             style={buttonStyles}
             onClick={handleButtonClick}
-            whileHover={{ scale: 1.02, boxShadow: "0 22px 44px rgba(56, 189, 248, 0.35)" }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.25 }}
+            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3 }}
           >
             I'm looking to refinance
             <FiArrowRight style={iconStyles} />
@@ -134,10 +114,9 @@ const HeroSection = ({ state, dispatch }) => {
         {/* Additional Info */}
         <div
           style={{
-            marginTop: "1.25rem",
-            fontSize: isMobile ? "0.78rem" : "0.84rem",
-            color: "var(--text-muted)",
-            letterSpacing: "0.04em",
+            marginTop: "1rem",
+            fontSize: isMobile ? "0.8rem" : "0.85rem", // Slightly reduced font size for desktop
+            color: "#ccc",
           }}
         >
           No impact on credit score • No hidden costs • No documents required
