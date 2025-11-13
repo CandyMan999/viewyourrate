@@ -1,130 +1,58 @@
-import React from "react";
-import applyButton from "../applyButton";
+import React, { useMemo } from "react";
+import { FiSliders, FiClock } from "react-icons/fi";
 import ApplyButton from "../applyButton";
-const RatesSectionMobile = () => {
-  // Styling for the entire section
-  const sectionStyles = {
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.5)", // Set opacity for background
-    paddingTop: "0.5rem", // Reduced padding
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.1)",
-    zIndex: 1000,
-  };
+import RateCard from "../ratesSection/RateCard";
+import { dummyRates } from "../../data/dummyRates";
+import "./RatesSectionMobile.css";
 
-  // Styling for the top row (header and button)
-  const topRowStyles = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: "0.5rem", // Reduced margin
-    paddingLeft: "0.5rem", // Reduced padding
-  };
+const RatesSectionMobile = ({ state, dispatch }) => {
+  const rates = state?.mortgageRates?.length
+    ? state.mortgageRates
+    : dummyRates;
 
-  const headerStyles = {
-    color: "#007bff",
-    fontSize: "0.8rem", // Slightly smaller font
-    fontWeight: "bold",
-    textTransform: "uppercase",
-  };
+  const timestampLabel = useMemo(() => {
+    const timestamp = new Date();
+    return timestamp.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }, []);
 
-  const buttonStyles = {
-    padding: "0.4rem 0.8rem", // Smaller padding
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "0.8rem", // Smaller font size
-    cursor: "pointer",
-    marginRight: "0.5rem", // Reduced margin
-  };
-
-  // Styling for the rate cards container
-  const ratesContainerStyles = {
-    display: "flex",
-    alignItems: "center",
-    overflowX: "auto", // Allow horizontal scrolling
-    width: "100%",
-    marginLeft: "0",
-    marginRight: "0",
-  };
-
-  // Styling for individual rate cards
-  const rateCardStyles = {
-    minWidth: "120px", // Reduced width
-    marginRight: "0.5rem", // Reduced margin
-    padding: "0.8rem", // Reduced padding
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    backgroundColor: "#fff", // Keep cards fully opaque
-    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-    textAlign: "center",
-    flexShrink: 0, // Prevents the cards from shrinking
-  };
-
-  const rateHeaderStyles = {
-    fontSize: "0.7rem", // Slightly smaller font
-    fontWeight: "bold",
-    color: "#666",
-    marginBottom: "0.3rem", // Reduced margin
-  };
-
-  const rateInfoStyles = {
-    fontSize: "0.9rem", // Slightly smaller font
-    fontWeight: "bold",
-    margin: "0.3rem 0", // Reduced margin
-  };
-
-  const rateDetailsStyles = {
-    fontSize: "0.7rem", // Slightly smaller font
-    color: "#666",
+  const handleCustomizeClick = () => {
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
   };
 
   return (
-    <div style={sectionStyles}>
-      {/* Top Row: Header and Button */}
-      <div style={topRowStyles}>
-        <div style={headerStyles}>Today's Rates</div>
-        <ApplyButton mobile={true} />
-        <button style={buttonStyles}>Compare</button>
-      </div>
-
-      {/* Second Row: Rate Cards */}
-      <div style={ratesContainerStyles}>
-        {/* Example Rate Card */}
-        <div style={rateCardStyles}>
-          <div style={rateHeaderStyles}>PURCHASE</div>
-          <div style={rateInfoStyles}>5.625% / 5.699%</div>
-          <div style={rateDetailsStyles}>30 Yr Fixed</div>
+    <section className="rates-mobile" aria-labelledby="rates-mobile-heading">
+      <div className="rates-mobile__top">
+        <div className="rates-mobile__label-group">
+          <span className="rates-mobile__eyebrow">Today's Pricing</span>
+          <h2 id="rates-mobile-heading" className="rates-mobile__title">
+            Live market snapshot
+          </h2>
+          <span className="rates-mobile__timestamp">
+            <FiClock aria-hidden="true" /> Updated {timestampLabel} ET
+          </span>
         </div>
-
-        {/* Additional Rate Cards */}
-        <div style={rateCardStyles}>
-          <div style={rateHeaderStyles}>PURCHASE</div>
-          <div style={rateInfoStyles}>4.750% / 4.885%</div>
-          <div style={rateDetailsStyles}>15 Yr Fixed</div>
-        </div>
-
-        <div style={rateCardStyles}>
-          <div style={rateHeaderStyles}>PURCHASE</div>
-          <div style={rateInfoStyles}>5.000% / 5.772%</div>
-          <div style={rateDetailsStyles}>FHA Loan</div>
-        </div>
-
-        <div style={rateCardStyles}>
-          <div style={rateHeaderStyles}>PURCHASE</div>
-          <div style={rateInfoStyles}>5.000% / 5.255%</div>
-          <div style={rateDetailsStyles}>VA Loan</div>
+        <div className="rates-mobile__actions">
+          <button
+            type="button"
+            className="rates-mobile__compare"
+            onClick={handleCustomizeClick}
+          >
+            <FiSliders aria-hidden="true" /> Customize
+          </button>
+          <ApplyButton mobile={true} />
         </div>
       </div>
-    </div>
+      <div className="rates-mobile__cards" role="list">
+        {rates.map((rate) => (
+          <div key={rate.id} role="listitem" className="rates-mobile__card">
+            <RateCard {...rate} size="compact" />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 };
 

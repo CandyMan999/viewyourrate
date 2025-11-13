@@ -1,10 +1,4 @@
-const express = require("express");
-const cors = require("cors");
-
-const app = express();
-app.use(cors());
-
-const placeholderRates = [
+export const dummyRates = [
   {
     id: "conv-30",
     purpose: "Purchase",
@@ -41,16 +35,22 @@ const placeholderRates = [
     change: -0.045,
     points: 0.235,
   },
+  {
+    id: "va-30",
+    purpose: "Purchase",
+    product: "30 Year VA",
+    rate: 5.75,
+    apr: 5.913,
+    change: 0.021,
+    points: 0.155,
+  },
+  {
+    id: "usda-30",
+    purpose: "Purchase",
+    product: "30 Year USDA",
+    rate: 5.99,
+    apr: 6.102,
+    change: -0.008,
+    points: 0.204,
+  },
 ];
-
-app.get("/api/mortgage-rates", (req, res) => {
-  res.json({
-    lastUpdated: new Date().toISOString(),
-    rates: placeholderRates,
-    source: "placeholder",
-  });
-});
-
-app.listen(4000, () => {
-  console.log("Mortgage Rates API server is running on port 4000");
-});
