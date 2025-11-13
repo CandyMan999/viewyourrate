@@ -149,6 +149,7 @@ const logoStyles = {
   fontSize: "1.5rem",
   fontWeight: "bold",
   cursor: "pointer",
+  color: "#1f2933",
 };
 // Inline Styles (remain the same)
 const leftContainerStyles = {
@@ -173,7 +174,7 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#007bff" : "#333",
+  color: isActive ? "#007bff" : "#4f5d75",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",

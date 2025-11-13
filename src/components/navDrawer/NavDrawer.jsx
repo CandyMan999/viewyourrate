@@ -22,11 +22,13 @@ const NavDrawer = ({
     right: 0,
     width: "50%",
     height: "100%",
-    backgroundColor: "#fff",
-    boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.3)",
+    backgroundColor: "rgba(255, 255, 255, 0.98)",
+    boxShadow: "-12px 0 35px rgba(15, 33, 60, 0.15)",
     zIndex: 2001,
     padding: "2rem",
-    borderRadius: "10px 0px 0px 0px",
+    borderRadius: "18px 0 0 0",
+    borderLeft: "1px solid rgba(0, 123, 255, 0.1)",
+    backdropFilter: "blur(6px)",
   };
 
   const sidebarNavLinksStyles = {
@@ -40,7 +42,7 @@ const NavDrawer = ({
   };
 
   const linkStyles = (isActive) => ({
-    color: isActive ? "#007bff" : "#333",
+    color: isActive ? "#007bff" : "#4f5d75",
     cursor: "pointer",
     padding: "0.5rem 1rem",
     textDecoration: "none",
@@ -53,15 +55,18 @@ const NavDrawer = ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "40px",
-    height: "40px",
+    width: "44px",
+    height: "44px",
     borderRadius: "50%",
-    backgroundColor: "rgba(30, 30, 30, 0.85)", // Dark scale background
-    border: `2px solid ${isActive ? "#007bff" : "#fff"}`, // Blue ring if active, white otherwise
-
-    boxShadow: isActive ? "0 0 0 2px #007bff" : "none", // Blue outer ring if active
-    color: "#fff", // White for icons
-    fontSize: "1.5rem", // Increased icon size
+    backgroundColor: isActive
+      ? "rgba(0, 123, 255, 0.15)"
+      : "rgba(0, 123, 255, 0.08)",
+    border: `1px solid rgba(0, 123, 255, ${isActive ? 0.5 : 0.25})`,
+    boxShadow: isActive
+      ? "0 10px 20px rgba(0, 123, 255, 0.25)"
+      : "0 6px 16px rgba(15, 33, 60, 0.08)",
+    color: "#007bff",
+    fontSize: "1.4rem",
     marginRight: 20,
   });
 

@@ -24,7 +24,9 @@ const Footer = forwardRef((props, ref) => {
   const logoPlaceholderStyles = {
     width: "150px",
     height: "50px",
-    backgroundColor: "#ccc",
+    borderRadius: "12px",
+    background:
+      "linear-gradient(135deg, rgba(0, 123, 255, 0.18), rgba(0, 123, 255, 0.05))",
     marginBottom: "1rem",
   };
 
@@ -36,8 +38,9 @@ const Footer = forwardRef((props, ref) => {
 
   const resourceLinkStyles = {
     marginBottom: "0.5rem",
-    color: "#333",
+    color: "#4f5d75",
     textDecoration: "none",
+    fontWeight: 500,
   };
 
   const socialIconsStyles = {
@@ -48,8 +51,8 @@ const Footer = forwardRef((props, ref) => {
   };
 
   const iconStyles = {
-    color: "#666",
-    fontSize: "1.5rem",
+    color: "#007bff",
+    fontSize: "1.4rem",
   };
 
   // Conditional styles for mobile and desktop
@@ -58,10 +61,11 @@ const Footer = forwardRef((props, ref) => {
     flexDirection: isMobile ? "column" : "row",
     justifyContent: isMobile ? "center" : "space-between",
     alignItems: isMobile ? "center" : "flex-start",
-    padding: isMobile ? "1rem" : "2rem",
-    backgroundColor: "#f9f9f9",
-    borderTop: "1px solid #ddd",
-    boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)", // Top and bottom shadows
+    padding: isMobile ? "1.5rem" : "2.5rem",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderTop: "1px solid rgba(0, 123, 255, 0.1)",
+    boxShadow: "0 -18px 40px rgba(15, 33, 60, 0.12)",
+    gap: isMobile ? "2rem" : "3rem",
   };
 
   const logosContainerStyles = {
@@ -88,7 +92,9 @@ const Footer = forwardRef((props, ref) => {
       <div style={columnStyles}>
         <div style={logoPlaceholderStyles}></div> {/* Placeholder for logo */}
         <div>NMLS #2625844</div>
-        <p>Your Home, Your Rate, Your Way.</p>
+        <p style={{ color: "#4f5d75", maxWidth: 260 }}>
+          Your Home, Your Rate, Your Way.
+        </p>
         <div style={socialIconsStyles}>
           <FaInstagram style={iconStyles} />
           <FaYoutube style={iconStyles} />
@@ -99,7 +105,7 @@ const Footer = forwardRef((props, ref) => {
 
       {/* Column 2: Resources */}
       <div style={columnStyles}>
-        <h4>Resources</h4>
+        <h4 style={{ color: "#1f2933" }}>Resources</h4>
         <ul style={resourcesListStyles}>
           <li>
             <a href="#" style={resourceLinkStyles}>
@@ -136,7 +142,7 @@ const Footer = forwardRef((props, ref) => {
 
       {/* Column 3: Contact Information */}
       <div style={columnStyles}>
-        <h4>Contact us</h4>
+        <h4 style={{ color: "#1f2933" }}>Contact us</h4>
         <p>
           <FaMapMarkerAlt /> 8004 Springmoss Drive
           <br />
@@ -153,10 +159,7 @@ const Footer = forwardRef((props, ref) => {
             tmanriquez@viewyourrate.com
           </a>
         </p>
-        <a
-          href="tel:+12146754530"
-          style={{ color: "#000", textDecoration: "none" }}
-        >
+        <a href="tel:+12146754530" style={{ color: "#1f2933", textDecoration: "none" }}>
           <FaPhone /> (214) 675-4530
         </a>
 

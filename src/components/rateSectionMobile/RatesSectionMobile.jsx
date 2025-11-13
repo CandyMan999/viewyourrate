@@ -1,5 +1,4 @@
 import React from "react";
-import applyButton from "../applyButton";
 import ApplyButton from "../applyButton";
 const RatesSectionMobile = () => {
   // Styling for the entire section
@@ -8,13 +7,15 @@ const RatesSectionMobile = () => {
     bottom: 0,
     left: 0,
     width: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.5)", // Set opacity for background
-    paddingTop: "0.5rem", // Reduced padding
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    padding: "0.75rem 0.75rem 1rem",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-    boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 -10px 25px rgba(15, 33, 60, 0.12)",
+    borderTop: "1px solid rgba(0, 123, 255, 0.15)",
+    backdropFilter: "blur(6px)",
     zIndex: 1000,
   };
 
@@ -24,8 +25,9 @@ const RatesSectionMobile = () => {
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginBottom: "0.5rem", // Reduced margin
-    paddingLeft: "0.5rem", // Reduced padding
+    marginBottom: "0.6rem",
+    paddingLeft: "0.75rem",
+    paddingRight: "0.75rem",
   };
 
   const headerStyles = {
@@ -36,14 +38,15 @@ const RatesSectionMobile = () => {
   };
 
   const buttonStyles = {
-    padding: "0.4rem 0.8rem", // Smaller padding
+    padding: "0.45rem 1.1rem",
     backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
-    borderRadius: "8px",
-    fontSize: "0.8rem", // Smaller font size
+    borderRadius: "999px",
+    fontSize: "0.85rem",
     cursor: "pointer",
-    marginRight: "0.5rem", // Reduced margin
+    marginRight: "0.5rem",
+    boxShadow: "0 10px 24px rgba(0, 123, 255, 0.2)",
   };
 
   // Styling for the rate cards container
@@ -52,19 +55,21 @@ const RatesSectionMobile = () => {
     alignItems: "center",
     overflowX: "auto", // Allow horizontal scrolling
     width: "100%",
-    marginLeft: "0",
-    marginRight: "0",
+    marginLeft: 0,
+    marginRight: 0,
+    gap: "0.75rem",
+    paddingLeft: "0.5rem",
+    paddingRight: "0.5rem",
   };
 
   // Styling for individual rate cards
   const rateCardStyles = {
     minWidth: "120px", // Reduced width
-    marginRight: "0.5rem", // Reduced margin
-    padding: "0.8rem", // Reduced padding
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    backgroundColor: "#fff", // Keep cards fully opaque
-    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+    padding: "0.85rem 1rem",
+    border: "1px solid rgba(0, 123, 255, 0.12)",
+    borderRadius: "12px",
+    backgroundColor: "#fff",
+    boxShadow: "0 14px 28px rgba(15, 33, 60, 0.12)",
     textAlign: "center",
     flexShrink: 0, // Prevents the cards from shrinking
   };
@@ -72,7 +77,7 @@ const RatesSectionMobile = () => {
   const rateHeaderStyles = {
     fontSize: "0.7rem", // Slightly smaller font
     fontWeight: "bold",
-    color: "#666",
+    color: "#007bff",
     marginBottom: "0.3rem", // Reduced margin
   };
 
@@ -80,11 +85,12 @@ const RatesSectionMobile = () => {
     fontSize: "0.9rem", // Slightly smaller font
     fontWeight: "bold",
     margin: "0.3rem 0", // Reduced margin
+    color: "#1f2933",
   };
 
   const rateDetailsStyles = {
     fontSize: "0.7rem", // Slightly smaller font
-    color: "#666",
+    color: "#5b6b82",
   };
 
   return (
