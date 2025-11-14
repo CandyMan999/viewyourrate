@@ -116,7 +116,12 @@ const DotToggle = ({
   );
 };
 
-const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
+const PricingWidget = ({
+  isVisible,
+  onClose,
+  onScenarioSubmit,
+  onShowOptionsPage,
+}) => {
   const [quoteType, setQuoteType] = useState("Purchase");
   const [purchasePrice, setPurchasePrice] = useState(550000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
@@ -193,20 +198,25 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
         ? Math.round(numericPurchasePrice * (numericDownPaymentPercent / 100))
         : null;
 
-    const scenarioData = {
+    const baseScenario = {
       quoteType,
       purchasePrice: Number.isFinite(numericPurchasePrice)
         ? numericPurchasePrice
         : 0,
+      loanAmount: Number.isFinite(loanAmount) ? loanAmount : 0,
       downPaymentPercent: Number.isFinite(numericDownPaymentPercent)
         ? numericDownPaymentPercent
         : 0,
-      downPaymentAmount,
-      loanAmount,
-      waiveEscrow,
+      stateSelection,
       occupancy,
       propertyType,
-      stateSelection,
+      creditBand: undefined,
+    };
+
+    const scenarioData = {
+      ...baseScenario,
+      downPaymentAmount,
+      waiveEscrow,
       isMilitary,
       timestamp: new Date().toISOString(),
     };
@@ -215,6 +225,14 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
 
     if (typeof onScenarioSubmit === "function") {
       onScenarioSubmit(scenarioData);
+    }
+
+    if (typeof onShowOptionsPage === "function") {
+      onShowOptionsPage(baseScenario);
+    }
+
+    if (typeof onClose === "function") {
+      onClose();
     }
   };
 

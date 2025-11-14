@@ -19,3 +19,4 @@ export { default as ApplyNow } from "./applyButton";
 export { default as ApplyNowWidget } from "./applyNowWidget/index";
 export { default as ProductsFilterWidget } from "./productsFilterWidget";
 export { default as CompareProducts } from "./compareProducts";
+export { default as MortgageOptionsPage } from "./mortgageResults/MortgageOptionsPage";

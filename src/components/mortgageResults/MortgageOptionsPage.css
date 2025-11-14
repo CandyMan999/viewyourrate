@@ -1,0 +1,243 @@
+.mortgage-options-page {
+  min-height: calc(100vh - 120px);
+  background: linear-gradient(180deg, #f8faff 0%, #eef2ff 100%);
+  color: #13223a;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 1.5rem 3rem;
+  box-sizing: border-box;
+}
+
+.options-summary-bar {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(19, 34, 58, 0.08);
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.scenario-summary-text {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.scenario-subtext {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  color: #4a6288;
+}
+
+.edit-scenario-button {
+  border: none;
+  background: linear-gradient(135deg, #1a6bff 0%, #2950ff 100%);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(41, 80, 255, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-scenario-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(41, 80, 255, 0.35);
+}
+
+.options-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.options-hero {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.options-hero h1 {
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  margin-bottom: 1rem;
+}
+
+.options-hero p {
+  margin: 0 auto;
+  color: #4a6288;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
+}
+
+.option-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 22px 50px rgba(19, 34, 58, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid rgba(41, 80, 255, 0.08);
+}
+
+.option-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: rgba(26, 107, 255, 0.08);
+  color: #1a3b6d;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.option-rate-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.option-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+  color: #4a6288;
+}
+
+.option-rate {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #112443;
+}
+
+.option-apr {
+  font-size: 0.95rem;
+  color: #516687;
+  font-weight: 600;
+}
+
+.option-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7b8ca8;
+}
+
+.metric-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #13223a;
+}
+
+.metric-hint {
+  font-size: 0.85rem;
+  color: #7b8ca8;
+}
+
+.option-description {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #3a4c68;
+}
+
+.option-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.option-primary-button {
+  border: none;
+  background: linear-gradient(135deg, #1a6bff 0%, #4b8bff 100%);
+  color: #fff;
+  padding: 0.85rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(26, 107, 255, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.option-primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 36px rgba(26, 107, 255, 0.35);
+}
+
+.option-secondary-button {
+  border: none;
+  background: transparent;
+  color: #1a6bff;
+  font-weight: 600;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.option-secondary-button:hover {
+  text-decoration: underline;
+}
+
+.options-footer-note {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 1.5rem;
+  font-size: 0.85rem;
+  color: #4a6288;
+  line-height: 1.6;
+  box-shadow: 0 16px 35px rgba(19, 34, 58, 0.08);
+}
+
+@media (min-width: 900px) {
+  .mortgage-options-page {
+    padding: 3rem 4vw 4rem;
+  }
+
+  .option-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .option-secondary-button {
+    align-self: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .options-summary-bar {
+    padding: 1.25rem 1.4rem;
+  }
+
+  .option-card {
+    padding: 1.5rem;
+  }
+}
