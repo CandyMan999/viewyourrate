@@ -6,7 +6,7 @@ export { default as RatesSectionMobile } from "./rateSectionMobile";
 export { default as Footer } from "./footer";
 export { default as NavDrawer } from "./navDrawer";
 export { default as Calculator } from "./calculators";
-export { default as CompareProducts } from "./compareProducts";
+
 export { default as Component2 } from "./component2";
 export { default as Component3 } from "./component3";
 export { default as Header } from "./header";
@@ -17,4 +17,5 @@ export { default as MortgageCalc } from "./calculators/MortgageCalc";
 export { default as BackDrop } from "./backdrop";
 export { default as ApplyNow } from "./applyButton";
 export { default as ApplyNowWidget } from "./applyNowWidget/index";
-export { default as MortgageResultsPage } from "./MortgageResultsPage";
+export { default as ProductsFilterWidget } from "./productsFilterWidget";
+export { default as CompareProducts } from "./compareProducts";

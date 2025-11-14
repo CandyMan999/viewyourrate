@@ -14,6 +14,7 @@ import {
   NavDrawer,
   Footer,
   Calculator,
+  ProductsFilterWidget,
   CompareProducts,
   Component2,
   Component3,
@@ -35,7 +36,7 @@ import { dummyRates } from "./data/dummyRates";
 const componentsList = [
   "HeroSection",
   "Calculator",
-  "CompareProducts",
+  "ProductsFilterWidget",
   "Component2",
   "Component3",
 ];
@@ -120,7 +121,7 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
 const navItems = [
   { name: "Home", index: 0, component: "HeroSection" },
   { name: "Calculators", index: 1, component: "Calculator" },
-  { name: "Compare Products", index: 2, component: "CompareProducts" },
+  { name: "Compare Products", index: 2, component: "ProductsFilterWidget" },
   { name: "Component2", index: 3, component: "Component2" },
   { name: "Component3", index: 4, component: "Component3" },
   { name: "Contact", index: 5, component: "Contact" },
@@ -133,6 +134,7 @@ const App = () => {
   const [showRatesSection, setShowRatesSection] = useState(true);
   const [opacity, setOpacity] = useState(1);
   const [direction, setDirection] = useState(1);
+  const [showCompareProducts, setShowCompareProducts] = useState(false);
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -165,6 +167,11 @@ const App = () => {
       scrollToFooter();
     } else {
       scrollToTop();
+    }
+    if (navItems[index].name === "Compare Products") {
+      setShowCompareProducts(true);
+    } else {
+      setShowCompareProducts(false);
     }
   };
 
@@ -201,8 +208,8 @@ const App = () => {
         return <HeroSection state={state} dispatch={dispatch} />;
       case "Calculator":
         return <Calculator dispatch={dispatch} />;
-      case "CompareProducts":
-        return <CompareProducts />;
+      case "ProductsFilterWidget":
+        return <ProductsFilterWidget />;
       case "Component2":
         return <Component2 />;
       case "Component3":
@@ -283,6 +290,7 @@ const App = () => {
           >
             <FiArrowLeft />
           </motion.div>
+
           <AnimatePresence wait>
             <motion.div
               key={state.activeComponent}
@@ -295,6 +303,7 @@ const App = () => {
               {renderActiveComponent()}
             </motion.div>
           </AnimatePresence>
+
           <motion.div
             style={{
               margin: isMobile ? 0 : 10,
@@ -320,6 +329,8 @@ const App = () => {
               </div>
             )
           ))}
+
+        {state.activeComponent === 2 && <CompareProducts />}
         <RateDropNotification />
         <MortgageServices />
         <ApplyNowWidget

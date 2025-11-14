@@ -1,969 +1,1223 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import Context from "../../context";
-import "./CompareProducts.css";
+import React, { useEffect, useMemo, useState } from "react";
 
-const creditBandOptions = [
-  { value: "760+", label: "760+ (Excellent)" },
-  { value: "720-759", label: "720–759 (Very Good)" },
-  { value: "680-719", label: "680–719 (Good)" },
-  { value: "640-679", label: "640–679 (Fair)" },
-  { value: "<640", label: "< 640 (Below Average)" },
-];
+const compareResultsStyles = `
+.mortgage-results-page {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  background-color: #f7f8fa;
+  color: #1f2933;
+  min-height: 100vh;
+  padding-bottom: 64px;
+}
 
-const loanPurposeOptions = ["Purchase", "Refinance"];
-const propertyTypeOptions = [
-  "Single Family",
-  "Condominium",
-  "Townhome",
-  "Multi-Family",
-];
-const occupancyOptions = [
-  "Primary Residence",
-  "Second Home",
-  "Investment Property",
-];
-const stateOptions = ["AZ", "CA", "CO", "FL", "NY", "TX", "WA"];
-const termOptions = ["30-year", "20-year", "15-year"];
+.scenario-summary-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #e4e8ef;
+  border-bottom: 1px solid rgba(31, 41, 51, 0.1);
+}
+
+.summary-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.summary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.95rem;
+}
+
+.scenario-line {
+  font-weight: 600;
+}
+
+.timestamp-line {
+  color: #52606d;
+  font-size: 0.85rem;
+}
+
+.edit-scenario-button {
+  background: none;
+  border: none;
+  color: #2a5bd7;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.edit-scenario-button:hover {
+  text-decoration: underline;
+}
+
+.recommended-section,
+.controls-section,
+.comparison-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 0;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.recommended-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-badge {
+  align-self: flex-start;
+  background-color: rgba(42, 91, 215, 0.12);
+  color: #2a5bd7;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.card-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-headline .rate {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.card-headline .payment {
+  font-size: 1.1rem;
+  color: #364152;
+}
+
+.card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background-color: #f0f4ff;
+  color: #1d3d8f;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cost-snapshot {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.snapshot-label {
+  display: block;
+  color: #52606d;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.snapshot-value {
+  display: block;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #2a5bd7, #1d3d8f);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(42, 91, 215, 0.25);
+}
+
+.secondary-link {
+  background: none;
+  border: none;
+  color: #2a5bd7;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.secondary-link:hover {
+  text-decoration: underline;
+}
+
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sort-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.sort-control select {
+  min-width: 200px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(82, 96, 109, 0.4);
+  font-size: 0.95rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-chip {
+  border-radius: 999px;
+  border: 1px solid rgba(42, 91, 215, 0.25);
+  background-color: #ffffff;
+  color: #2a5bd7;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.filter-chip.active {
+  background-color: #2a5bd7;
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(42, 91, 215, 0.25);
+}
+
+.comparison-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.show-all-button {
+  border: none;
+  background: none;
+  color: #2a5bd7;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.show-all-button:hover {
+  text-decoration: underline;
+}
+
+.comparison-table-wrapper {
+  overflow-x: auto;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+}
+
+.comparison-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 700px;
+  width: 100%;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+  vertical-align: middle;
+  background-color: #ffffff;
+}
+
+.comparison-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f0f4ff;
+  z-index: 5;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.sticky-column {
+  position: sticky;
+  left: 0;
+  background-color: #f0f4ff;
+  z-index: 6;
+  text-align: left;
+  font-weight: 600;
+  min-width: 200px;
+}
+
+.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.numeric .highlight-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background-color: rgba(34, 197, 94, 0.18);
+  color: #047857;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.highlight {
+  background-color: rgba(34, 197, 94, 0.08);
+}
+
+.offer-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.offer-lender {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.table-details-link {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  color: #2a5bd7;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.table-details-link:hover {
+  text-decoration: underline;
+}
+
+.rating-stars {
+  display: inline-block;
+  margin-right: 6px;
+  font-weight: 600;
+}
+
+.rating-reviews {
+  color: #52606d;
+  font-size: 0.85rem;
+}
+
+.details-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.55);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 30;
+  padding: 24px;
+}
+
+.details-drawer {
+  background-color: #ffffff;
+  width: min(420px, 100%);
+  border-radius: 24px;
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  background: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #52606d;
+}
+
+.close-button:hover {
+  color: #1f2933;
+}
+
+.details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 16px;
+}
+
+.details-section h4 {
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+
+.details-section p,
+.details-section li {
+  color: #364152;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.details-section ul {
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.details-actions {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.secondary-button {
+  border: 1px solid rgba(31, 41, 51, 0.2);
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background-color: #f3f4f6;
+}
+
+@media (max-width: 768px) {
+  .summary-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .comparison-table {
+    min-width: 600px;
+  }
+
+  .details-overlay {
+    padding: 0;
+  }
+
+  .details-drawer {
+    border-radius: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  .mortgage-results-page {
+    padding-bottom: 48px;
+  }
+
+  .recommended-section,
+  .controls-section,
+  .comparison-section {
+    padding-inline: 16px;
+  }
+
+  .recommended-card {
+    padding: 20px;
+  }
+}
+`;
 
 const loanOffers = [
   {
     id: "offer-1",
     lenderName: "Acme Mortgage",
-    programName: "Conventional 30-year Fixed",
-    recommendationTag: "🏁 Lowest monthly payment",
-    isRecommended: true,
-    productType: "fixed",
-    termLabel: "30-year fixed",
-    points: 0.75,
-    hasPoints: true,
-    hasPMI: false,
     rate: 5.75,
     apr: 5.88,
     monthlyPayment: 2432,
+    points: 0.75,
     lenderFees: 1450,
-    thirdPartyFees: 1650,
-    escrowEstimate: 3200,
     cashToClose: 27400,
     cost5yr: 152000,
     lockPeriodDays: 45,
     prepaymentPenalty: false,
     rating: 4.8,
     reviewsCount: 326,
-    costNarrative:
-      "If you stay ~5 years, this loan keeps $3,200 in your pocket versus the average offer.",
+    productType: "fixed",
+    hasPMI: false,
+    hasPoints: true,
+    isRecommended: true,
+    recommendationTag: "🏁 Lowest monthly payment",
+    termYears: 30,
   },
   {
     id: "offer-2",
     lenderName: "Bluebonnet Home Loans",
-    programName: "Conventional 30-year Fixed",
-    recommendationTag: "⚡ Lowest upfront cost",
-    isRecommended: true,
-    productType: "fixed",
-    termLabel: "30-year fixed",
-    points: 0,
-    hasPoints: false,
-    hasPMI: false,
     rate: 5.9,
     apr: 6.02,
     monthlyPayment: 2485,
+    points: 0,
     lenderFees: 990,
-    thirdPartyFees: 1425,
-    escrowEstimate: 3050,
     cashToClose: 26180,
     cost5yr: 149500,
     lockPeriodDays: 30,
     prepaymentPenalty: false,
     rating: 4.6,
     reviewsCount: 214,
-    costNarrative:
-      "Ideal when you want to minimize cash at closing without giving up a competitive payment.",
+    productType: "fixed",
+    hasPMI: false,
+    hasPoints: false,
+    isRecommended: true,
+    recommendationTag: "⚡ Lowest upfront cost",
+    termYears: 30,
   },
   {
     id: "offer-3",
     lenderName: "Lone Star Lending",
-    programName: "Conventional 30-year Fixed",
-    recommendationTag: "🔒 Best long-term savings",
-    isRecommended: true,
-    productType: "fixed",
-    termLabel: "30-year fixed",
-    points: 1.05,
-    hasPoints: true,
-    hasPMI: false,
     rate: 5.65,
     apr: 5.79,
     monthlyPayment: 2398,
+    points: 1.05,
     lenderFees: 1200,
-    thirdPartyFees: 1580,
-    escrowEstimate: 3185,
     cashToClose: 28950,
     cost5yr: 147800,
     lockPeriodDays: 60,
     prepaymentPenalty: false,
     rating: 4.9,
     reviewsCount: 412,
-    costNarrative:
-      "Run the numbers past 7 years and this option becomes the clear winner versus other lenders.",
+    productType: "fixed",
+    hasPMI: false,
+    hasPoints: true,
+    isRecommended: true,
+    recommendationTag: "🔒 Best long-term savings",
+    termYears: 30,
   },
   {
     id: "offer-4",
     lenderName: "MetroFlex Bank",
-    programName: "Jumbo 7/6 ARM",
-    recommendationTag: "",
-    isRecommended: false,
-    productType: "arm",
-    termLabel: "7/6 ARM",
-    points: 1.6,
-    hasPoints: true,
-    hasPMI: false,
     rate: 5.35,
     apr: 5.91,
     monthlyPayment: 2360,
+    points: 1.6,
     lenderFees: 1850,
-    thirdPartyFees: 2100,
-    escrowEstimate: 4100,
     cashToClose: 31080,
     cost5yr: 155900,
     lockPeriodDays: 45,
     prepaymentPenalty: true,
     rating: 4.2,
     reviewsCount: 168,
-    costNarrative:
-      "Best suited if you anticipate selling or refinancing within the introductory ARM period.",
+    productType: "arm",
+    hasPMI: false,
+    hasPoints: true,
+    isRecommended: false,
+    recommendationTag: "",
+    termYears: 7,
   },
   {
     id: "offer-5",
     lenderName: "Pioneer Credit Union",
-    programName: "FHA 30-year Fixed",
-    recommendationTag: "",
-    isRecommended: false,
-    productType: "fixed",
-    termLabel: "30-year fixed",
-    points: 0,
-    hasPoints: false,
-    hasPMI: true,
     rate: 6.05,
     apr: 6.18,
     monthlyPayment: 2520,
+    points: 0,
     lenderFees: 850,
-    thirdPartyFees: 1850,
-    escrowEstimate: 2950,
     cashToClose: 25800,
     cost5yr: 153300,
     lockPeriodDays: 30,
     prepaymentPenalty: false,
     rating: 4.4,
     reviewsCount: 98,
-    costNarrative:
-      "Backed by the FHA, this option helps stretch qualifications when you need flexible guidelines.",
+    productType: "fixed",
+    hasPMI: true,
+    hasPoints: false,
+    isRecommended: false,
+    recommendationTag: "",
+    termYears: 30,
   },
   {
     id: "offer-6",
     lenderName: "Riverstone Capital",
-    programName: "VA 5/6 ARM",
-    recommendationTag: "",
-    isRecommended: false,
-    productType: "arm",
-    termLabel: "5/6 ARM",
-    points: 1.25,
-    hasPoints: true,
-    hasPMI: false,
     rate: 5.4,
     apr: 6.08,
     monthlyPayment: 2389,
+    points: 1.25,
     lenderFees: 2100,
-    thirdPartyFees: 1935,
-    escrowEstimate: 3320,
-    cashToClose: 30560,
-    cost5yr: 154200,
-    lockPeriodDays: 45,
-    prepaymentPenalty: false,
-    rating: 4.7,
-    reviewsCount: 276,
-    costNarrative:
-      "Veteran-exclusive option with competitive payment during the initial adjustable period.",
+    cashToClose: 31740,
+    cost5yr: 158400,
+    lockPeriodDays: 75,
+    prepaymentPenalty: true,
+    rating: 4.1,
+    reviewsCount: 77,
+    productType: "arm",
+    hasPMI: false,
+    hasPoints: true,
+    isRecommended: false,
+    recommendationTag: "",
+    termYears: 5,
   },
   {
     id: "offer-7",
-    lenderName: "Harborlight Lending",
-    programName: "Conventional 15-year Fixed",
-    recommendationTag: "",
-    isRecommended: false,
+    lenderName: "Heritage Mortgage",
+    rate: 5.95,
+    apr: 6.04,
+    monthlyPayment: 2474,
+    points: 0.35,
+    lenderFees: 1050,
+    cashToClose: 26840,
+    cost5yr: 151600,
+    lockPeriodDays: 45,
+    prepaymentPenalty: false,
+    rating: 4.7,
+    reviewsCount: 265,
     productType: "fixed",
-    termLabel: "15-year fixed",
-    points: -0.25,
-    hasPoints: false,
     hasPMI: false,
-    rate: 5.05,
-    apr: 5.12,
-    monthlyPayment: 3150,
-    lenderFees: 780,
-    thirdPartyFees: 1380,
-    escrowEstimate: 2750,
-    cashToClose: 24890,
-    cost5yr: 142400,
+    hasPoints: true,
+    isRecommended: false,
+    recommendationTag: "",
+    termYears: 30,
+  },
+  {
+    id: "offer-8",
+    lenderName: "VistaView Loans",
+    rate: 6.15,
+    apr: 6.24,
+    monthlyPayment: 2556,
+    points: -0.25,
+    lenderFees: 600,
+    cashToClose: 24620,
+    cost5yr: 150900,
     lockPeriodDays: 30,
     prepaymentPenalty: false,
     rating: 4.5,
-    reviewsCount: 189,
-    costNarrative:
-      "Accelerated payoff paired with a lender credit that reduces your upfront cash.",
+    reviewsCount: 134,
+    productType: "fixed",
+    hasPMI: false,
+    hasPoints: false,
+    isRecommended: false,
+    recommendationTag: "",
+    termYears: 30,
   },
 ];
 
-const sortComparators = {
-  lowestPayment: (a, b) => a.monthlyPayment - b.monthlyPayment,
-  lowestCashToClose: (a, b) => a.cashToClose - b.cashToClose,
-  lowestRate: (a, b) => a.rate - b.rate,
-  lowest5yrCost: (a, b) => a.cost5yr - b.cost5yr,
-  lenderRating: (a, b) => b.rating - a.rating,
+const sortOptions = [
+  { value: "payment", label: "Lowest payment" },
+  { value: "cash", label: "Lowest cash to close" },
+  { value: "rate", label: "Lowest rate" },
+  { value: "cost5", label: "Lowest 5-year cost" },
+  { value: "rating", label: "Lender rating" },
+];
+
+const defaultScenario = {
+  quoteType: "Purchase",
+  purchasePrice: 450000,
+  downPaymentPercent: 20,
+  termYears: 30,
+  creditScore: 780,
+  location: "Texas",
+  lendersCount: loanOffers.length,
+  timestamp: new Date().toISOString(),
 };
 
-const formatCurrency = (value) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(Number.isFinite(value) ? value : 0);
+const formatter = new Intl.NumberFormat("en-US");
 
-const formatPercent = (value) =>
-  `${Number.isFinite(value) ? value.toFixed(3).replace(/\.0+$/, "") : value}%`
-    .replace(".000", "")
-    .replace(/(\.\d*[1-9])0+$/, "$1");
-
-const formatPoints = (value) => {
-  if (value === 0) return "0 points";
-  if (value > 0) return `${value.toFixed(2)} points`;
-  return `${Math.abs(value).toFixed(2)} credits`;
-};
-
-const classNames = (...values) => values.filter(Boolean).join(" ");
-
-const CompareProducts = () => {
-  const { state, dispatch } = useContext(Context);
-  const defaultScenario = {
-    purchasePrice: 450000,
-    downPaymentPercent: 20,
-    termYears: 30,
-    loanPurpose: "Purchase",
-    propertyType: "Single Family",
-    occupancy: "Primary Residence",
-    state: "TX",
-    creditBand: "760+",
-  };
-
-  const [formState, setFormState] = useState(() => ({
-    ...defaultScenario,
-    ...(state.mortgageScenario || {}),
-  }));
-  const [activeScenario, setActiveScenario] = useState(() => ({
-    ...defaultScenario,
-    ...(state.mortgageScenario || {}),
-  }));
-  const [sortBy, setSortBy] = useState("lowestPayment");
-  const [filterChips, setFilterChips] = useState({
+const CompareProducts = ({ scenario, onEditScenario }) => {
+  const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
+  const [filters, setFilters] = useState({
     fixedOnly: false,
     armOnly: false,
     noPoints: false,
-    noPmi: false,
+    noPMI: false,
   });
-  const [selectedOffer, setSelectedOffer] = useState(null);
   const [showAllOffers, setShowAllOffers] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState(new Date());
-  const formRef = useRef(null);
+  const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {
-    if (state.mortgageScenario) {
-      const scenarioFromContext = state.mortgageScenario;
-      const normalizedScenario = {
-        purchasePrice:
-          scenarioFromContext.purchasePrice ?? defaultScenario.purchasePrice,
-        downPaymentPercent:
-          scenarioFromContext.downPaymentPercent ?? defaultScenario.downPaymentPercent,
-        termYears:
-          scenarioFromContext.termYears ?? defaultScenario.termYears,
-        loanPurpose:
-          scenarioFromContext.loanPurpose ||
-          scenarioFromContext.quoteType ||
-          defaultScenario.loanPurpose,
-        propertyType:
-          scenarioFromContext.propertyType || defaultScenario.propertyType,
-        occupancy:
-          scenarioFromContext.occupancy || defaultScenario.occupancy,
-        state:
-          scenarioFromContext.state ||
-          scenarioFromContext.stateSelection ||
-          defaultScenario.state,
-        creditBand:
-          scenarioFromContext.creditBand || defaultScenario.creditBand,
-      };
-
-      setFormState((prev) => ({ ...prev, ...normalizedScenario }));
-      setActiveScenario((prev) => ({ ...prev, ...normalizedScenario }));
-      setLastUpdated(new Date());
-    }
-  }, [state.mortgageScenario]);
-
-  useEffect(() => {
-    if (selectedOffer) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
     return () => {
       document.body.style.overflow = "";
     };
-  }, [selectedOffer]);
+  }, []);
 
-  useEffect(() => {
-    setShowAllOffers(false);
-  }, [filterChips, sortBy]);
-
-  const handleFieldChange = (field) => (event) => {
-    const value = event.target.value;
-    setFormState((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleFindProducts = (event) => {
-    event.preventDefault();
-    const scenarioPayload = {
-      ...formState,
-      purchasePrice: Number(formState.purchasePrice),
-      downPaymentPercent: Number(formState.downPaymentPercent),
-      termYears: Number(String(formState.termYears).replace(/[^0-9]/g, "")) || 30,
+  const resolvedScenario = useMemo(() => {
+    const merged = {
+      ...defaultScenario,
+      ...(scenario || {}),
     };
 
-    setActiveScenario(scenarioPayload);
-    dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenarioPayload });
-    setLastUpdated(new Date());
-  };
+    const purchasePrice = Number(merged.purchasePrice);
+    const downPaymentPercent = Number(merged.downPaymentPercent);
 
-  const toggleChip = (chipKey) => {
-    setFilterChips((prev) => ({ ...prev, [chipKey]: !prev[chipKey] }));
-  };
-
-  const filteredOffers = useMemo(() => {
-    return loanOffers.filter((offer) => {
-      if (filterChips.fixedOnly && offer.productType !== "fixed") return false;
-      if (filterChips.armOnly && offer.productType !== "arm") return false;
-      if (filterChips.fixedOnly && filterChips.armOnly) return false;
-      if (filterChips.noPoints && offer.hasPoints) return false;
-      if (filterChips.noPmi && offer.hasPMI) return false;
-      return true;
-    });
-  }, [filterChips]);
-
-  const sortedOffers = useMemo(() => {
-    const comparator = sortComparators[sortBy];
-    return [...filteredOffers].sort(comparator);
-  }, [filteredOffers, sortBy]);
+    return {
+      quoteType: merged.quoteType || "Purchase",
+      purchasePrice: Number.isFinite(purchasePrice)
+        ? purchasePrice
+        : defaultScenario.purchasePrice,
+      downPaymentPercent: Number.isFinite(downPaymentPercent)
+        ? downPaymentPercent
+        : defaultScenario.downPaymentPercent,
+      termYears: merged.termYears || defaultScenario.termYears,
+      creditScore: merged.creditScore || defaultScenario.creditScore,
+      location:
+        merged.stateSelection || merged.location || defaultScenario.location,
+      lendersCount: loanOffers.length,
+      lastUpdated:
+        merged.timestamp instanceof Date
+          ? merged.timestamp
+          : new Date(merged.timestamp || defaultScenario.timestamp),
+    };
+  }, [scenario]);
 
   const recommendedOffers = useMemo(() => {
-    const recommended = sortedOffers.filter((offer) => offer.isRecommended);
-    const limitedRecommended = recommended.slice(0, 3);
-    if (limitedRecommended.length >= 3) {
-      return limitedRecommended;
+    const recs = loanOffers.filter((offer) => offer.isRecommended);
+    if (recs.length > 0) {
+      return recs.slice(0, 3);
+    }
+    return [...loanOffers]
+      .sort((a, b) => a.monthlyPayment - b.monthlyPayment)
+      .slice(0, 3);
+  }, []);
+
+  const filteredSortedOffers = useMemo(() => {
+    let result = [...loanOffers];
+
+    if (filters.fixedOnly && !filters.armOnly) {
+      result = result.filter((offer) => offer.productType === "fixed");
     }
 
-    const filler = sortedOffers.filter(
-      (offer) => !limitedRecommended.find((item) => item.id === offer.id)
-    );
-    return [...limitedRecommended, ...filler].slice(0, 3);
-  }, [sortedOffers]);
+    if (filters.armOnly && !filters.fixedOnly) {
+      result = result.filter((offer) => offer.productType === "arm");
+    }
 
-  const bestMonthlyPayment = useMemo(() => {
-    if (!sortedOffers.length) return null;
-    return Math.min(...sortedOffers.map((offer) => offer.monthlyPayment));
-  }, [sortedOffers]);
+    if (filters.noPoints) {
+      result = result.filter(
+        (offer) => offer.hasPoints === false || offer.points <= 0
+      );
+    }
 
-  const bestCashToClose = useMemo(() => {
-    if (!sortedOffers.length) return null;
-    return Math.min(...sortedOffers.map((offer) => offer.cashToClose));
-  }, [sortedOffers]);
+    if (filters.noPMI) {
+      result = result.filter((offer) => offer.hasPMI === false);
+    }
 
-  const bestCostFiveYear = useMemo(() => {
-    if (!sortedOffers.length) return null;
-    return Math.min(...sortedOffers.map((offer) => offer.cost5yr));
-  }, [sortedOffers]);
+    switch (selectedSort) {
+      case "payment":
+        result.sort((a, b) => a.monthlyPayment - b.monthlyPayment);
+        break;
+      case "cash":
+        result.sort((a, b) => a.cashToClose - b.cashToClose);
+        break;
+      case "rate":
+        result.sort((a, b) => a.rate - b.rate);
+        break;
+      case "cost5":
+        result.sort((a, b) => a.cost5yr - b.cost5yr);
+        break;
+      case "rating":
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        break;
+    }
+
+    return result;
+  }, [filters, selectedSort]);
 
   const visibleOffers = useMemo(() => {
     if (showAllOffers) {
-      return sortedOffers;
+      return filteredSortedOffers;
     }
-    return sortedOffers.slice(0, 4);
-  }, [sortedOffers, showAllOffers]);
+    return filteredSortedOffers.slice(0, 4);
+  }, [filteredSortedOffers, showAllOffers]);
 
-  const loanAmount = useMemo(() => {
-    const purchasePrice = Number(formState.purchasePrice) || 0;
-    const downPercent = Number(formState.downPaymentPercent) || 0;
-    return purchasePrice * (1 - downPercent / 100);
-  }, [formState]);
+  const lowestPayment = useMemo(() => {
+    if (filteredSortedOffers.length === 0) return null;
+    return Math.min(
+      ...filteredSortedOffers.map((offer) => offer.monthlyPayment)
+    );
+  }, [filteredSortedOffers]);
 
-  const formattedTimestamp = useMemo(() => {
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    }).format(lastUpdated);
-  }, [lastUpdated]);
+  const lowestCash = useMemo(() => {
+    if (filteredSortedOffers.length === 0) return null;
+    return Math.min(...filteredSortedOffers.map((offer) => offer.cashToClose));
+  }, [filteredSortedOffers]);
 
-  const handleEditScenario = () => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+  const lowestCost5 = useMemo(() => {
+    if (filteredSortedOffers.length === 0) return null;
+    return Math.min(...filteredSortedOffers.map((offer) => offer.cost5yr));
+  }, [filteredSortedOffers]);
+
+  const handleFilterToggle = (key) => {
+    setFilters((prev) => {
+      const nextValue = !prev[key];
+      if (key === "fixedOnly" && nextValue) {
+        return { ...prev, fixedOnly: true, armOnly: false };
+      }
+      if (key === "armOnly" && nextValue) {
+        return { ...prev, armOnly: true, fixedOnly: false };
+      }
+      return { ...prev, [key]: nextValue };
+    });
   };
 
-  const openDetails = (offer) => {
+  const toNumber = (value, fallback = 0) => {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : fallback;
+  };
+
+  const formatCurrency = (value) => `$${formatter.format(toNumber(value))}`;
+  const formatPercent = (value) => `${toNumber(value).toFixed(3)}%`;
+  const formatPoints = (value) => {
+    const numeric = toNumber(value, 0);
+    if (numeric > 0) {
+      return `${numeric.toFixed(2)} points`;
+    }
+    if (numeric < 0) {
+      return `${Math.abs(numeric).toFixed(2)} credits`;
+    }
+    return "0 points";
+  };
+
+  const handleDetailsOpen = (offer) => {
     setSelectedOffer(offer);
+    document.body.style.overflow = "hidden";
   };
 
-  const closeDetails = () => {
+  const handleDetailsClose = () => {
     setSelectedOffer(null);
+    document.body.style.overflow = "";
   };
+
+  const showAllRemaining =
+    !showAllOffers && filteredSortedOffers.length > visibleOffers.length;
+
+  const downPaymentLabel = Number.isFinite(resolvedScenario.downPaymentPercent)
+    ? `${
+        resolvedScenario.downPaymentPercent % 1 === 0
+          ? resolvedScenario.downPaymentPercent
+          : resolvedScenario.downPaymentPercent.toFixed(1)
+      }% down`
+    : "-- down";
+
+  const purchaseDescriptor =
+    resolvedScenario.quoteType &&
+    resolvedScenario.quoteType.toLowerCase() === "refinance"
+      ? "refinance"
+      : "purchase";
+
+  const summaryText = `🏠 ${formatCurrency(
+    resolvedScenario.purchasePrice
+  )} ${purchaseDescriptor} • ${downPaymentLabel} • ${
+    resolvedScenario.termYears
+  }-year term • ${resolvedScenario.creditScore} credit • ${
+    resolvedScenario.location
+  }`;
+
+  const lastUpdatedText = `Showing rates from ${
+    resolvedScenario.lendersCount
+  } lenders as of ${resolvedScenario.lastUpdated.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  })} (rates may change)`;
 
   return (
-    <div className="compare-products-page">
-      <section className="scenario-builder" ref={formRef}>
-        <header className="builder-header">
-          <div>
-            <h2>Compare mortgage products</h2>
-            <p>
-              Tune the scenario that best matches your goals. When you&apos;re
-              ready, we&apos;ll surface the offers below so you can zero in on the
-              right fit.
-            </p>
-          </div>
-          <div className="credit-assurance">
-            <strong>We will not pull your credit.</strong>
-            <span>
-              Checking your options won&apos;t affect your score. No hard inquiry at
-              this stage.
-            </span>
-          </div>
-        </header>
-
-        <form className="builder-form" onSubmit={handleFindProducts}>
-          <div className="grid">
-            <label className="field">
-              <span className="field-label">Loan purpose</span>
-              <select
-                value={formState.loanPurpose}
-                onChange={handleFieldChange("loanPurpose")}
-              >
-                {loanPurposeOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span className="field-label">Purchase price</span>
-              <input
-                type="number"
-                min="0"
-                step="1000"
-                value={formState.purchasePrice}
-                onChange={handleFieldChange("purchasePrice")}
-              />
-            </label>
-
-            <label className="field">
-              <span className="field-label">Down payment %</span>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                step="1"
-                value={formState.downPaymentPercent}
-                onChange={handleFieldChange("downPaymentPercent")}
-              />
-            </label>
-
-            <label className="field">
-              <span className="field-label">Loan term</span>
-              <select
-                value={`${formState.termYears}-year`}
-                onChange={(event) => {
-                  const selected = event.target.value;
-                  const years = Number(selected.split("-")[0]);
-                  setFormState((prev) => ({ ...prev, termYears: years }));
-                }}
-              >
-                {termOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span className="field-label">Property type</span>
-              <select
-                value={formState.propertyType}
-                onChange={handleFieldChange("propertyType")}
-              >
-                {propertyTypeOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span className="field-label">Occupancy</span>
-              <select
-                value={formState.occupancy}
-                onChange={handleFieldChange("occupancy")}
-              >
-                {occupancyOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span className="field-label">State</span>
-              <select value={formState.state} onChange={handleFieldChange("state")}>
-                {stateOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="field">
-              <span className="field-label">Estimated credit score</span>
-              <select
-                value={formState.creditBand}
-                onChange={handleFieldChange("creditBand")}
-              >
-                {creditBandOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div className="helper-row">
-            <div>
-              <span className="helper-label">Estimated loan amount</span>
-              <span className="helper-value">{formatCurrency(loanAmount)}</span>
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button type="submit" className="primary-button">
-              Find products
-            </button>
-          </div>
-        </form>
-      </section>
-
-      <section className="results-section">
+    <>
+      <style>{compareResultsStyles}</style>
+      <div className="mortgage-results-page">
         <div className="scenario-summary-bar">
-          <div className="scenario-summary">
-            <span role="img" aria-label="home">
-              🏠
-            </span>
-            <span>
-              {formatCurrency(activeScenario.purchasePrice)} {" "}
-              {activeScenario.loanPurpose?.toLowerCase() === "refinance"
-                ? "refinance"
-                : "purchase"}
-              {" "}• {activeScenario.downPaymentPercent}% down •
-              {" "}
-              {activeScenario.termYears}-year term • {activeScenario.creditBand} credit
-              • {activeScenario.state}
-            </span>
-          </div>
-          <div className="scenario-meta">
-            <span>
-              Showing rates from {sortedOffers.length} lenders as of {formattedTimestamp}
-              . Rates may change.
-            </span>
+          <div className="summary-content">
+            <div className="summary-text">
+              <div className="scenario-line">{summaryText}</div>
+              <div className="timestamp-line">{lastUpdatedText}</div>
+            </div>
             <button
+              className="edit-scenario-button"
               type="button"
-              className="text-button"
-              onClick={handleEditScenario}
+              onClick={() => onEditScenario?.()}
             >
               Edit scenario
             </button>
           </div>
         </div>
 
-        <section className="recommended-offers">
-          <header className="section-heading">
-            <h3>Recommended for you</h3>
-            <p>
-              Based on your scenario, these offers surface the most common goals
-              we hear from borrowers.
-            </p>
-          </header>
-          {sortedOffers.length ? (
-            <div className="recommended-grid">
-              {recommendedOffers.map((offer) => (
-                <article key={offer.id} className="offer-card">
-                  {offer.recommendationTag && (
-                    <div className="offer-badge">{offer.recommendationTag}</div>
-                  )}
-                  <div className="offer-rate">
-                    <span className="rate-value">{formatPercent(offer.apr)}</span>
-                    <span className="rate-label">APR</span>
-                  </div>
-                  <div className="offer-payment">
-                    <span className="payment-value">
-                      {formatCurrency(offer.monthlyPayment)}
+        <section className="recommended-section">
+          <h2 className="section-title">Recommended options for you</h2>
+          <div className="recommended-grid">
+            {recommendedOffers.map((offer) => (
+              <article key={offer.id} className="recommended-card">
+                <div className="card-badge">{offer.recommendationTag}</div>
+                <div className="card-headline">
+                  <div className="rate">{formatPercent(offer.apr)}</div>
+                  <div className="payment">{`${formatCurrency(
+                    offer.monthlyPayment
+                  )} /mo (P&I)`}</div>
+                </div>
+                <div className="card-chips">
+                  <span className="chip">
+                    {offer.termYears
+                      ? `${offer.termYears}-year ${offer.productType}`
+                      : "30-year fixed"}
+                  </span>
+                  <span className="chip">{formatPoints(offer.points)}</span>
+                  <span className="chip">Lender: {offer.lenderName}</span>
+                </div>
+                <div className="cost-snapshot">
+                  <div>
+                    <span className="snapshot-label">Cash to close</span>
+                    <span className="snapshot-value">
+                      {formatCurrency(offer.cashToClose)}
                     </span>
-                    <span className="payment-label">per month (P&amp;I)</span>
                   </div>
-                  <div className="offer-chips">
-                    <span>{offer.termLabel}</span>
-                    <span>{formatPoints(offer.points)}</span>
-                    <span>Lender: {offer.lenderName}</span>
+                  <div>
+                    <span className="snapshot-label">
+                      Total cost over 5 years
+                    </span>
+                    <span className="snapshot-value">
+                      {formatCurrency(offer.cost5yr)}
+                    </span>
                   </div>
-                  <div className="cost-snapshot">
-                    <div>
-                      <span className="snapshot-label">Cash to close</span>
-                      <span className="snapshot-value">
-                        {formatCurrency(offer.cashToClose)}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="snapshot-label">5-year cost</span>
-                      <span className="snapshot-value">
-                        {formatCurrency(offer.cost5yr)}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="card-actions">
-                    <button type="button" className="primary-button">
-                      Continue with this rate
-                    </button>
-                    <button
-                      type="button"
-                      className="text-button"
-                      onClick={() => openDetails(offer)}
-                    >
-                      View full details
-                    </button>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state">
-              <h4>No recommendations yet</h4>
-              <p>Adjust your filters to uncover matching lenders.</p>
-            </div>
-          )}
-        </section>
-
-        <section className="offer-controls">
-          <div className="sort-control">
-            <label htmlFor="sort-by">Sort by</label>
-            <select
-              id="sort-by"
-              value={sortBy}
-              onChange={(event) => setSortBy(event.target.value)}
-            >
-              <option value="lowestPayment">Lowest payment</option>
-              <option value="lowestCashToClose">Lowest cash to close</option>
-              <option value="lowestRate">Lowest rate</option>
-              <option value="lowest5yrCost">Lowest 5-year cost</option>
-              <option value="lenderRating">Lender rating</option>
-            </select>
-          </div>
-          <div className="filter-chips">
-            <button
-              type="button"
-              className={classNames(
-                "chip",
-                filterChips.fixedOnly ? "chip-active" : ""
-              )}
-              onClick={() => toggleChip("fixedOnly")}
-            >
-              Fixed only
-            </button>
-            <button
-              type="button"
-              className={classNames(
-                "chip",
-                filterChips.armOnly ? "chip-active" : ""
-              )}
-              onClick={() => toggleChip("armOnly")}
-            >
-              ARM only
-            </button>
-            <button
-              type="button"
-              className={classNames(
-                "chip",
-                filterChips.noPoints ? "chip-active" : ""
-              )}
-              onClick={() => toggleChip("noPoints")}
-            >
-              No points
-            </button>
-            <button
-              type="button"
-              className={classNames(
-                "chip",
-                filterChips.noPmi ? "chip-active" : ""
-              )}
-              onClick={() => toggleChip("noPmi")}
-            >
-              No PMI
-            </button>
+                </div>
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={() => handleDetailsOpen(offer)}
+                >
+                  Continue with this rate
+                </button>
+                <button
+                  type="button"
+                  className="secondary-link"
+                  onClick={() => handleDetailsOpen(offer)}
+                >
+                  View full details
+                </button>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section className="comparison-table-section">
-          <header className="section-heading">
-            <h3>Full comparison</h3>
-            <p>
-              Review side-by-side details across the lenders that match your
-              filters.
-            </p>
-          </header>
+        <section className="controls-section">
+          <div className="controls-row">
+            <label className="sort-control">
+              <span>Sort by</span>
+              <select
+                value={selectedSort}
+                onChange={(event) => setSelectedSort(event.target.value)}
+              >
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="filters">
+              <button
+                type="button"
+                className={`filter-chip ${filters.fixedOnly ? "active" : ""}`}
+                onClick={() => handleFilterToggle("fixedOnly")}
+              >
+                Fixed only
+              </button>
+              <button
+                type="button"
+                className={`filter-chip ${filters.armOnly ? "active" : ""}`}
+                onClick={() => handleFilterToggle("armOnly")}
+              >
+                ARM only
+              </button>
+              <button
+                type="button"
+                className={`filter-chip ${filters.noPoints ? "active" : ""}`}
+                onClick={() => handleFilterToggle("noPoints")}
+              >
+                No points
+              </button>
+              <button
+                type="button"
+                className={`filter-chip ${filters.noPMI ? "active" : ""}`}
+                onClick={() => handleFilterToggle("noPMI")}
+              >
+                No PMI
+              </button>
+            </div>
+          </div>
+        </section>
 
-          <div className="comparison-table-wrapper">
-            {sortedOffers.length ? (
-              <table className="comparison-table">
-                <thead>
-                  <tr>
-                    <th className="sticky-column">&nbsp;</th>
-                    {visibleOffers.map((offer) => (
-                      <th key={offer.id}>
-                        <div className="offer-header">
-                          <div className="offer-lender">{offer.lenderName}</div>
-                          <div className="offer-program">{offer.programName}</div>
-                          <div className="offer-header-actions">
-                            <button
-                              type="button"
-                              className="table-link"
-                              onClick={() => openDetails(offer)}
-                            >
-                              View full details
-                            </button>
-                          </div>
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th className="sticky-column">Interest rate</th>
-                    {visibleOffers.map((offer) => (
-                      <td key={`${offer.id}-rate`} className="numeric">
-                        {formatPercent(offer.rate)}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">APR</th>
-                    {visibleOffers.map((offer) => (
-                      <td key={`${offer.id}-apr`} className="numeric">
-                        {formatPercent(offer.apr)}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Monthly payment (P&amp;I)</th>
-                    {visibleOffers.map((offer) => (
-                      <td
-                        key={`${offer.id}-payment`}
-                        className={classNames(
-                          "numeric",
-                          offer.monthlyPayment === bestMonthlyPayment
-                            ? "best-value"
-                            : ""
-                        )}
-                      >
-                        {formatCurrency(offer.monthlyPayment)}
-                        {offer.monthlyPayment === bestMonthlyPayment && (
-                          <span className="best-tag">Lowest</span>
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Points / credits</th>
-                    {visibleOffers.map((offer) => (
-                      <td key={`${offer.id}-points`} className="numeric">
-                        {formatPoints(offer.points)}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Lender fees</th>
-                    {visibleOffers.map((offer) => (
-                      <td key={`${offer.id}-fees`} className="numeric">
-                        {formatCurrency(offer.lenderFees)}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Cash to close</th>
-                    {visibleOffers.map((offer) => (
-                      <td
-                        key={`${offer.id}-cash`}
-                        className={classNames(
-                          "numeric",
-                          offer.cashToClose === bestCashToClose ? "best-value" : ""
-                        )}
-                      >
-                        {formatCurrency(offer.cashToClose)}
-                        {offer.cashToClose === bestCashToClose && (
-                          <span className="best-tag">Lowest</span>
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Cost over 5 years</th>
-                    {visibleOffers.map((offer) => (
-                      <td
-                        key={`${offer.id}-cost5`}
-                        className={classNames(
-                          "numeric",
-                          offer.cost5yr === bestCostFiveYear ? "best-value" : ""
-                        )}
-                      >
-                        {formatCurrency(offer.cost5yr)}
-                        {offer.cost5yr === bestCostFiveYear && (
-                          <span className="best-tag">Lowest</span>
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Lock period</th>
-                    {visibleOffers.map((offer) => (
-                      <td key={`${offer.id}-lock`} className="numeric">
-                        {offer.lockPeriodDays} days
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Prepayment penalty</th>
-                    {visibleOffers.map((offer) => (
-                      <td key={`${offer.id}-prepay`}>
-                        {offer.prepaymentPenalty ? "Yes" : "No"}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th className="sticky-column">Lender rating</th>
-                    {visibleOffers.map((offer) => (
-                      <td key={`${offer.id}-rating`}>
-                        <span className="rating-stars">{"★".repeat(Math.round(offer.rating))}</span>
-                        <span className="rating-score">{offer.rating.toFixed(1)}</span>
-                        <span className="rating-reviews">({offer.reviewsCount} reviews)</span>
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
-            ) : (
-              <div className="empty-state">
-                <h4>No offers match those filters</h4>
-                <p>Try clearing a filter or two to broaden your results.</p>
-              </div>
+        <section className="comparison-section">
+          <div className="comparison-header">
+            <h2 className="section-title">Compare all offers</h2>
+            {showAllRemaining && (
+              <button
+                type="button"
+                className="show-all-button"
+                onClick={() => setShowAllOffers(true)}
+              >
+                Show all offers ({filteredSortedOffers.length})
+              </button>
             )}
           </div>
-          {!showAllOffers && sortedOffers.length > visibleOffers.length && (
-            <button
-              type="button"
-              className="show-all-button"
-              onClick={() => setShowAllOffers(true)}
-            >
-              Show all offers ({sortedOffers.length})
-            </button>
-          )}
+          <div className="comparison-table-wrapper">
+            <table className="comparison-table">
+              <thead>
+                <tr>
+                  <th className="sticky-column" />
+                  {visibleOffers.map((offer) => (
+                    <th key={offer.id}>
+                      <div className="offer-header">
+                        <div className="offer-lender">{offer.lenderName}</div>
+                        <button
+                          type="button"
+                          className="table-details-link"
+                          onClick={() => handleDetailsOpen(offer)}
+                        >
+                          View full details
+                        </button>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th className="sticky-column">Interest rate</th>
+                  {visibleOffers.map((offer) => (
+                    <td key={`${offer.id}-rate`} className="numeric">
+                      {formatPercent(offer.rate)}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <th className="sticky-column">APR</th>
+                  {visibleOffers.map((offer) => (
+                    <td key={`${offer.id}-apr`} className="numeric">
+                      {formatPercent(offer.apr)}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Monthly payment (P&I)</th>
+                  {visibleOffers.map((offer) => {
+                    const isBest =
+                      lowestPayment !== null &&
+                      offer.monthlyPayment === lowestPayment;
+                    return (
+                      <td
+                        key={`${offer.id}-payment`}
+                        className={`numeric ${isBest ? "highlight" : ""}`}
+                      >
+                        {formatCurrency(offer.monthlyPayment)}
+                        {isBest && (
+                          <span className="highlight-badge">Lowest</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Points / credits</th>
+                  {visibleOffers.map((offer) => (
+                    <td key={`${offer.id}-points`} className="numeric">
+                      {formatPoints(offer.points)}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Lender fees</th>
+                  {visibleOffers.map((offer) => (
+                    <td key={`${offer.id}-fees`} className="numeric">
+                      {formatCurrency(offer.lenderFees)}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Cash to close</th>
+                  {visibleOffers.map((offer) => {
+                    const isBest =
+                      lowestCash !== null && offer.cashToClose === lowestCash;
+                    return (
+                      <td
+                        key={`${offer.id}-cash`}
+                        className={`numeric ${isBest ? "highlight" : ""}`}
+                      >
+                        {formatCurrency(offer.cashToClose)}
+                        {isBest && (
+                          <span className="highlight-badge">Lowest</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Cost over 5 years</th>
+                  {visibleOffers.map((offer) => {
+                    const isBest =
+                      lowestCost5 !== null && offer.cost5yr === lowestCost5;
+                    return (
+                      <td
+                        key={`${offer.id}-cost5`}
+                        className={`numeric ${isBest ? "highlight" : ""}`}
+                      >
+                        {formatCurrency(offer.cost5yr)}
+                        {isBest && (
+                          <span className="highlight-badge">Lowest</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Lock period</th>
+                  {visibleOffers.map((offer) => (
+                    <td key={`${offer.id}-lock`} className="numeric">
+                      {offer.lockPeriodDays}-day
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Prepayment penalty</th>
+                  {visibleOffers.map((offer) => (
+                    <td key={`${offer.id}-prepay`}>
+                      {offer.prepaymentPenalty ? "Yes" : "No"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <th className="sticky-column">Lender rating</th>
+                  {visibleOffers.map((offer) => (
+                    <td key={`${offer.id}-rating`}>
+                      <span className="rating-stars">
+                        ⭐️ {offer.rating.toFixed(1)}
+                      </span>
+                      <span className="rating-reviews">
+                        ({offer.reviewsCount} reviews)
+                      </span>
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
-      </section>
 
-      {selectedOffer && (
-        <div className="details-drawer-overlay" onClick={closeDetails}>
-          <aside
-            className="details-drawer"
-            role="dialog"
-            aria-modal="true"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button className="drawer-close" type="button" onClick={closeDetails}>
-              ×
-            </button>
-            <div className="drawer-content">
-              <header className="drawer-header">
+        {selectedOffer && (
+          <div className="details-overlay" onClick={handleDetailsClose}>
+            <aside
+              className="details-drawer"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="close-button"
+                aria-label="Close details"
+                onClick={handleDetailsClose}
+              >
+                ×
+              </button>
+              <div className="details-content">
                 <h3>{selectedOffer.lenderName}</h3>
-                <p>{selectedOffer.programName}</p>
-              </header>
-              <section className="drawer-section">
-                <h4>Loan basics</h4>
-                <ul>
-                  <li>
-                    <strong>Rate:</strong> {formatPercent(selectedOffer.rate)}
-                  </li>
-                  <li>
-                    <strong>APR:</strong> {formatPercent(selectedOffer.apr)}
-                  </li>
-                  <li>
-                    <strong>Payment:</strong> {formatCurrency(selectedOffer.monthlyPayment)} (principal &amp; interest)
-                  </li>
-                  <li>
-                    <strong>Term:</strong> {selectedOffer.termLabel}
-                  </li>
-                  <li>
-                    <strong>Amortization:</strong> Level payments for the fixed period with
-                    optional recast after major principal reductions.
-                  </li>
-                </ul>
-              </section>
-              <section className="drawer-section">
-                <h4>Cost breakdown</h4>
-                <ul>
-                  <li>
-                    <strong>Points / credits:</strong> {formatPoints(selectedOffer.points)}
-                  </li>
-                  <li>
-                    <strong>Lender fees:</strong> {formatCurrency(selectedOffer.lenderFees)}
-                  </li>
-                  <li>
-                    <strong>Third-party fees:</strong> {formatCurrency(selectedOffer.thirdPartyFees)}
-                  </li>
-                  <li>
-                    <strong>Escrow estimate:</strong> {formatCurrency(selectedOffer.escrowEstimate)}
-                  </li>
-                </ul>
-              </section>
-              <section className="drawer-section">
-                <h4>Why it could work</h4>
-                <p>{selectedOffer.costNarrative}</p>
-              </section>
-              <footer className="drawer-actions">
+                <div className="details-section">
+                  <h4>Loan basics</h4>
+                  <p>
+                    Rate: {formatPercent(selectedOffer.rate)} APR • Payment:{" "}
+                    {formatCurrency(selectedOffer.monthlyPayment)}/mo (principal
+                    & interest)
+                  </p>
+                  <p>
+                    Term: {selectedOffer.termYears || "30-year fixed"} • Lock
+                    period: {selectedOffer.lockPeriodDays}-day •{" "}
+                    {selectedOffer.prepaymentPenalty ? "Includes" : "No"}{" "}
+                    prepayment penalty
+                  </p>
+                  <p>
+                    This loan amortizes over the full term, keeping your payment
+                    consistent as long as rates stay fixed.
+                  </p>
+                </div>
+                <div className="details-section">
+                  <h4>Cost breakdown</h4>
+                  <ul>
+                    <li>
+                      Points / credits: {formatPoints(selectedOffer.points)}
+                    </li>
+                    <li>
+                      Lender fees: {formatCurrency(selectedOffer.lenderFees)}
+                    </li>
+                    <li>
+                      Third-party fees:{" "}
+                      {formatCurrency(selectedOffer.thirdPartyFees || 2100)}
+                    </li>
+                    <li>
+                      Estimated escrow at closing:{" "}
+                      {formatCurrency(selectedOffer.escrowEstimate || 4200)}
+                    </li>
+                    <li>
+                      Cash to close: {formatCurrency(selectedOffer.cashToClose)}
+                    </li>
+                  </ul>
+                </div>
+                <div className="details-section">
+                  <h4>Why this could work</h4>
+                  <p>
+                    {lowestCost5
+                      ? `If you stay in this home for around five years, this option is projected to be ${formatCurrency(
+                          Math.max(0, selectedOffer.cost5yr - lowestCost5)
+                        )} more than the lowest-cost alternative over the same period.`
+                      : "If you stay in this home for around five years, this loan keeps your costs predictable compared with similar offers."}
+                  </p>
+                  <p>
+                    Compare the cash-to-close and monthly payment with other
+                    options to find your ideal balance of upfront versus ongoing
+                    cost.
+                  </p>
+                </div>
+              </div>
+              <div className="details-actions">
                 <button type="button" className="primary-button">
                   Apply now
                 </button>
-                <button type="button" className="secondary-button" onClick={closeDetails}>
+                <button type="button" className="secondary-button">
                   Talk to a loan officer
                 </button>
-              </footer>
-            </div>
-          </aside>
-        </div>
-      )}
-    </div>
+              </div>
+            </aside>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

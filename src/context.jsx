@@ -13,6 +13,7 @@ const Context = createContext({
   mortgageRates: [],
   showMortgageResultsPage: false,
   mortgageScenario: null,
+  showProductComparison: false,
 });
 
 export default Context;
