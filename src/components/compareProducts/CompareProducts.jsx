@@ -349,7 +349,7 @@ const compareResultsStyles = `
   background-color: rgba(15, 23, 42, 0.55);
   display: flex;
   justify-content: flex-end;
-  z-index: 30;
+  z-index: 1300;
   padding: 24px;
 }
 

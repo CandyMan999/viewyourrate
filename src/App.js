@@ -135,6 +135,8 @@ const App = () => {
   const [opacity, setOpacity] = useState(1);
   const [direction, setDirection] = useState(1);
   const isShowingProductComparison = state.showProductComparison;
+  const isActiveProductsFilter =
+    componentsList[state.activeComponent] === "ProductsFilterWidget";
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -283,7 +285,19 @@ const App = () => {
             }}
           />
         ) : (
-          <div style={mainContainerStyles}>
+          <div
+            style={{
+              ...baseMainContainerStyles,
+              alignItems: isActiveProductsFilter
+                ? "flex-start"
+                : baseMainContainerStyles.alignItems,
+              paddingTop: isActiveProductsFilter ? (isMobile ? 48 : 56) : 0,
+              paddingBottom: isActiveProductsFilter ? (isMobile ? 24 : 32) : 0,
+              overflow: isActiveProductsFilter
+                ? "auto"
+                : baseMainContainerStyles.overflow,
+            }}
+          >
             <motion.div
               style={{
                 margin: isMobile ? 0 : 10,
@@ -374,12 +388,12 @@ const App = () => {
 };
 
 // Styles for main container with background image
-const mainContainerStyles = {
+const baseMainContainerStyles = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   position: "relative",
-  height: "100vh",
+  minHeight: "100vh",
   overflow: "hidden",
   backgroundImage: `url(${background})`,
   backgroundSize: "cover",
