@@ -300,12 +300,7 @@ const propertyTypes = [
   "New construction",
 ];
 
-const propertyUnitsOptions = [
-  "Single unit",
-  "2 units",
-  "3 units",
-  "4 units",
-];
+const propertyUnitsOptions = ["Single unit", "2 units", "3 units", "4 units"];
 
 const occupancyOptions = [
   "Primary residence",
@@ -322,10 +317,7 @@ const loanProgramOptions = [
   "Non-QM",
 ];
 
-const rateStructureOptions = [
-  "Fixed rate",
-  "Adjustable rate (ARM)",
-];
+const rateStructureOptions = ["Fixed rate", "Adjustable rate (ARM)"];
 
 const armTermOptions = ["5/6 ARM", "7/6 ARM", "10/6 ARM"];
 
@@ -497,7 +489,8 @@ const ProductsFilterWidget = () => {
       name === "existingLoanBalance" ||
       name === "cashOutAmount"
     ) {
-      const sanitized = nextValue === "" ? "" : nextValue.toString().replace(/[^\d.]/g, "");
+      const sanitized =
+        nextValue === "" ? "" : nextValue.toString().replace(/[^\d.]/g, "");
       nextValue = sanitized;
     }
 
@@ -536,7 +529,11 @@ const ProductsFilterWidget = () => {
     }
 
     const purchasePrice = Number(formState.purchasePrice) || 0;
-    const sanitizedPercent = clamp(Number(formState.downPaymentPercent) || 0, 0, 80);
+    const sanitizedPercent = clamp(
+      Number(formState.downPaymentPercent) || 0,
+      0,
+      80
+    );
     const downPayment = Math.min(
       purchasePrice,
       (purchasePrice * sanitizedPercent) / 100
@@ -750,7 +747,9 @@ const ProductsFilterWidget = () => {
                 />
                 <div className="down-payment-display">
                   <span>{formattedDownPaymentPercent}% selected</span>
-                  <span>{currencyFormatter.format(downPaymentAmount)} down</span>
+                  <span>
+                    {currencyFormatter.format(downPaymentAmount)} down
+                  </span>
                 </div>
               </div>
             </div>
@@ -821,7 +820,7 @@ const ProductsFilterWidget = () => {
                 name="propertyZip"
                 type="text"
                 inputMode="numeric"
-                pattern="\\d{5}"
+                // pattern="\\d{5}"
                 maxLength={5}
                 value={formState.propertyZip}
                 onChange={handleZipChange}

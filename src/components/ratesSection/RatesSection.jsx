@@ -67,6 +67,7 @@ const RatesSection = ({ dispatch, state }) => {
             alignContent: "center",
             fontWeight: "bold",
             justifyContent: "center",
+            color: "white",
           }}
         >
           <FiClock aria-hidden="true" /> Updated {timestampLabel} ET
