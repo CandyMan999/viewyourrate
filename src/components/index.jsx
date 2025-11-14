@@ -17,3 +17,4 @@ export { default as MortgageCalc } from "./calculators/MortgageCalc";
 export { default as BackDrop } from "./backdrop";
 export { default as ApplyNow } from "./applyButton";
 export { default as ApplyNowWidget } from "./applyNowWidget/index";
+export { default as MortgageResultsPage } from "./MortgageResultsPage";

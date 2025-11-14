@@ -22,6 +22,7 @@ import {
   RateDropNotification,
   AffordabilityCalc,
   MortgageCalc,
+  MortgageResultsPage,
 } from "./components";
 import Context from "./context";
 import reducer from "./reducer";
@@ -186,6 +187,20 @@ const App = () => {
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
   };
 
+  const handleScenarioSubmit = (scenarioData) => {
+    dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenarioData });
+    dispatch({ type: "SHOW_MORTGAGE_RESULTS_PAGE", payload: true });
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  };
+
+  const handleEditScenario = () => {
+    dispatch({ type: "SHOW_MORTGAGE_RESULTS_PAGE", payload: false });
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+  };
+
   const renderActiveComponent = () => {
     switch (componentsList[state.activeComponent]) {
       case "HeroSection":
@@ -237,6 +252,17 @@ const App = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (state.showMortgageResultsPage) {
+    return (
+      <Context.Provider value={{ state, dispatch }}>
+        <MortgageResultsPage
+          scenario={state.mortgageScenario}
+          onEditScenario={handleEditScenario}
+        />
+      </Context.Provider>
+    );
+  }
 
   return (
     <Context.Provider value={{ state, dispatch }}>
@@ -326,6 +352,7 @@ const App = () => {
           onClose={() =>
             dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
           }
+          onScenarioSubmit={handleScenarioSubmit}
         />
         <AffordabilityCalc
           isVisible={state.showAffordabilityCalculator}
