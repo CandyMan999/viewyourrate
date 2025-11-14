@@ -23,6 +23,7 @@ import {
   RateDropNotification,
   AffordabilityCalc,
   MortgageCalc,
+  MortgageOptionsPage,
 } from "./components";
 import Context from "./context";
 import reducer from "./reducer";
@@ -137,6 +138,8 @@ const App = () => {
   const isShowingProductComparison = state.showProductComparison;
   const isActiveProductsFilter =
     componentsList[state.activeComponent] === "ProductsFilterWidget";
+  const [activePage, setActivePage] = useState("home");
+  const [activeScenario, setActiveScenario] = useState(null);
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -164,6 +167,7 @@ const App = () => {
   };
 
   const handleNavClick = (index) => {
+    setActivePage("home");
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: index });
     if (navItems[index].name === "Contact") {
       scrollToFooter();
@@ -195,12 +199,6 @@ const App = () => {
 
   const handleScenarioSubmit = (scenarioData) => {
     dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenarioData });
-    dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
-    dispatch({ type: "SET_ACTIVE_COMPONENT", payload: 2 });
-    dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: true });
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "auto" });
-    }
   };
 
   const renderActiveComponent = () => {
@@ -276,85 +274,101 @@ const App = () => {
           navItems={navItems}
         />
         {/* Main container with background image */}
-        {isShowingProductComparison ? (
-          <CompareProducts
-            scenario={state.mortgageScenario}
-            onEditScenario={() => {
-              dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: false });
-              dispatch({ type: "SET_ACTIVE_COMPONENT", payload: 2 });
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              ...baseMainContainerStyles,
-              alignItems: isActiveProductsFilter
-                ? "flex-start"
-                : baseMainContainerStyles.alignItems,
-              paddingTop: isActiveProductsFilter ? (isMobile ? 48 : 56) : 0,
-              paddingBottom: isActiveProductsFilter ? (isMobile ? 24 : 32) : 0,
-              overflow: isActiveProductsFilter
-                ? "auto"
-                : baseMainContainerStyles.overflow,
-            }}
-          >
-            <motion.div
-              style={{
-                margin: isMobile ? 0 : 10,
-                left: 0,
-                position: "absolute",
-                // transform: "translateY(-50%)",
-                ...arrowStyles,
-              }}
-              onClick={handlePrevious}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <FiArrowLeft />
-            </motion.div>
-
-            <AnimatePresence wait>
-              <motion.div
-                key={state.activeComponent}
-                initial={{ x: direction === 1 ? 300 : -300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: direction === 1 ? -300 : 300, opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                style={{ width: "100%", height: "100%" }}
+        {activePage === "home" ? (
+          <>
+            {isShowingProductComparison ? (
+              <CompareProducts
+                scenario={state.mortgageScenario}
+                onEditScenario={() => {
+                  dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: false });
+                  dispatch({ type: "SET_ACTIVE_COMPONENT", payload: 2 });
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  ...baseMainContainerStyles,
+                  alignItems: isActiveProductsFilter
+                    ? "flex-start"
+                    : baseMainContainerStyles.alignItems,
+                  paddingTop: isActiveProductsFilter ? (isMobile ? 48 : 56) : 0,
+                  paddingBottom: isActiveProductsFilter ? (isMobile ? 24 : 32) : 0,
+                  overflow: isActiveProductsFilter
+                    ? "auto"
+                    : baseMainContainerStyles.overflow,
+                }}
               >
-                {renderActiveComponent()}
-              </motion.div>
-            </AnimatePresence>
+                <motion.div
+                  style={{
+                    margin: isMobile ? 0 : 10,
+                    left: 0,
+                    position: "absolute",
+                    // transform: "translateY(-50%)",
+                    ...arrowStyles,
+                  }}
+                  onClick={handlePrevious}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <FiArrowLeft />
+                </motion.div>
 
-            <motion.div
-              style={{
-                margin: isMobile ? 0 : 10,
-                right: 0,
-                position: "absolute",
-                // transform: "translateY(-50%)",
-                ...arrowStyles,
-              }}
-              onClick={handleNext}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <FiArrowRight />
-            </motion.div>
-          </div>
-        )}
-        {state.activeComponent === 0 &&
-          (isMobile ? (
-            <RatesSectionMobile dispatch={dispatch} state={state} />
-          ) : (
-            showRatesSection && (
-              <div style={{ transition: "opacity 0.5s ease", opacity }}>
-                <RatesSection dispatch={dispatch} state={state} />
+                <AnimatePresence wait>
+                  <motion.div
+                    key={state.activeComponent}
+                    initial={{ x: direction === 1 ? 300 : -300, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: direction === 1 ? -300 : 300, opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    style={{ width: "100%", height: "100%" }}
+                  >
+                    {renderActiveComponent()}
+                  </motion.div>
+                </AnimatePresence>
+
+                <motion.div
+                  style={{
+                    margin: isMobile ? 0 : 10,
+                    right: 0,
+                    position: "absolute",
+                    // transform: "translateY(-50%)",
+                    ...arrowStyles,
+                  }}
+                  onClick={handleNext}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <FiArrowRight />
+                </motion.div>
               </div>
-            )
-          ))}
+            )}
+            {state.activeComponent === 0 &&
+              (isMobile ? (
+                <RatesSectionMobile dispatch={dispatch} state={state} />
+              ) : (
+                showRatesSection && (
+                  <div style={{ transition: "opacity 0.5s ease", opacity }}>
+                    <RatesSection dispatch={dispatch} state={state} />
+                  </div>
+                )
+              ))}
 
-        <RateDropNotification />
-        <MortgageServices />
+            <RateDropNotification />
+            <MortgageServices />
+          </>
+        ) : (
+          activeScenario && (
+            <MortgageOptionsPage
+              scenario={activeScenario}
+              onEditScenario={() => {
+                setActivePage("home");
+                setTimeout(() => {
+                  dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+                }, 0);
+              }}
+            />
+          )
+        )}
         <ApplyNowWidget
           isVisible={state.showApplyNowWidget}
           onClose={() =>
@@ -369,6 +383,15 @@ const App = () => {
             dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
           }
           onScenarioSubmit={handleScenarioSubmit}
+          onShowOptionsPage={(scenarioData) => {
+            setActiveScenario(scenarioData);
+            setActivePage("mortgageOptions");
+            dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
+            dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: false });
+            if (typeof window !== "undefined") {
+              window.scrollTo({ top: 0, behavior: "auto" });
+            }
+          }}
         />
         <AffordabilityCalc
           isVisible={state.showAffordabilityCalculator}
