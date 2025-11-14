@@ -6,7 +6,7 @@ export { default as RatesSectionMobile } from "./rateSectionMobile";
 export { default as Footer } from "./footer";
 export { default as NavDrawer } from "./navDrawer";
 export { default as Calculator } from "./calculators";
-export { default as Component1 } from "./component1";
+export { default as CompareProducts } from "./compareProducts";
 export { default as Component2 } from "./component2";
 export { default as Component3 } from "./component3";
 export { default as Header } from "./header";

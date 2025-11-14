@@ -14,7 +14,7 @@ import {
   NavDrawer,
   Footer,
   Calculator,
-  Component1,
+  CompareProducts,
   Component2,
   Component3,
   Header,
@@ -35,7 +35,7 @@ import { dummyRates } from "./data/dummyRates";
 const componentsList = [
   "HeroSection",
   "Calculator",
-  "Component1",
+  "CompareProducts",
   "Component2",
   "Component3",
 ];
@@ -118,12 +118,12 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
 };
 
 const navItems = [
-  { name: "Home", index: 0 },
-  { name: "Calculators", index: 1 },
-  { name: "Component1", index: 2 },
-  { name: "Component2", index: 3 },
-  { name: "Component3", index: 4 },
-  { name: "Contact", index: 5 },
+  { name: "Home", index: 0, component: "HeroSection" },
+  { name: "Calculators", index: 1, component: "Calculator" },
+  { name: "Compare Products", index: 2, component: "CompareProducts" },
+  { name: "Component2", index: 3, component: "Component2" },
+  { name: "Component3", index: 4, component: "Component3" },
+  { name: "Contact", index: 5, component: "Contact" },
 ];
 
 const App = () => {
@@ -201,8 +201,8 @@ const App = () => {
         return <HeroSection state={state} dispatch={dispatch} />;
       case "Calculator":
         return <Calculator dispatch={dispatch} />;
-      case "Component1":
-        return <Component1 />;
+      case "CompareProducts":
+        return <CompareProducts />;
       case "Component2":
         return <Component2 />;
       case "Component3":
@@ -215,7 +215,7 @@ const App = () => {
   useEffect(() => {
     const activeComponentName = componentsList[state.activeComponent];
     const activeNavItem = navItems.find(
-      (item) => item.name === activeComponentName
+      (item) => item.component === activeComponentName
     );
     if (activeNavItem) {
       dispatch({ type: "SET_ACTIVE_NAV", payload: activeNavItem.index });
