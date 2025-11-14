@@ -8,7 +8,7 @@ const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#d1fae5"
+    stroke="#7dd3fc"
     strokeLinecap="round"
     {...props}
   />
@@ -70,7 +70,7 @@ const Navbar = ({
   }, [activeComponent]);
 
   const linkVariants = {
-    hover: { scale: 1.08, color: "#86efac" },
+    hover: { scale: 1.08, color: "#93c5fd" },
   };
 
   const handleNavClick = (index) => {
@@ -88,10 +88,10 @@ const Navbar = ({
         justifyContent: "space-between",
         alignItems: "center",
         padding: "1rem 2rem",
-        background: "linear-gradient(135deg, rgba(4, 27, 31, 0.96), rgba(5, 22, 25, 0.92))",
-        color: "#e6f9f0",
-        borderBottom: "1px solid rgba(74, 222, 128, 0.35)",
-        boxShadow: "0 12px 32px rgba(4, 27, 31, 0.25)",
+        background: "linear-gradient(135deg, rgba(6, 12, 31, 0.96), rgba(13, 24, 48, 0.92))",
+        color: "#e2e8f0",
+        borderBottom: "1px solid rgba(148, 163, 184, 0.28)",
+        boxShadow: "0 14px 38px rgba(7, 11, 23, 0.35)",
         position: "sticky",
         top: 0,
         zIndex: 1000,
@@ -140,7 +140,8 @@ const logoStyles = {
   fontWeight: "700",
   cursor: "pointer",
   letterSpacing: "0.08em",
-  color: "#bbf7d0",
+  color: "#bfdbfe",
+  textShadow: "0 2px 12px rgba(59, 130, 246, 0.45)",
 };
 
 const leftContainerStyles = {
@@ -165,7 +166,7 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#4ade80" : "rgba(226, 252, 236, 0.82)",
+  color: isActive ? "#60a5fa" : "rgba(226, 232, 240, 0.78)",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",
@@ -179,21 +180,21 @@ const indicatorBaseStyles = {
   position: "absolute",
   bottom: -6,
   height: "3px",
-  background: "linear-gradient(90deg, #22c55e, #4ade80)",
+  background: "linear-gradient(90deg, #2563eb, #38bdf8)",
   borderRadius: "999px",
-  boxShadow: "0 0 12px rgba(34, 197, 94, 0.65)",
+  boxShadow: "0 0 14px rgba(56, 189, 248, 0.55)",
 };
 
 const menuButtonStyles = {
-  background: "rgba(15, 44, 41, 0.65)",
-  border: "1px solid rgba(74, 222, 128, 0.4)",
+  background: "rgba(15, 23, 42, 0.65)",
+  border: "1px solid rgba(96, 165, 250, 0.4)",
   borderRadius: "999px",
   cursor: "pointer",
   padding: "0.4rem 0.55rem",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  boxShadow: "0 10px 20px rgba(4, 27, 31, 0.35)",
+  boxShadow: "0 12px 24px rgba(8, 15, 32, 0.4)",
 };
 
 export default Navbar;
