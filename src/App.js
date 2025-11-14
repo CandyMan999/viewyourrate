@@ -134,7 +134,7 @@ const App = () => {
   const [showRatesSection, setShowRatesSection] = useState(true);
   const [opacity, setOpacity] = useState(1);
   const [direction, setDirection] = useState(1);
-  const [showCompareProducts, setShowCompareProducts] = useState(false);
+  const isShowingProductComparison = state.showProductComparison;
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -168,10 +168,8 @@ const App = () => {
     } else {
       scrollToTop();
     }
-    if (navItems[index].name === "Compare Products") {
-      setShowCompareProducts(true);
-    } else {
-      setShowCompareProducts(false);
+    if (navItems[index].name !== "Compare Products") {
+      dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: false });
     }
   };
 
@@ -197,6 +195,7 @@ const App = () => {
     dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenarioData });
     dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: 2 });
+    dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: true });
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "auto" });
     }
@@ -275,50 +274,60 @@ const App = () => {
           navItems={navItems}
         />
         {/* Main container with background image */}
-        <div style={mainContainerStyles}>
-          <motion.div
-            style={{
-              margin: isMobile ? 0 : 10,
-              left: 0,
-              position: "absolute",
-              // transform: "translateY(-50%)",
-              ...arrowStyles,
+        {isShowingProductComparison ? (
+          <CompareProducts
+            scenario={state.mortgageScenario}
+            onEditScenario={() => {
+              dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: false });
+              dispatch({ type: "SET_ACTIVE_COMPONENT", payload: 2 });
             }}
-            onClick={handlePrevious}
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <FiArrowLeft />
-          </motion.div>
-
-          <AnimatePresence wait>
+          />
+        ) : (
+          <div style={mainContainerStyles}>
             <motion.div
-              key={state.activeComponent}
-              initial={{ x: direction === 1 ? 300 : -300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: direction === 1 ? -300 : 300, opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              style={{ width: "100%", height: "100%" }}
+              style={{
+                margin: isMobile ? 0 : 10,
+                left: 0,
+                position: "absolute",
+                // transform: "translateY(-50%)",
+                ...arrowStyles,
+              }}
+              onClick={handlePrevious}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
             >
-              {renderActiveComponent()}
+              <FiArrowLeft />
             </motion.div>
-          </AnimatePresence>
 
-          <motion.div
-            style={{
-              margin: isMobile ? 0 : 10,
-              right: 0,
-              position: "absolute",
-              // transform: "translateY(-50%)",
-              ...arrowStyles,
-            }}
-            onClick={handleNext}
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <FiArrowRight />
-          </motion.div>
-        </div>
+            <AnimatePresence wait>
+              <motion.div
+                key={state.activeComponent}
+                initial={{ x: direction === 1 ? 300 : -300, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: direction === 1 ? -300 : 300, opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ width: "100%", height: "100%" }}
+              >
+                {renderActiveComponent()}
+              </motion.div>
+            </AnimatePresence>
+
+            <motion.div
+              style={{
+                margin: isMobile ? 0 : 10,
+                right: 0,
+                position: "absolute",
+                // transform: "translateY(-50%)",
+                ...arrowStyles,
+              }}
+              onClick={handleNext}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FiArrowRight />
+            </motion.div>
+          </div>
+        )}
         {state.activeComponent === 0 &&
           (isMobile ? (
             <RatesSectionMobile dispatch={dispatch} state={state} />
@@ -330,7 +339,6 @@ const App = () => {
             )
           ))}
 
-        {state.activeComponent === 2 && <CompareProducts />}
         <RateDropNotification />
         <MortgageServices />
         <ApplyNowWidget
