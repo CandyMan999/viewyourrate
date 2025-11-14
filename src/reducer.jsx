@@ -31,6 +31,12 @@ export default function reducer(state, { type, payload }) {
       };
     case "SET_MORTGAGE_RATES":
       return { ...state, mortgageRates: payload };
+    case "TOGGLE_PRODUCT_COMPARISON":
+      return { ...state, showProductComparison: payload };
+    case "SET_MORTGAGE_SCENARIO":
+      return { ...state, mortgageScenario: payload };
+    case "SHOW_MORTGAGE_RESULTS_PAGE":
+      return { ...state, showMortgageResultsPage: payload };
 
     // Other cases...
     default:

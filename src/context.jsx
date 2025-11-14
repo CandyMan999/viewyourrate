@@ -11,6 +11,9 @@ const Context = createContext({
   showPricingWidget: false,
   showApplyNowWidget: false,
   mortgageRates: [],
+  showMortgageResultsPage: false,
+  mortgageScenario: null,
+  showProductComparison: false,
 });
 
 export default Context;

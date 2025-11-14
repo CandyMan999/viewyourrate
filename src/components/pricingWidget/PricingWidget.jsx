@@ -116,7 +116,7 @@ const DotToggle = ({
   );
 };
 
-const PricingWidget = ({ isVisible, onClose }) => {
+const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
   const [quoteType, setQuoteType] = useState("Purchase");
   const [purchasePrice, setPurchasePrice] = useState(550000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
@@ -185,6 +185,37 @@ const PricingWidget = ({ isVisible, onClose }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const numericPurchasePrice = Number(purchasePrice);
+    const numericDownPaymentPercent = Number(downPaymentPercent);
+    const downPaymentAmount =
+      Number.isFinite(numericPurchasePrice) && Number.isFinite(numericDownPaymentPercent)
+        ? Math.round(numericPurchasePrice * (numericDownPaymentPercent / 100))
+        : null;
+
+    const scenarioData = {
+      quoteType,
+      purchasePrice: Number.isFinite(numericPurchasePrice)
+        ? numericPurchasePrice
+        : 0,
+      downPaymentPercent: Number.isFinite(numericDownPaymentPercent)
+        ? numericDownPaymentPercent
+        : 0,
+      downPaymentAmount,
+      loanAmount,
+      waiveEscrow,
+      occupancy,
+      propertyType,
+      stateSelection,
+      isMilitary,
+      timestamp: new Date().toISOString(),
+    };
+
+    console.log("Pricing scenario submitted:", scenarioData);
+
+    if (typeof onScenarioSubmit === "function") {
+      onScenarioSubmit(scenarioData);
+    }
   };
 
   return (

@@ -72,7 +72,7 @@ const NavDrawer = ({
         return <FiHome />;
       case "Calculators":
         return <FaCalculator />;
-      case "Component1":
+      case "Compare Products":
         return <FiPieChart />;
       case "Component2":
         return <FiUsers />;

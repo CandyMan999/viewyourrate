@@ -14,7 +14,8 @@ import {
   NavDrawer,
   Footer,
   Calculator,
-  Component1,
+  ProductsFilterWidget,
+  CompareProducts,
   Component2,
   Component3,
   Header,
@@ -35,7 +36,7 @@ import { dummyRates } from "./data/dummyRates";
 const componentsList = [
   "HeroSection",
   "Calculator",
-  "Component1",
+  "ProductsFilterWidget",
   "Component2",
   "Component3",
 ];
@@ -118,12 +119,12 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
 };
 
 const navItems = [
-  { name: "Home", index: 0 },
-  { name: "Calculators", index: 1 },
-  { name: "Component1", index: 2 },
-  { name: "Component2", index: 3 },
-  { name: "Component3", index: 4 },
-  { name: "Contact", index: 5 },
+  { name: "Home", index: 0, component: "HeroSection" },
+  { name: "Calculators", index: 1, component: "Calculator" },
+  { name: "Compare Products", index: 2, component: "ProductsFilterWidget" },
+  { name: "Component2", index: 3, component: "Component2" },
+  { name: "Component3", index: 4, component: "Component3" },
+  { name: "Contact", index: 5, component: "Contact" },
 ];
 
 const App = () => {
@@ -133,6 +134,7 @@ const App = () => {
   const [showRatesSection, setShowRatesSection] = useState(true);
   const [opacity, setOpacity] = useState(1);
   const [direction, setDirection] = useState(1);
+  const [showCompareProducts, setShowCompareProducts] = useState(false);
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -166,6 +168,11 @@ const App = () => {
     } else {
       scrollToTop();
     }
+    if (navItems[index].name === "Compare Products") {
+      setShowCompareProducts(true);
+    } else {
+      setShowCompareProducts(false);
+    }
   };
 
   const toggleDrawer = () => {
@@ -186,14 +193,23 @@ const App = () => {
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
   };
 
+  const handleScenarioSubmit = (scenarioData) => {
+    dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenarioData });
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
+    dispatch({ type: "SET_ACTIVE_COMPONENT", payload: 2 });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  };
+
   const renderActiveComponent = () => {
     switch (componentsList[state.activeComponent]) {
       case "HeroSection":
         return <HeroSection state={state} dispatch={dispatch} />;
       case "Calculator":
         return <Calculator dispatch={dispatch} />;
-      case "Component1":
-        return <Component1 />;
+      case "ProductsFilterWidget":
+        return <ProductsFilterWidget />;
       case "Component2":
         return <Component2 />;
       case "Component3":
@@ -206,7 +222,7 @@ const App = () => {
   useEffect(() => {
     const activeComponentName = componentsList[state.activeComponent];
     const activeNavItem = navItems.find(
-      (item) => item.name === activeComponentName
+      (item) => item.component === activeComponentName
     );
     if (activeNavItem) {
       dispatch({ type: "SET_ACTIVE_NAV", payload: activeNavItem.index });
@@ -274,6 +290,7 @@ const App = () => {
           >
             <FiArrowLeft />
           </motion.div>
+
           <AnimatePresence wait>
             <motion.div
               key={state.activeComponent}
@@ -286,6 +303,7 @@ const App = () => {
               {renderActiveComponent()}
             </motion.div>
           </AnimatePresence>
+
           <motion.div
             style={{
               margin: isMobile ? 0 : 10,
@@ -311,6 +329,8 @@ const App = () => {
               </div>
             )
           ))}
+
+        {state.activeComponent === 2 && <CompareProducts />}
         <RateDropNotification />
         <MortgageServices />
         <ApplyNowWidget
@@ -326,6 +346,7 @@ const App = () => {
           onClose={() =>
             dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
           }
+          onScenarioSubmit={handleScenarioSubmit}
         />
         <AffordabilityCalc
           isVisible={state.showAffordabilityCalculator}
