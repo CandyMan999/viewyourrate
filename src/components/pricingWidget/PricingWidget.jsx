@@ -62,7 +62,9 @@ const DotToggle = ({
         width: 18,
         height: 18,
         borderRadius: "50%",
-        border: `2px solid ${active ? "rgba(125, 211, 252, 0.95)" : "rgba(148, 163, 184, 0.55)"}`,
+        border: `2px solid ${
+          active ? "rgba(125, 211, 252, 0.95)" : "rgba(148, 163, 184, 0.55)"
+        }`,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
@@ -327,7 +329,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                       }}
                     >
                       <label
-                        style={{ fontWeight: 600, color: "rgba(226, 232, 240, 0.88)" }}
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
                       >
                         Purchase Price
                       </label>
@@ -338,7 +343,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         value={purchasePrice}
                         onChange={(e) => setPurchasePrice(e.target.value)}
                         style={{
-                          width: "100%",
+                          width: "90%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
                           border: "1px solid rgba(96, 165, 250, 0.25)",
@@ -359,7 +364,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                       }}
                     >
                       <label
-                        style={{ fontWeight: 600, color: "rgba(226, 232, 240, 0.88)" }}
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
                       >
                         Down Payment
                       </label>
@@ -396,7 +404,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                       }}
                     >
                       <label
-                        style={{ fontWeight: 600, color: "rgba(226, 232, 240, 0.88)" }}
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
                       >
                         Loan Amount
                       </label>
@@ -405,7 +416,7 @@ const PricingWidget = ({ isVisible, onClose }) => {
                         value={formatCurrency(loanAmount)}
                         readOnly
                         style={{
-                          width: "100%",
+                          width: "90%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
                           border: "1px solid rgba(56, 189, 248, 0.35)",
@@ -434,7 +445,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                       }}
                     >
                       <label
-                        style={{ fontWeight: 600, color: "rgba(226, 232, 240, 0.88)" }}
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
                       >
                         Occupancy Type
                       </label>
@@ -470,7 +484,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                       }}
                     >
                       <label
-                        style={{ fontWeight: 600, color: "rgba(226, 232, 240, 0.88)" }}
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
                       >
                         Property Type
                       </label>
@@ -506,7 +523,10 @@ const PricingWidget = ({ isVisible, onClose }) => {
                       }}
                     >
                       <label
-                        style={{ fontWeight: 600, color: "rgba(226, 232, 240, 0.88)" }}
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
                       >
                         State
                       </label>

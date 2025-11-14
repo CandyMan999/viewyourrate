@@ -6,9 +6,7 @@ import { dummyRates } from "../../data/dummyRates";
 import "./RatesSectionMobile.css";
 
 const RatesSectionMobile = ({ state, dispatch }) => {
-  const rates = state?.mortgageRates?.length
-    ? state.mortgageRates
-    : dummyRates;
+  const rates = state?.mortgageRates?.length ? state.mortgageRates : dummyRates;
 
   const timestampLabel = useMemo(() => {
     const timestamp = new Date();
@@ -30,7 +28,10 @@ const RatesSectionMobile = ({ state, dispatch }) => {
           <h2 id="rates-mobile-heading" className="rates-mobile__title">
             Live market snapshot
           </h2>
-          <span className="rates-mobile__timestamp">
+          <span
+            className="rates-mobile__timestamp"
+            style={{ color: "white", fontWeight: "bold" }}
+          >
             <FiClock aria-hidden="true" /> Updated {timestampLabel} ET
           </span>
         </div>
