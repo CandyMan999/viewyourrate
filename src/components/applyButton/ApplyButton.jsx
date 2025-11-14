@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
+import { FiEdit3 } from "react-icons/fi";
 import Context from "../../context";
 import "./ApplyButton.css";
 
@@ -32,6 +33,9 @@ const ApplyNowButton = ({ mobile = false, className = "" }) => {
       variants={buttonVariants}
       onClick={handleClick}
     >
+      <span className="apply-button__icon" aria-hidden="true">
+        <FiEdit3 />
+      </span>
       <span className="apply-button__label">Apply Now</span>
     </motion.button>
   );

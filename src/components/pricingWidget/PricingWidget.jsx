@@ -37,20 +37,22 @@ const DotToggle = ({
     gap: "0.5rem",
     padding: "0.55rem 0.9rem",
     borderRadius: "999px",
-    border: "1px solid #d7deeb",
-    backgroundColor: "#ffffff",
-    color: "#13223a",
+    border: "1px solid rgba(148, 163, 184, 0.35)",
+    background: "rgba(15, 23, 42, 0.55)",
+    color: "#e2e8f0",
     fontWeight: 600,
     cursor: "pointer",
     transition: "all 0.15s ease",
     userSelect: "none",
+    backdropFilter: "blur(6px)",
   };
 
   const activePill = {
     ...basePill,
-    borderColor: "#1a6bff",
-    backgroundColor: "#eef5ff",
-    boxShadow: "0 0 0 3px rgba(26,107,255,0.12)",
+    borderColor: "rgba(96, 165, 250, 0.8)",
+    background:
+      "linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(56, 189, 248, 0.8))",
+    boxShadow: "0 10px 24px rgba(37, 99, 235, 0.3)",
   };
 
   const Dot = ({ active }) => (
@@ -60,12 +62,14 @@ const DotToggle = ({
         width: 18,
         height: 18,
         borderRadius: "50%",
-        border: `2px solid ${active ? "#1a6bff" : "#9fb3d6"}`,
+        border: `2px solid ${
+          active ? "rgba(125, 211, 252, 0.95)" : "rgba(148, 163, 184, 0.55)"
+        }`,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         transition: "all 0.15s ease",
-        background: "#fff",
+        background: "rgba(15, 23, 42, 0.75)",
       }}
     >
       <span
@@ -73,7 +77,7 @@ const DotToggle = ({
           width: 8,
           height: 8,
           borderRadius: "50%",
-          backgroundColor: active ? "#1a6bff" : "transparent",
+          backgroundColor: active ? "#7dd3fc" : "transparent",
           transition: "all 0.15s ease",
         }}
       />
@@ -82,7 +86,7 @@ const DotToggle = ({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>{label}</label>
+      <label style={{ fontWeight: 600, color: "#cbd5f5" }}>{label}</label>
       <div
         style={{ display: "flex", gap: "0.75rem" }}
         role="radiogroup"
@@ -171,7 +175,10 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
     maxWidth: "1100px",
     borderRadius: "18px",
     overflow: "hidden",
-    boxShadow: "0 20px 45px rgba(15, 33, 60, 0.25)",
+    boxShadow: "0 24px 48px rgba(6, 12, 31, 0.5)",
+    background:
+      "linear-gradient(135deg, rgba(6, 12, 31, 0.96), rgba(13, 24, 48, 0.92))",
+    border: "1px solid rgba(148, 163, 184, 0.22)",
   };
 
   const closeIconStyles = {
@@ -179,7 +186,7 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
     top: "18px",
     right: "18px",
     fontSize: "1.5rem",
-    color: "#fff",
+    color: "#e0f2fe",
     cursor: "pointer",
   };
 
@@ -238,7 +245,9 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                backgroundColor: "#f5f7fb",
+                background:
+                  "linear-gradient(145deg, rgba(7, 12, 26, 0.9), rgba(11, 20, 38, 0.9))",
+                color: "#e2e8f0",
               }}
             >
               <div
@@ -247,7 +256,9 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                   flexDirection: "column",
                   gap: "2rem",
                   padding: "2.5rem",
-                  backgroundColor: "#fff",
+                  background: "rgba(10, 18, 35, 0.82)",
+                  backdropFilter: "blur(8px)",
+                  borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
                 }}
               >
                 <div
@@ -261,7 +272,7 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                     <p
                       style={{
                         textTransform: "uppercase",
-                        color: "#5a6a85",
+                        color: "rgba(148, 163, 184, 0.78)",
                         fontWeight: 700,
                         fontSize: "0.75rem",
                         letterSpacing: "0.12em",
@@ -275,7 +286,7 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                         margin: "0.4rem 0 0",
                         fontSize: "1.75rem",
                         fontWeight: 800,
-                        color: "#13223a",
+                        color: "#f8fafc",
                       }}
                     >
                       Customize Your Rate
@@ -284,10 +295,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                   <div
                     style={{
                       display: "flex",
-                      backgroundColor: "#eef2ff",
+                      background: "rgba(15, 23, 42, 0.65)",
                       borderRadius: "999px",
                       padding: "0.25rem",
                       gap: "0.25rem",
+                      border: "1px solid rgba(96, 165, 250, 0.3)",
+                      boxShadow: "0 12px 28px rgba(15, 23, 42, 0.45)",
                     }}
                   >
                     {["Purchase", "Refinance"].map((type) => {
@@ -302,12 +315,17 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                             borderRadius: "999px",
                             padding: "0.5rem 1.5rem",
                             fontWeight: 600,
-                            backgroundColor: isActive
-                              ? "#1a6bff"
+                            background: isActive
+                              ? "linear-gradient(135deg, #2563eb, #38bdf8)"
                               : "transparent",
-                            color: isActive ? "#fff" : "#1a3b6d",
+                            color: isActive
+                              ? "#f8fafc"
+                              : "rgba(226, 232, 240, 0.78)",
                             cursor: "pointer",
                             transition: "all 0.2s ease",
+                            boxShadow: isActive
+                              ? "0 12px 24px rgba(37, 99, 235, 0.3)"
+                              : "none",
                           }}
                         >
                           {type}
@@ -341,7 +359,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
+                      <label
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
+                      >
                         Purchase Price
                       </label>
                       <input
@@ -354,10 +377,11 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                           width: "90%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid #d7deeb",
+                          border: "1px solid rgba(96, 165, 250, 0.25)",
                           fontSize: "1rem",
-                          color: "#13223a",
-                          backgroundColor: "#f7f9ff",
+                          color: "#e2e8f0",
+                          backgroundColor: "rgba(15, 23, 42, 0.85)",
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.35)",
                         }}
                       />
                     </div>
@@ -370,7 +394,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
+                      <label
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
+                      >
                         Down Payment
                       </label>
                       <select
@@ -380,11 +409,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid #d7deeb",
+                          border: "1px solid rgba(96, 165, 250, 0.25)",
                           fontSize: "1rem",
-                          color: "#13223a",
-                          backgroundColor: "#f7f9ff",
+                          color: "#e2e8f0",
+                          backgroundColor: "rgba(15, 23, 42, 0.85)",
                           appearance: "none",
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.35)",
                         }}
                       >
                         {downPaymentOptions.map((option) => (
@@ -404,7 +434,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
+                      <label
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
+                      >
                         Loan Amount
                       </label>
                       <input
@@ -415,11 +450,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                           width: "90%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid #d7deeb",
+                          border: "1px solid rgba(56, 189, 248, 0.35)",
                           fontSize: "1rem",
-                          color: "#1a3b6d",
-                          backgroundColor: "#eaf1ff",
+                          color: "#bae6fd",
+                          backgroundColor: "rgba(15, 23, 42, 0.75)",
                           fontWeight: 600,
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.35)",
                         }}
                       />
                     </div>
@@ -439,7 +475,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
+                      <label
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
+                      >
                         Occupancy Type
                       </label>
                       <select
@@ -449,11 +490,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid #d7deeb",
+                          border: "1px solid rgba(96, 165, 250, 0.25)",
                           fontSize: "1rem",
-                          color: "#13223a",
-                          backgroundColor: "#f7f9ff",
+                          color: "#e2e8f0",
+                          backgroundColor: "rgba(15, 23, 42, 0.85)",
                           appearance: "none",
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.35)",
                         }}
                       >
                         {occupancyOptions.map((option) => (
@@ -472,7 +514,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
+                      <label
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
+                      >
                         Property Type
                       </label>
                       <select
@@ -482,11 +529,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid #d7deeb",
+                          border: "1px solid rgba(96, 165, 250, 0.25)",
                           fontSize: "1rem",
-                          color: "#13223a",
-                          backgroundColor: "#f7f9ff",
+                          color: "#e2e8f0",
+                          backgroundColor: "rgba(15, 23, 42, 0.85)",
                           appearance: "none",
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.35)",
                         }}
                       >
                         {propertyTypeOptions.map((option) => (
@@ -505,7 +553,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <label style={{ fontWeight: 600, color: "#1a3b6d" }}>
+                      <label
+                        style={{
+                          fontWeight: 600,
+                          color: "rgba(226, 232, 240, 0.88)",
+                        }}
+                      >
                         State
                       </label>
                       <select
@@ -515,11 +568,12 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                           width: "100%",
                           padding: "0.8rem 1rem",
                           borderRadius: "10px",
-                          border: "1px solid #d7deeb",
+                          border: "1px solid rgba(96, 165, 250, 0.25)",
                           fontSize: "1rem",
-                          color: "#13223a",
-                          backgroundColor: "#f7f9ff",
+                          color: "#e2e8f0",
+                          backgroundColor: "rgba(15, 23, 42, 0.85)",
                           appearance: "none",
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.35)",
                         }}
                       >
                         {states.map((option) => (
@@ -545,8 +599,8 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                     style={{
                       padding: "0.95rem 1.5rem",
                       background:
-                        "linear-gradient(90deg, #1a6bff 0%, #4c8dff 100%)",
-                      color: "#fff",
+                        "linear-gradient(135deg, #2563eb 0%, #38bdf8 100%)",
+                      color: "#f8fafc",
                       border: "none",
                       borderRadius: "12px",
                       fontSize: "1.05rem",
@@ -554,7 +608,8 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                       cursor: "pointer",
                       textTransform: "uppercase",
                       letterSpacing: "0.05em",
-                      boxShadow: "0 15px 25px rgba(26, 107, 255, 0.25)",
+                      boxShadow: "0 20px 34px rgba(37, 99, 235, 0.35)",
+                      textShadow: "0 1px 2px rgba(15, 23, 42, 0.45)",
                     }}
                   >
                     Get Rates
@@ -570,8 +625,9 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                   gap: "1.25rem",
                   padding: "2.5rem",
                   background:
-                    "linear-gradient(135deg, #1b4dff 0%, #0f8bff 100%)",
-                  color: "#fff",
+                    "linear-gradient(135deg, rgba(17, 33, 68, 0.95), rgba(21, 94, 203, 0.88))",
+                  color: "#e2e8f0",
+                  borderTop: "1px solid rgba(148, 163, 184, 0.18)",
                 }}
               >
                 <div style={{ position: "relative" }}>
@@ -585,6 +641,7 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                       marginBottom: 0,
                       fontSize: "1rem",
                       lineHeight: 1.6,
+                      color: "rgba(226, 232, 240, 0.88)",
                     }}
                   >
                     Get a real quote in seconds. Customize your scenario and
@@ -617,9 +674,15 @@ const PricingWidget = ({ isVisible, onClose, onScenarioSubmit }) => {
                     >
                       <FiCheckCircle
                         size={22}
-                        style={{ marginTop: 2, color: "#fff" }}
+                        style={{ marginTop: 2, color: "#a5f3fc" }}
                       />
-                      <span style={{ fontSize: "1rem", lineHeight: 1.6 }}>
+                      <span
+                        style={{
+                          fontSize: "1rem",
+                          lineHeight: 1.6,
+                          color: "rgba(226, 232, 240, 0.9)",
+                        }}
+                      >
                         {benefit}
                       </span>
                     </li>

@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { isMobile } from "react-device-detect";
-import Context from "../../context"; // Import the global context
+import Context from "../../context";
 import ApplyButton from "../applyButton/ApplyButton";
 
-// MenuToggle Component for the animated menu button
 const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#333"
+    stroke="#7dd3fc"
     strokeLinecap="round"
     {...props}
   />
 );
 
 const MenuToggle = ({ toggle }) => {
-  const { state } = useContext(Context); // Use context to get the nav drawer state
-  const isOpen = state.isNavDrawerOpen; // Get `isNavDrawerOpen` from context
+  const { state } = useContext(Context);
+  const isOpen = state.isNavDrawerOpen;
 
   return (
     <button className="navButton" onClick={toggle} style={menuButtonStyles}>
@@ -27,7 +26,7 @@ const MenuToggle = ({ toggle }) => {
             closed: { d: "M 2 2.5 L 20 2.5" },
             open: { d: "M 3 16.5 L 17 2.5" },
           }}
-          animate={isOpen ? "open" : "closed"} // Animate based on context state
+          animate={isOpen ? "open" : "closed"}
         />
         <Path
           d="M 2 9.423 L 20 9.423"
@@ -35,7 +34,7 @@ const MenuToggle = ({ toggle }) => {
             closed: { opacity: 1 },
             open: { opacity: 0 },
           }}
-          animate={isOpen ? "open" : "closed"} // Animate based on context state
+          animate={isOpen ? "open" : "closed"}
           transition={{ duration: 0.1 }}
         />
         <Path
@@ -43,7 +42,7 @@ const MenuToggle = ({ toggle }) => {
             closed: { d: "M 2 16.346 L 20 16.346" },
             open: { d: "M 3 2.5 L 17 16.346" },
           }}
-          animate={isOpen ? "open" : "closed"} // Animate based on context state
+          animate={isOpen ? "open" : "closed"}
         />
       </svg>
     </button>
@@ -60,7 +59,6 @@ const Navbar = ({
   const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 });
   const navRefs = useRef([]);
 
-  // Update indicator position when active component changes
   useEffect(() => {
     if (navRefs.current[activeComponent]) {
       const { width, left } =
@@ -71,19 +69,16 @@ const Navbar = ({
     }
   }, [activeComponent]);
 
-  // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.1, color: "#007bff" },
+    hover: { scale: 1.08, color: "#93c5fd" },
   };
 
-  // Handle navigation clicks
   const handleNavClick = (index) => {
     onNavClick(index);
   };
 
-  // Handle menu toggle
   const handleMenuToggle = () => {
-    toggleDrawer(); // Toggle the nav drawer and update context state
+    toggleDrawer();
   };
 
   return (
@@ -93,22 +88,21 @@ const Navbar = ({
         justifyContent: "space-between",
         alignItems: "center",
         padding: "1rem 2rem",
-        backgroundColor: "#fff",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        background: "linear-gradient(135deg, rgba(6, 12, 31, 0.96), rgba(13, 24, 48, 0.92))",
+        color: "#e2e8f0",
+        borderBottom: "1px solid rgba(148, 163, 184, 0.28)",
+        boxShadow: "0 14px 38px rgba(7, 11, 23, 0.35)",
         position: "sticky",
-        // position: showHeader ? "relative" : "sticky",
-
         top: 0,
         zIndex: 1000,
+        backdropFilter: "blur(12px)",
       }}
     >
       <div style={leftContainerStyles}>
         <div style={logoStyles}>ViewYourRate</div>
-        <ApplyButton mobile={isMobile} />{" "}
-        {/* Use the ApplyNowButton component here */}
+        <ApplyButton mobile={isMobile} />
       </div>
 
-      {/* Navigation Links for desktop */}
       {!isMobile && (
         <div style={navLinksContainerStyles}>
           <ul style={navLinksStyles}>
@@ -125,32 +119,31 @@ const Navbar = ({
               </motion.li>
             ))}
           </ul>
-          {/* Sliding Indicator */}
           <motion.div
             style={indicatorBaseStyles}
             animate={{
               width: `${indicatorStyle.width}px`,
               left: `${indicatorStyle.left}px`,
             }}
-            transition={{ type: "spring", stiffness: 300 }}
+            transition={{ type: "spring", stiffness: 320, damping: 30 }}
           />
         </div>
       )}
 
-      {/* Menu Button for Mobile */}
       {isMobile && <MenuToggle toggle={handleMenuToggle} />}
     </nav>
   );
 };
 
-// Inline Styles
-
 const logoStyles = {
   fontSize: "1.5rem",
-  fontWeight: "bold",
+  fontWeight: "700",
   cursor: "pointer",
+  letterSpacing: "0.08em",
+  color: "#bfdbfe",
+  textShadow: "0 2px 12px rgba(59, 130, 246, 0.45)",
 };
-// Inline Styles (remain the same)
+
 const leftContainerStyles = {
   display: "flex",
   alignItems: "center",
@@ -173,30 +166,35 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#007bff" : "#333",
+  color: isActive ? "#60a5fa" : "rgba(226, 232, 240, 0.78)",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",
   textDecoration: "none",
   transition: "color 0.3s ease",
+  fontWeight: isActive ? 700 : 500,
+  letterSpacing: "0.04em",
 });
 
 const indicatorBaseStyles = {
   position: "absolute",
-  bottom: 0,
+  bottom: -6,
   height: "3px",
-  backgroundColor: "#007bff",
-  borderRadius: "4px",
+  background: "linear-gradient(90deg, #2563eb, #38bdf8)",
+  borderRadius: "999px",
+  boxShadow: "0 0 14px rgba(56, 189, 248, 0.55)",
 };
 
 const menuButtonStyles = {
-  background: "none",
-  border: "none",
+  background: "rgba(15, 23, 42, 0.65)",
+  border: "1px solid rgba(96, 165, 250, 0.4)",
+  borderRadius: "999px",
   cursor: "pointer",
-  padding: 0,
+  padding: "0.4rem 0.55rem",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  boxShadow: "0 12px 24px rgba(8, 15, 32, 0.4)",
 };
 
 export default Navbar;
