@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import RateCard from "../ratesSection/RateCard";
 
 const compareResultsStyles = `
 .mortgage-results-page {
@@ -74,6 +75,18 @@ const compareResultsStyles = `
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
+}
+
+.rate-card-grid,
+.comparison-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.comparison-cards-grid {
+  margin-top: 16px;
+  margin-bottom: 24px;
 }
 
 .recommended-card {
@@ -664,6 +677,7 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
   });
   const [showAllOffers, setShowAllOffers] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
+  const [expandedOfferId, setExpandedOfferId] = useState(null);
 
   useEffect(() => {
     return () => {
@@ -809,6 +823,83 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
     return "0 points";
   };
 
+  const getLoanTypeLabel = (offer) => {
+    if (!offer) return "";
+    const term = offer.termYears || 30;
+    const typeLabel =
+      offer.productType === "arm"
+        ? "ARM"
+        : offer.productType === "jumbo"
+        ? "Jumbo"
+        : "Fixed";
+    return `${term}-Year ${typeLabel}`;
+  };
+
+  const buildPricingOptions = (offer) => {
+    const baseRate = toNumber(offer.rate, 0);
+    const basePayment = toNumber(offer.monthlyPayment, 0);
+    const basePoints = toNumber(offer.points, 0);
+
+    const buydownRate = Math.max(0, baseRate - 0.25);
+    const buydownPayment = Math.max(0, basePayment - 85);
+    const creditRate = baseRate + 0.25;
+    const creditPayment = Math.max(0, basePayment + 90);
+    const creditPoints = basePoints > 0 ? -Math.max(0.5, basePoints / 2) : -0.5;
+
+    return [
+      {
+        label: "Buydown",
+        rate: buydownRate,
+        points: basePoints + 0.75,
+        monthlyPayment: buydownPayment,
+      },
+      {
+        label: "Par",
+        rate: baseRate,
+        points: 0,
+        monthlyPayment: basePayment,
+        isRecommended: true,
+      },
+      {
+        label: "Lender Credit",
+        rate: creditRate,
+        points: creditPoints,
+        monthlyPayment: creditPayment,
+      },
+    ];
+  };
+
+  const getBadges = (offer) => {
+    if (!offer) return [];
+    const badgesList = [];
+    if (offer.recommendationTag) {
+      badgesList.push(offer.recommendationTag);
+    }
+    if (offer.rating) {
+      badgesList.push(`⭐️ ${offer.rating.toFixed(1)}`);
+    }
+    if (offer.lockPeriodDays) {
+      badgesList.push(`${offer.lockPeriodDays}-day lock`);
+    }
+    if (offer.hasPMI === false) {
+      badgesList.push("No PMI");
+    }
+
+    return [...new Set(badgesList)].slice(0, 3);
+  };
+
+  const handleCardToggle = (offerId, nextExpanded) => {
+    setExpandedOfferId((prev) => {
+      if (nextExpanded) {
+        return offerId;
+      }
+      if (prev === offerId) {
+        return null;
+      }
+      return prev;
+    });
+  };
+
   const handleDetailsOpen = (offer) => {
     setSelectedOffer(offer);
     document.body.style.overflow = "hidden";
@@ -875,56 +966,26 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
 
         <section className="recommended-section">
           <h2 className="section-title">Recommended options for you</h2>
-          <div className="recommended-grid">
+          <div className="recommended-grid rate-card-grid">
             {recommendedOffers.map((offer) => (
-              <article key={offer.id} className="recommended-card">
-                <div className="card-badge">{offer.recommendationTag}</div>
-                <div className="card-headline">
-                  <div className="rate">{formatPercent(offer.apr)}</div>
-                  <div className="payment">{`${formatCurrency(
-                    offer.monthlyPayment
-                  )} /mo (P&I)`}</div>
-                </div>
-                <div className="card-chips">
-                  <span className="chip">
-                    {offer.termYears
-                      ? `${offer.termYears}-year ${offer.productType}`
-                      : "30-year fixed"}
-                  </span>
-                  <span className="chip">{formatPoints(offer.points)}</span>
-                  <span className="chip">Lender: {offer.lenderName}</span>
-                </div>
-                <div className="cost-snapshot">
-                  <div>
-                    <span className="snapshot-label">Cash to close</span>
-                    <span className="snapshot-value">
-                      {formatCurrency(offer.cashToClose)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="snapshot-label">
-                      Total cost over 5 years
-                    </span>
-                    <span className="snapshot-value">
-                      {formatCurrency(offer.cost5yr)}
-                    </span>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="primary-button"
-                  onClick={() => handleDetailsOpen(offer)}
-                >
-                  Continue with this rate
-                </button>
-                <button
-                  type="button"
-                  className="secondary-link"
-                  onClick={() => handleDetailsOpen(offer)}
-                >
-                  View full details
-                </button>
-              </article>
+              <RateCard
+                key={offer.id}
+                variant="offer"
+                lenderName={offer.lenderName}
+                loanType={getLoanTypeLabel(offer)}
+                rate={offer.rate}
+                apr={offer.apr}
+                monthlyPayment={offer.monthlyPayment}
+                points={offer.points}
+                badges={getBadges(offer)}
+                pricingOptions={buildPricingOptions(offer)}
+                ctaLabel="Continue with this rate"
+                onCtaClick={() => handleDetailsOpen(offer)}
+                isExpanded={expandedOfferId === offer.id}
+                onToggle={(nextExpanded) =>
+                  handleCardToggle(offer.id, nextExpanded)
+                }
+              />
             ))}
           </div>
         </section>
@@ -989,6 +1050,28 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
                 Show all offers ({filteredSortedOffers.length})
               </button>
             )}
+          </div>
+          <div className="comparison-cards-grid rate-card-grid">
+            {visibleOffers.map((offer) => (
+              <RateCard
+                key={offer.id}
+                variant="offer"
+                lenderName={offer.lenderName}
+                loanType={getLoanTypeLabel(offer)}
+                rate={offer.rate}
+                apr={offer.apr}
+                monthlyPayment={offer.monthlyPayment}
+                points={offer.points}
+                badges={getBadges(offer)}
+                pricingOptions={buildPricingOptions(offer)}
+                ctaLabel="View full details"
+                onCtaClick={() => handleDetailsOpen(offer)}
+                isExpanded={expandedOfferId === offer.id}
+                onToggle={(nextExpanded) =>
+                  handleCardToggle(offer.id, nextExpanded)
+                }
+              />
+            ))}
           </div>
           <div className="comparison-table-wrapper">
             <table className="comparison-table">
