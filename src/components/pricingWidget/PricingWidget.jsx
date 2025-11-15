@@ -186,8 +186,12 @@ const PricingWidget = ({
               <div className="pricing-widget__form-panel">
                 <div className="pricing-widget__header">
                   <div className="pricing-widget__heading">
-                    <p className="pricing-widget__eyebrow">Get Your Quote Now</p>
-                    <h2 className="pricing-widget__title">Customize Your Rate</h2>
+                    <p className="pricing-widget__eyebrow">
+                      Get Your Quote Now
+                    </p>
+                    <h2 className="pricing-widget__title">
+                      Customize Your Rate
+                    </h2>
                   </div>
                   <div className="pricing-widget__quote-toggle">
                     {["Purchase", "Refinance"].map((type) => {
@@ -222,28 +226,37 @@ const PricingWidget = ({
                         value={purchasePrice}
                         onChange={(e) => setPurchasePrice(e.target.value)}
                         className="pricing-widget__input"
+                        style={{ width: "87%" }}
                       />
                     </div>
 
                     <div className="pricing-widget__field">
-                      <label className="pricing-widget__label">Down Payment</label>
+                      <label className="pricing-widget__label">
+                        Down Payment
+                      </label>
                       <select
                         value={downPaymentPercent}
                         onChange={(e) => setDownPaymentPercent(e.target.value)}
                         className="pricing-widget__select"
                       >
                         {downPaymentOptions.map((option) => (
-                          <option key={option} value={option}>{`${option}% Down`}</option>
+                          <option
+                            key={option}
+                            value={option}
+                          >{`${option}% Down`}</option>
                         ))}
                       </select>
                     </div>
 
                     <div className="pricing-widget__field">
-                      <label className="pricing-widget__label">Loan Amount</label>
+                      <label className="pricing-widget__label">
+                        Loan Amount
+                      </label>
                       <input
                         type="text"
                         value={formatCurrency(loanAmount)}
                         readOnly
+                        style={{ width: "87%" }}
                         className={classNames(
                           "pricing-widget__input",
                           "pricing-widget__input--readonly"
@@ -258,7 +271,9 @@ const PricingWidget = ({
                     />
 
                     <div className="pricing-widget__field">
-                      <label className="pricing-widget__label">Occupancy Type</label>
+                      <label className="pricing-widget__label">
+                        Occupancy Type
+                      </label>
                       <select
                         value={occupancy}
                         onChange={(e) => setOccupancy(e.target.value)}
@@ -273,7 +288,9 @@ const PricingWidget = ({
                     </div>
 
                     <div className="pricing-widget__field">
-                      <label className="pricing-widget__label">Property Type</label>
+                      <label className="pricing-widget__label">
+                        Property Type
+                      </label>
                       <select
                         value={propertyType}
                         onChange={(e) => setPropertyType(e.target.value)}
@@ -326,17 +343,20 @@ const PricingWidget = ({
                   </p>
                 </div>
                 <ul className="pricing-widget__benefits">
-                  {["Simple info required for quote", "See all costs including third-party fees", "Compare multiple options at once", "Review your rate online"].map(
-                    (benefit) => (
-                      <li key={benefit} className="pricing-widget__benefit">
-                        <FiCheckCircle
-                          size={22}
-                          className="pricing-widget__benefit-icon"
-                        />
-                        <span>{benefit}</span>
-                      </li>
-                    )
-                  )}
+                  {[
+                    "Simple info required for quote",
+                    "See all costs including third-party fees",
+                    "Compare multiple options at once",
+                    "Review your rate online",
+                  ].map((benefit) => (
+                    <li key={benefit} className="pricing-widget__benefit">
+                      <FiCheckCircle
+                        size={22}
+                        className="pricing-widget__benefit-icon"
+                      />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
