@@ -5,6 +5,7 @@ import {
   FiArrowUpRight,
   FiMinus,
 } from "react-icons/fi";
+import PointHelpTooltip from "./PointHelpTooltip";
 import "./RateCard.css";
 
 const toNumeric = (value) => {
@@ -69,6 +70,7 @@ const RateCard = (props) => {
     ctaLabel = "Get Pre-Approved",
     onCtaClick,
     pricingOptions = [],
+    loanAmount,
     isExpanded: controlledExpanded,
     defaultExpanded = false,
     onToggle,
@@ -116,6 +118,19 @@ const RateCard = (props) => {
   }, [defaultOptionIndex, normalizedPricingOptions]);
 
   const hasPricingOptions = normalizedPricingOptions.length > 0;
+  const loanAmountValue = toNumeric(loanAmount);
+
+  const parPricingOption = useMemo(() => {
+    if (!hasPricingOptions) {
+      return null;
+    }
+
+    return (
+      normalizedPricingOptions.find(
+        (option) => toNumeric(option?.points) === 0
+      ) || null
+    );
+  }, [hasPricingOptions, normalizedPricingOptions]);
   const selectedOption =
     hasPricingOptions && selectedOptionIndex !== null
       ? normalizedPricingOptions[selectedOptionIndex]
@@ -327,6 +342,15 @@ const RateCard = (props) => {
                     <div className="rate-card__pricing-option-meta">
                       <span className="rate-card__pricing-points">
                         {formatPointsDetail(option?.points)}
+                        {parPricingOption &&
+                          Number.isFinite(loanAmountValue) &&
+                          loanAmountValue > 0 && (
+                            <PointHelpTooltip
+                              option={option}
+                              parOption={parPricingOption}
+                              loanAmount={loanAmountValue}
+                            />
+                          )}
                       </span>
                       {option?.monthlyPayment !== undefined && (
                         <span className="rate-card__pricing-payment">
@@ -387,6 +411,7 @@ RateCard.propTypes = {
   defaultExpanded: PropTypes.bool,
   onToggle: PropTypes.func,
   onPricingOptionSelect: PropTypes.func,
+  loanAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default RateCard;

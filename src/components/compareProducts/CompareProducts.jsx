@@ -707,15 +707,23 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
 
     const purchasePrice = Number(merged.purchasePrice);
     const downPaymentPercent = Number(merged.downPaymentPercent);
+    const resolvedPurchasePrice = Number.isFinite(purchasePrice)
+      ? purchasePrice
+      : defaultScenario.purchasePrice;
+    const resolvedDownPaymentPercent = Number.isFinite(downPaymentPercent)
+      ? downPaymentPercent
+      : defaultScenario.downPaymentPercent;
+    const downPaymentAmount =
+      resolvedPurchasePrice * (resolvedDownPaymentPercent / 100);
+    const loanAmount = Math.max(
+      resolvedPurchasePrice - downPaymentAmount,
+      0
+    );
 
     return {
       quoteType: merged.quoteType || "Purchase",
-      purchasePrice: Number.isFinite(purchasePrice)
-        ? purchasePrice
-        : defaultScenario.purchasePrice,
-      downPaymentPercent: Number.isFinite(downPaymentPercent)
-        ? downPaymentPercent
-        : defaultScenario.downPaymentPercent,
+      purchasePrice: resolvedPurchasePrice,
+      downPaymentPercent: resolvedDownPaymentPercent,
       termYears: merged.termYears || defaultScenario.termYears,
       creditScore: merged.creditScore || defaultScenario.creditScore,
       location:
@@ -725,6 +733,7 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
         merged.timestamp instanceof Date
           ? merged.timestamp
           : new Date(merged.timestamp || defaultScenario.timestamp),
+      loanAmount: Math.round(loanAmount),
     };
   }, [scenario]);
 
@@ -993,6 +1002,7 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
                 points={offer.points}
                 badges={getBadges(offer)}
                 pricingOptions={buildPricingOptions(offer)}
+                loanAmount={resolvedScenario.loanAmount}
                 ctaLabel="Continue with this rate"
                 onCtaClick={() => handleDetailsOpen(offer)}
                 isExpanded={expandedOfferId === offer.id}
@@ -1078,6 +1088,7 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
                 points={offer.points}
                 badges={getBadges(offer)}
                 pricingOptions={buildPricingOptions(offer)}
+                loanAmount={resolvedScenario.loanAmount}
                 ctaLabel="View full details"
                 onCtaClick={() => handleDetailsOpen(offer)}
                 isExpanded={expandedOfferId === offer.id}
