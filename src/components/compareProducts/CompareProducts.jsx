@@ -281,7 +281,7 @@ const compareResultsStyles = `
   border-bottom: 1px solid rgba(148, 163, 184, 0.3);
   vertical-align: middle;
   background-color: #ffffff;
-  text-align: center;
+
 }
 
 .comparison-table thead th {
@@ -290,7 +290,7 @@ const compareResultsStyles = `
   background-color: #f0f4ff;
   z-index: 5;
   font-size: 0.9rem;
-  text-align: center;
+ 
 }
 
 .sticky-column {
@@ -1207,7 +1207,10 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
                 <tr>
                   <th className="sticky-column">Prepayment penalty</th>
                   {visibleOffers.map((offer) => (
-                    <td key={`${offer.id}-prepay`}>
+                    <td
+                      style={{ textAlign: "center" }}
+                      key={`${offer.id}-prepay`}
+                    >
                       {offer.prepaymentPenalty ? "Yes" : "No"}
                     </td>
                   ))}
@@ -1215,7 +1218,10 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
                 <tr>
                   <th className="sticky-column">Lender rating</th>
                   {visibleOffers.map((offer) => (
-                    <td key={`${offer.id}-rating`}>
+                    <td
+                      style={{ textAlign: "center" }}
+                      key={`${offer.id}-rating`}
+                    >
                       <span className="rating-stars">
                         ⭐️ {offer.rating.toFixed(1)}
                       </span>
