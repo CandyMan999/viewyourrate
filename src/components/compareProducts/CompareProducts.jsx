@@ -1003,6 +1003,7 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
                 badges={getBadges(offer)}
                 pricingOptions={buildPricingOptions(offer)}
                 loanAmount={resolvedScenario.loanAmount}
+                homePrice={resolvedScenario.purchasePrice}
                 ctaLabel="Continue with this rate"
                 onCtaClick={() => handleDetailsOpen(offer)}
                 isExpanded={expandedOfferId === offer.id}
@@ -1089,6 +1090,7 @@ const CompareProducts = ({ scenario, onEditScenario }) => {
                 badges={getBadges(offer)}
                 pricingOptions={buildPricingOptions(offer)}
                 loanAmount={resolvedScenario.loanAmount}
+                homePrice={resolvedScenario.purchasePrice}
                 ctaLabel="View full details"
                 onCtaClick={() => handleDetailsOpen(offer)}
                 isExpanded={expandedOfferId === offer.id}

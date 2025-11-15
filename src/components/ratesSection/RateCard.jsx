@@ -71,6 +71,7 @@ const RateCard = (props) => {
     onCtaClick,
     pricingOptions = [],
     loanAmount,
+    homePrice,
     isExpanded: controlledExpanded,
     defaultExpanded = false,
     onToggle,
@@ -119,6 +120,8 @@ const RateCard = (props) => {
 
   const hasPricingOptions = normalizedPricingOptions.length > 0;
   const loanAmountValue = toNumeric(loanAmount);
+  const homePriceValue = toNumeric(homePrice);
+  const hasHomePrice = Number.isFinite(homePriceValue) && homePriceValue > 0;
 
   const parPricingOption = useMemo(() => {
     if (!hasPricingOptions) {
@@ -287,9 +290,16 @@ const RateCard = (props) => {
 
       <footer className="rate-card__footer rate-card__footer--offer">
         <div className="rate-card__footer-info">
-          <span className="rate-card__points">
-            {formatPointsDetail(pointsValue)}
-          </span>
+          <div className="rate-card__points-group">
+            {hasHomePrice && (
+              <span className="rate-card__home-price">
+                Based on {formatCurrency(homePriceValue)} home value
+              </span>
+            )}
+            <span className="rate-card__points">
+              {formatPointsDetail(pointsValue)}
+            </span>
+          </div>
           <span className="rate-card__apr">APR {formatPercentage(aprValue)}</span>
         </div>
         {hasPricingOptions && (
@@ -349,6 +359,7 @@ const RateCard = (props) => {
                               option={option}
                               parOption={parPricingOption}
                               loanAmount={loanAmountValue}
+                              homePrice={homePriceValue}
                             />
                           )}
                       </span>
@@ -412,6 +423,7 @@ RateCard.propTypes = {
   onToggle: PropTypes.func,
   onPricingOptionSelect: PropTypes.func,
   loanAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  homePrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default RateCard;

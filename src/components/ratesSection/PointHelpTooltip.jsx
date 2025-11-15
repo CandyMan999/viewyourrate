@@ -27,7 +27,7 @@ const toNumber = (value, fallback = 0) => {
   return Number.isFinite(numeric) ? numeric : fallback;
 };
 
-const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
+const PointHelpTooltip = ({ option, parOption, loanAmount, homePrice }) => {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -42,6 +42,11 @@ const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
   const absPoints = Math.abs(optionPoints);
   const onePointValue = numericLoanAmount * 0.01;
   const pointsDollarValue = numericLoanAmount * (absPoints / 100);
+  const scenarioHomePrice = useMemo(
+    () => Math.max(0, toNumber(homePrice, 0)),
+    [homePrice]
+  );
+  const hasScenarioHomePrice = scenarioHomePrice > 0;
 
   const parPayment = useMemo(
     () => toNumber(parOption?.monthlyPayment, 0),
@@ -211,6 +216,10 @@ const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
   const onePointCopy = fmtCurrency(onePointValue);
   const pointsCopy = fmtCurrency(pointsDollarValue);
   const formattedPoints = absPoints.toFixed(2);
+  const homePriceCopy = fmtCurrency(scenarioHomePrice);
+  const scenarioIntro = hasScenarioHomePrice
+    ? `You’re comparing a home priced at ${homePriceCopy}. `
+    : "";
   const pointsSentence =
     optionPoints > 0
       ? `This ${optionLabel} option uses ${formattedPoints} points, which works out to about ${pointsCopy} paid upfront.`
@@ -248,8 +257,9 @@ const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
         {optionPoints === 0 ? (
           <>
             <p>
-              On your loan of {loanAmountCopy}, 1.00 point would equal {onePointCopy}
-              either paid at closing or offered as a credit.
+              {scenarioIntro}On your loan of {loanAmountCopy}, 1.00 point would
+              equal {onePointCopy} either paid at closing or offered as a
+              credit.
             </p>
             <p>
               Choosing 0 points keeps things neutral—you’re not paying extra to
@@ -261,9 +271,8 @@ const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
         ) : (
           <>
             <p>
-              On your loan of {loanAmountCopy}, 1.00 point equals {onePointCopy}.
-              {" "}
-              {pointsSentence}
+              {scenarioIntro}On your loan of {loanAmountCopy}, 1.00 point equals
+              {onePointCopy}. {pointsSentence}
             </p>
             {paymentDifferenceCopy && <p>{paymentDifferenceCopy}</p>}
             {breakEvenCopy}
@@ -290,6 +299,7 @@ PointHelpTooltip.propTypes = {
     points: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
   loanAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  homePrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default PointHelpTooltip;
