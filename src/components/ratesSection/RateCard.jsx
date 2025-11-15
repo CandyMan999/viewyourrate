@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import {
   FiArrowDownRight,
@@ -72,14 +72,62 @@ const RateCard = (props) => {
     isExpanded: controlledExpanded,
     defaultExpanded = false,
     onToggle,
+    onPricingOptionSelect,
   } = props;
 
   const variantToUse = variant || (lenderName ? "offer" : "summary");
 
-  const rateValue = toNumeric(rate);
+  const normalizedPricingOptions = useMemo(
+    () => (Array.isArray(pricingOptions) ? pricingOptions.filter(Boolean) : []),
+    [pricingOptions]
+  );
+
+  const defaultOptionIndex = useMemo(() => {
+    if (normalizedPricingOptions.length === 0) {
+      return null;
+    }
+    const recommendedIndex = normalizedPricingOptions.findIndex(
+      (option) => option && option.isRecommended
+    );
+    return recommendedIndex >= 0 ? recommendedIndex : 0;
+  }, [normalizedPricingOptions]);
+
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(() =>
+    defaultOptionIndex !== null ? defaultOptionIndex : null
+  );
+
+  useEffect(() => {
+    if (normalizedPricingOptions.length === 0) {
+      setSelectedOptionIndex(null);
+      return;
+    }
+
+    setSelectedOptionIndex((previousIndex) => {
+      if (previousIndex === null) {
+        return defaultOptionIndex;
+      }
+
+      if (previousIndex >= normalizedPricingOptions.length) {
+        return defaultOptionIndex;
+      }
+
+      return previousIndex;
+    });
+  }, [defaultOptionIndex, normalizedPricingOptions]);
+
+  const hasPricingOptions = normalizedPricingOptions.length > 0;
+  const selectedOption =
+    hasPricingOptions && selectedOptionIndex !== null
+      ? normalizedPricingOptions[selectedOptionIndex]
+      : null;
+
+  const rateValue = toNumeric(selectedOption?.rate ?? rate);
   const aprValue = toNumeric(apr);
   const changeValue = toNumeric(change);
-  const pointsValue = toNumeric(points);
+  const pointsValue = toNumeric(selectedOption?.points ?? points);
+  const paymentValue = toNumeric(
+    selectedOption?.monthlyPayment ?? monthlyPayment
+  );
 
   const trend =
     changeValue > 0 ? "up" : changeValue < 0 ? "down" : "flat";
@@ -153,7 +201,21 @@ const RateCard = (props) => {
   }
 
   const hasBadges = Array.isArray(badges) && badges.length > 0;
-  const hasPricingOptions = Array.isArray(pricingOptions) && pricingOptions.length > 0;
+
+  const handleOptionSelect = (index) => {
+    if (!hasPricingOptions) {
+      return;
+    }
+
+    const safeIndex = Math.max(0, Math.min(index, normalizedPricingOptions.length - 1));
+
+    setSelectedOptionIndex(safeIndex);
+
+    if (typeof onPricingOptionSelect === "function") {
+      const option = normalizedPricingOptions[safeIndex];
+      onPricingOptionSelect(option, safeIndex);
+    }
+  };
 
   return (
     <article
@@ -202,7 +264,7 @@ const RateCard = (props) => {
           <div className="rate-card__figure">
             <span className="rate-card__label">Payment</span>
             <span className="rate-card__value">
-              {`${formatCurrency(monthlyPayment)}/mo`}
+              {`${formatCurrency(paymentValue)}/mo`}
             </span>
           </div>
         </div>
@@ -211,9 +273,7 @@ const RateCard = (props) => {
       <footer className="rate-card__footer rate-card__footer--offer">
         <div className="rate-card__footer-info">
           <span className="rate-card__points">
-            {pointsValue !== 0
-              ? `${pointsValue > 0 ? "+" : ""}${pointsValue.toFixed(3)} pts`
-              : "0 pts"}
+            {formatPointsDetail(pointsValue)}
           </span>
           <span className="rate-card__apr">APR {formatPercentage(aprValue)}</span>
         </div>
@@ -236,31 +296,48 @@ const RateCard = (props) => {
           }`}
         >
           <ul className="rate-card__pricing-list">
-            {pricingOptions.map((option, index) => (
-              <li
-                key={`${option.label || "option"}-${index}`}
-                className={`rate-card__pricing-option ${
-                  option.isRecommended ? "rate-card__pricing-option--active" : ""
-                }`}
-              >
-                <div className="rate-card__pricing-option-header">
-                  <span className="rate-card__pricing-label">{option.label}</span>
-                  <span className="rate-card__pricing-rate">
-                    {formatPercentage(toNumeric(option.rate))}
-                  </span>
-                </div>
-                <div className="rate-card__pricing-option-meta">
-                  <span className="rate-card__pricing-points">
-                    {formatPointsDetail(option.points)}
-                  </span>
-                  {option.monthlyPayment !== undefined && (
-                    <span className="rate-card__pricing-payment">
-                      {`${formatCurrency(option.monthlyPayment)}/mo`}
-                    </span>
-                  )}
-                </div>
-              </li>
-            ))}
+            {normalizedPricingOptions.map((option, index) => {
+              const optionKey = `${option?.label || "option"}-${index}`;
+              const isActive = index === selectedOptionIndex;
+
+              return (
+                <li key={optionKey}>
+                  <button
+                    type="button"
+                    className={`rate-card__pricing-option ${
+                      isActive ? "rate-card__pricing-option--active" : ""
+                    }`}
+                    onClick={() => handleOptionSelect(index)}
+                  >
+                    <div className="rate-card__pricing-option-header">
+                      <div className="rate-card__pricing-label-group">
+                        <span className="rate-card__pricing-label">
+                          {option?.label}
+                        </span>
+                        {option?.isRecommended && (
+                          <span className="rate-card__pricing-recommended">
+                            Recommended
+                          </span>
+                        )}
+                      </div>
+                      <span className="rate-card__pricing-rate">
+                        {formatPercentage(toNumeric(option?.rate))}
+                      </span>
+                    </div>
+                    <div className="rate-card__pricing-option-meta">
+                      <span className="rate-card__pricing-points">
+                        {formatPointsDetail(option?.points)}
+                      </span>
+                      {option?.monthlyPayment !== undefined && (
+                        <span className="rate-card__pricing-payment">
+                          {`${formatCurrency(option?.monthlyPayment)}/mo`}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -309,6 +386,7 @@ RateCard.propTypes = {
   isExpanded: PropTypes.bool,
   defaultExpanded: PropTypes.bool,
   onToggle: PropTypes.func,
+  onPricingOptionSelect: PropTypes.func,
 };
 
 export default RateCard;

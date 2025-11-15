@@ -274,12 +274,14 @@ const compareResultsStyles = `
   width: 100%;
 }
 
+
 .comparison-table th,
 .comparison-table td {
   padding: 16px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.3);
   vertical-align: middle;
   background-color: #ffffff;
+  text-align: center;
 }
 
 .comparison-table thead th {
@@ -288,7 +290,7 @@ const compareResultsStyles = `
   background-color: #f0f4ff;
   z-index: 5;
   font-size: 0.9rem;
-  text-align: left;
+  text-align: center;
 }
 
 .sticky-column {
@@ -302,8 +304,16 @@ const compareResultsStyles = `
 }
 
 .numeric {
-  text-align: right;
+  text-align: center;
   font-variant-numeric: tabular-nums;
+}
+
+.comparison-table thead tr > th:nth-child(2n + 2) {
+  background-color: #e2e8f8;
+}
+
+.comparison-table tbody tr > td:nth-child(2n + 2):not(.highlight) {
+  background-color: #edf0fb;
 }
 
 .numeric .highlight-badge {
@@ -318,13 +328,16 @@ const compareResultsStyles = `
 }
 
 .highlight {
-  background-color: rgba(34, 197, 94, 0.08);
+  background-color: rgba(34, 197, 94, 0.18);
 }
+
 
 .offer-header {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  align-items: center;
+  text-align: center;
 }
 
 .offer-lender {
@@ -332,8 +345,9 @@ const compareResultsStyles = `
   font-size: 1rem;
 }
 
+
 .table-details-link {
-  align-self: flex-start;
+  align-self: center;
   border: none;
   background: none;
   color: #2a5bd7;
