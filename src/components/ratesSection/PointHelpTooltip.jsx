@@ -203,7 +203,7 @@ const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
     if (optionPoints < 0) {
       return "💳 What is a lender credit?";
     }
-    return "⚖️ What does 0 points mean?";
+    return "⚖️ What does par pricing mean?";
   }, [optionPoints]);
 
   const optionLabel = option?.label ? option.label.toLowerCase() : "pricing";
@@ -213,8 +213,8 @@ const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
   const formattedPoints = absPoints.toFixed(2);
   const pointsSentence =
     optionPoints > 0
-      ? `This ${optionLabel} option uses ${formattedPoints} points, which is about ${pointsCopy} upfront.`
-      : `This option gives you ${formattedPoints} points of lender credit, which is about ${pointsCopy} toward your closing costs.`;
+      ? `This ${optionLabel} option uses ${formattedPoints} points, which works out to about ${pointsCopy} paid upfront.`
+      : `This ${optionLabel} option gives you ${formattedPoints} points of lender credit—roughly ${pointsCopy} applied toward your closing costs.`;
 
   return (
     <span
@@ -248,14 +248,14 @@ const PointHelpTooltip = ({ option, parOption, loanAmount }) => {
         {optionPoints === 0 ? (
           <>
             <p>
-              On your loan of {loanAmountCopy}, 1.00 point would equal {onePointCopy} in
-              upfront cost or credit.
+              On your loan of {loanAmountCopy}, 1.00 point would equal {onePointCopy}
+              either paid at closing or offered as a credit.
             </p>
             <p>
-              This option uses 0 points: you’re not paying extra to lower the
-              rate, and you’re not receiving a lender credit. It’s a neutral
-              starting point that many borrowers choose when they’re unsure how
-              long they’ll keep the loan.
+              Choosing 0 points keeps things neutral—you’re not paying extra to
+              buy down the rate, and you’re not receiving a lender credit. It’s
+              the par baseline many borrowers start from when deciding what fits
+              their plans.
             </p>
           </>
         ) : (

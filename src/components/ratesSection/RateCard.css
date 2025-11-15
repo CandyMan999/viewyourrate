@@ -266,6 +266,7 @@
   max-height: 460px;
   opacity: 1;
   margin-top: 0.35rem;
+  overflow: visible;
 }
 
 .rate-card__pricing-list {
