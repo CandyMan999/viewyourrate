@@ -3,13 +3,16 @@ import { motion } from "framer-motion";
 import { isMobile } from "react-device-detect";
 import Context from "../../context"; // Import the global context
 import ApplyButton from "../applyButton/ApplyButton";
+import "./Navbar.css";
+
+const classNames = (...classes) => classes.filter(Boolean).join(" ");
 
 // MenuToggle Component for the animated menu button
 const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#333"
+    stroke="#e2e8f0"
     strokeLinecap="round"
     {...props}
   />
@@ -20,7 +23,7 @@ const MenuToggle = ({ toggle }) => {
   const isOpen = state.isNavDrawerOpen; // Get `isNavDrawerOpen` from context
 
   return (
-    <button className="navButton" onClick={toggle} style={menuButtonStyles}>
+    <button className="navButton" type="button" onClick={toggle}>
       <svg width="23" height="23" viewBox="0 0 23 23">
         <Path
           variants={{
@@ -73,7 +76,7 @@ const Navbar = ({
 
   // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.1, color: "#007bff" },
+    hover: { scale: 1.06, color: "#38bdf8" },
   };
 
   // Handle navigation clicks
@@ -87,38 +90,27 @@ const Navbar = ({
   };
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "1rem 2rem",
-        backgroundColor: "#fff",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        position: "sticky",
-        // position: showHeader ? "relative" : "sticky",
-
-        top: 0,
-        zIndex: 1000,
-      }}
-    >
-      <div style={leftContainerStyles}>
-        <div style={logoStyles}>ViewYourRate</div>
+    <nav className="navbar">
+      <div className="navbar__left">
+        <div className="navbar__logo">ViewYourRate</div>
         <ApplyButton mobile={isMobile} />{" "}
         {/* Use the ApplyNowButton component here */}
       </div>
 
       {/* Navigation Links for desktop */}
       {!isMobile && (
-        <div style={navLinksContainerStyles}>
-          <ul style={navLinksStyles}>
+        <div className="navbar__links-container">
+          <ul className="navbar__links">
             {navItems.map(({ name, index }) => (
               <motion.li
                 key={name}
                 ref={(el) => (navRefs.current[index] = el)}
                 variants={linkVariants}
                 whileHover="hover"
-                style={linkStyles(index === activeComponent)}
+                className={classNames(
+                  "navbar__link",
+                  index === activeComponent && "navbar__link--active"
+                )}
                 onClick={() => handleNavClick(index)}
               >
                 {name}
@@ -127,10 +119,10 @@ const Navbar = ({
           </ul>
           {/* Sliding Indicator */}
           <motion.div
-            style={indicatorBaseStyles}
+            className="navbar__indicator"
             animate={{
-              width: `${indicatorStyle.width}px`,
-              left: `${indicatorStyle.left}px`,
+              width: indicatorStyle.width,
+              left: indicatorStyle.left,
             }}
             transition={{ type: "spring", stiffness: 300 }}
           />
@@ -141,62 +133,6 @@ const Navbar = ({
       {isMobile && <MenuToggle toggle={handleMenuToggle} />}
     </nav>
   );
-};
-
-// Inline Styles
-
-const logoStyles = {
-  fontSize: "1.5rem",
-  fontWeight: "bold",
-  cursor: "pointer",
-};
-// Inline Styles (remain the same)
-const leftContainerStyles = {
-  display: "flex",
-  alignItems: "center",
-  gap: "1rem",
-};
-
-const navLinksContainerStyles = {
-  position: "relative",
-  display: "flex",
-  alignItems: "center",
-};
-
-const navLinksStyles = {
-  listStyle: "none",
-  display: "flex",
-  gap: "2rem",
-  position: "relative",
-  margin: 0,
-  padding: 0,
-};
-
-const linkStyles = (isActive) => ({
-  color: isActive ? "#007bff" : "#333",
-  cursor: "pointer",
-  padding: "0.5rem 1rem",
-  position: "relative",
-  textDecoration: "none",
-  transition: "color 0.3s ease",
-});
-
-const indicatorBaseStyles = {
-  position: "absolute",
-  bottom: 0,
-  height: "3px",
-  backgroundColor: "#007bff",
-  borderRadius: "4px",
-};
-
-const menuButtonStyles = {
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-  padding: 0,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
 };
 
 export default Navbar;
