@@ -2,7 +2,10 @@ import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
+  process.env.REACT_APP_API_BASE_URL ||
+  (window.location.hostname === "localhost"
+    ? "http://localhost:4000"
+    : "https://view-your-rate-7292aa3d3693.herokuapp.com");
 
 const LoanEstimateUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
