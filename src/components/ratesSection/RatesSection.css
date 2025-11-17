@@ -1,0 +1,148 @@
+.rates-section {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 20vh;
+  /* min-height: 185px; */
+  max-height: 230px;
+  padding: 0.75rem 1.5rem 0.9rem;
+  background: rgba(7, 12, 26, 0.92);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  z-index: 1000;
+  color: #f8fafc;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+.rates-section__apply {
+  position: absolute;
+  top: -1.6rem;
+  right: 1.75rem;
+}
+
+.rates-section__apply-button {
+  box-shadow: 0 14px 26px rgba(14, 23, 42, 0.55);
+  margin-left: 0;
+  transform: scale(0.9);
+  transform-origin: top right;
+}
+
+.rates-section__content {
+  display: flex;
+  align-items: stretch;
+  gap: 1.1rem;
+  max-width: 85%;
+  margin: 0 auto;
+  padding-right: 0.25rem;
+  height: 100%;
+}
+
+.rates-section__sidebar {
+  flex: 0 0 225px;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  row-gap: 0.4rem;
+  height: 100%;
+}
+
+.rates-section__eyebrow {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.rates-section__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.rates-section__subtitle {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.rates-section__actions {
+  display: flex;
+  align-items: center;
+}
+
+.rates-section__cta {
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #0f172a;
+  background: linear-gradient(135deg, #60a5fa, #38bdf8);
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(56, 189, 248, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rates-section__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 26px rgba(56, 189, 248, 0.28);
+}
+
+.rates-section__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.6rem;
+  color: rgba(148, 163, 184, 0.88);
+  margin-top: auto;
+}
+
+.rates-section__timestamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.62rem;
+}
+
+.rates-section__disclaimer {
+  line-height: 1.25;
+}
+
+.rates-section__cards {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  padding-bottom: 0.3rem;
+  height: 100%;
+  align-items: stretch;
+}
+
+.rates-section__card {
+  flex: 0 0 auto;
+  height: 85%;
+}
+
+@media (max-width: 1200px) {
+  .rates-section__apply {
+    right: 1.2rem;
+  }
+
+  .rates-section__content {
+    gap: 0.85rem;
+    padding-right: 0;
+  }
+
+  .rates-section__sidebar {
+    flex-basis: 210px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .rates-section {
+    display: none;
+  }
+}
