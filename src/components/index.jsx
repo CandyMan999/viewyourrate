@@ -7,7 +7,7 @@ export { default as Footer } from "./footer";
 export { default as NavDrawer } from "./navDrawer";
 export { default as Calculator } from "./calculators";
 
-export { default as Component2 } from "./component2";
+export { default as LoanEstimateUpload } from "./LoanEstimateUpload";
 export { default as Component3 } from "./component3";
 export { default as Header } from "./header";
 export { default as MortgageServices } from "./mortgageServices";

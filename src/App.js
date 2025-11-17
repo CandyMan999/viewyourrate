@@ -16,7 +16,7 @@ import {
   Calculator,
   ProductsFilterWidget,
   CompareProducts,
-  Component2,
+  LoanEstimateUpload,
   Component3,
   Header,
   MortgageServices,
@@ -38,7 +38,7 @@ const componentsList = [
   "HeroSection",
   "Calculator",
   "ProductsFilterWidget",
-  "Component2",
+  "LoanEstimateUpload",
   "Component3",
 ];
 const ApplyNowWidget = ({ isVisible, onClose }) => {
@@ -123,7 +123,11 @@ const navItems = [
   { name: "Home", index: 0, component: "HeroSection" },
   { name: "Calculators", index: 1, component: "Calculator" },
   { name: "Compare Products", index: 2, component: "ProductsFilterWidget" },
-  { name: "Component2", index: 3, component: "Component2" },
+  {
+    name: "Loan Estimate Upload",
+    index: 3,
+    component: "LoanEstimateUpload",
+  },
   { name: "Component3", index: 4, component: "Component3" },
   { name: "Contact", index: 5, component: "Contact" },
 ];
@@ -209,8 +213,8 @@ const App = () => {
         return <Calculator dispatch={dispatch} />;
       case "ProductsFilterWidget":
         return <ProductsFilterWidget />;
-      case "Component2":
-        return <Component2 />;
+      case "LoanEstimateUpload":
+        return <LoanEstimateUpload />;
       case "Component3":
         return <Component3 />;
       default:
@@ -280,7 +284,10 @@ const App = () => {
               <CompareProducts
                 scenario={state.mortgageScenario}
                 onEditScenario={() => {
-                  dispatch({ type: "TOGGLE_PRODUCT_COMPARISON", payload: false });
+                  dispatch({
+                    type: "TOGGLE_PRODUCT_COMPARISON",
+                    payload: false,
+                  });
                   dispatch({ type: "SET_ACTIVE_COMPONENT", payload: 2 });
                 }}
               />
@@ -292,7 +299,11 @@ const App = () => {
                     ? "flex-start"
                     : baseMainContainerStyles.alignItems,
                   paddingTop: isActiveProductsFilter ? (isMobile ? 48 : 56) : 0,
-                  paddingBottom: isActiveProductsFilter ? (isMobile ? 24 : 32) : 0,
+                  paddingBottom: isActiveProductsFilter
+                    ? isMobile
+                      ? 24
+                      : 32
+                    : 0,
                   overflow: isActiveProductsFilter
                     ? "auto"
                     : baseMainContainerStyles.overflow,

@@ -74,7 +74,7 @@ const NavDrawer = ({
         return <FaCalculator />;
       case "Compare Products":
         return <FiPieChart />;
-      case "Component2":
+      case "Loan Estimate Upload":
         return <FiUsers />;
       case "Contact":
         return <FiPhone />;
