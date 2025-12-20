@@ -8,11 +8,12 @@ const HeroSection = ({ state, dispatch }) => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: isMobile ? "100%" : "90vh", // Use full height for mobile
+    minHeight: isMobile ? "calc(100vh - 140px)" : "90vh", // Use full height for mobile
     backgroundSize: "cover",
     backgroundPosition: "center",
     position: "relative",
     overflow: "hidden",
+    padding: isMobile ? "96px 16px 56px" : "0 24px",
   };
 
   const overlayStyles = {
@@ -23,21 +24,19 @@ const HeroSection = ({ state, dispatch }) => {
     height: "100%",
   };
 
-  // Adjust content styles to be positioned correctly for mobile and desktop
   const contentStyles = {
-    position: "absolute",
-    top: isMobile ? "30%" : "35%", // Adjust top positioning for mobile
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    position: "relative",
     zIndex: 1,
     color: "#f0f0f0",
     textAlign: "center",
-    padding: isMobile ? "1rem" : "1.8rem", // Slightly reduced padding for desktop
-    maxWidth: isMobile ? "90%" : "540px", // Reduced width for desktop
-    width: "80%",
+    margin: "0 auto",
+    padding: isMobile ? "1rem 1.25rem 1.4rem" : "1.8rem 2rem",
+    maxWidth: isMobile ? "640px" : "540px", // Reduced width for desktop
+    width: "100%",
     borderRadius: "10px",
     background: "rgba(30, 30, 30, 0.85)",
     boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+    backdropFilter: "blur(6px)",
   };
 
   const buttonContainerStyles = {

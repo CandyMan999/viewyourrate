@@ -20,13 +20,16 @@ const NavDrawer = ({
     position: "fixed",
     top: 60,
     right: 0,
-    width: "50%",
-    height: "100%",
+    width: "90%",
+    maxWidth: 420,
+    height: "calc(100% - 60px)",
     backgroundColor: "#fff",
-    boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.3)",
+    boxShadow: "-2px 0 10px rgba(0, 0, 0, 0.25)",
     zIndex: 2001,
-    padding: "2rem",
-    borderRadius: "10px 0px 0px 0px",
+    padding: "1.5rem 1.25rem",
+    borderRadius: "12px 0px 0px 0px",
+    overflowY: "auto",
+    boxSizing: "border-box",
   };
 
   const sidebarNavLinksStyles = {
@@ -37,6 +40,7 @@ const NavDrawer = ({
     height: "100%",
     padding: 0,
     margin: 0,
+    gap: "0.5rem",
   };
 
   const linkStyles = (isActive) => ({

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { isMobile } from "react-device-detect";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL ||
@@ -149,28 +150,28 @@ const sectionStyles = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  padding: "2rem 1rem",
+  padding: isMobile ? "88px 14px 64px" : "2.4rem 1.5rem",
 };
 
 const cardStyles = {
   width: "100%",
-  maxWidth: "700px",
+  maxWidth: isMobile ? "520px" : "700px",
   backgroundColor: "rgba(255, 255, 255, 0.95)",
   borderRadius: "18px",
-  padding: "2rem",
+  padding: isMobile ? "1.5rem" : "2rem",
   boxShadow: "0 20px 40px rgba(0, 0, 0, 0.25)",
 };
 
 const titleStyles = {
-  fontSize: "2rem",
+  fontSize: isMobile ? "1.6rem" : "2rem",
   marginBottom: "0.5rem",
   color: "#0f2027",
   textAlign: "center",
 };
 
 const subtitleStyles = {
-  fontSize: "1rem",
-  marginBottom: "1.5rem",
+  fontSize: isMobile ? "0.95rem" : "1rem",
+  marginBottom: isMobile ? "1.1rem" : "1.5rem",
   color: "#4b5d67",
   textAlign: "center",
 };
@@ -178,13 +179,13 @@ const subtitleStyles = {
 const uploadAreaStyles = {
   display: "flex",
   flexDirection: "column",
-  gap: "1rem",
+  gap: isMobile ? "0.85rem" : "1rem",
 };
 
 const fileInputLabelStyles = {
   border: "2px dashed #4b5d67",
   borderRadius: "12px",
-  padding: "1.25rem",
+  padding: isMobile ? "1rem" : "1.25rem",
   textAlign: "center",
   color: "#4b5d67",
   fontWeight: 600,
@@ -193,20 +194,21 @@ const fileInputLabelStyles = {
 
 const buttonStyles = {
   width: "100%",
-  padding: "1rem",
+  padding: isMobile ? "0.9rem" : "1rem",
   borderRadius: "12px",
   border: "none",
   background: "linear-gradient(90deg, #3a7bd5, #3a6073)",
   color: "#fff",
-  fontSize: "1rem",
+  fontSize: isMobile ? "0.95rem" : "1rem",
   fontWeight: 600,
   transition: "transform 0.2s ease",
 };
 
 const helperTextStyles = {
-  fontSize: "0.85rem",
+  fontSize: isMobile ? "0.8rem" : "0.85rem",
   color: "#6c7a89",
   textAlign: "center",
+  lineHeight: 1.4,
 };
 
 const errorStyles = {
@@ -219,22 +221,22 @@ const errorStyles = {
 };
 
 const resultsContainerStyles = {
-  marginTop: "2rem",
+  marginTop: isMobile ? "1.4rem" : "2rem",
   borderRadius: "12px",
   backgroundColor: "#0f2027",
   color: "#fff",
-  padding: "1.5rem",
+  padding: isMobile ? "1.25rem" : "1.5rem",
   overflowX: "auto",
 };
 
 const resultsTitleStyles = {
-  marginBottom: "1rem",
-  fontSize: "1.25rem",
+  marginBottom: isMobile ? "0.75rem" : "1rem",
+  fontSize: isMobile ? "1.05rem" : "1.25rem",
 };
 
 const preStyles = {
   margin: 0,
-  fontSize: "0.95rem",
+  fontSize: isMobile ? "0.85rem" : "0.95rem",
   lineHeight: 1.4,
   whiteSpace: "pre-wrap",
   wordBreak: "break-word",

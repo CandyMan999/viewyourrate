@@ -425,21 +425,23 @@ const App = () => {
 const baseMainContainerStyles = {
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
+  alignItems: isMobile ? "flex-start" : "center",
   position: "relative",
   minHeight: "100vh",
-  overflow: "hidden",
+  overflowY: isMobile ? "auto" : "hidden",
   backgroundImage: `url(${background})`,
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
+  padding: isMobile ? "72px 14px 56px" : "72px 28px 56px",
+  boxSizing: "border-box",
 };
 
 // Styles for arrows
 const arrowStyles = {
-  width: "40px",
-  height: "40px",
-  top: "30%",
+  width: isMobile ? "34px" : "40px",
+  height: isMobile ? "34px" : "40px",
+  top: isMobile ? "45%" : "30%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -447,9 +449,9 @@ const arrowStyles = {
   borderRadius: "50%",
   cursor: "pointer",
   zIndex: 1000,
-  fontSize: "1.5rem",
+  fontSize: isMobile ? "1.2rem" : "1.5rem",
   color: "#007bff",
-
+  boxSizing: "border-box",
   boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
 };
 
