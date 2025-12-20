@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import RatesDropped from "../../pics/RatesDropped.png"; // Adjust path based on your project structure
 import { isMobile } from "react-device-detect"; // Import mobile detection
 
 const RateDropNotification = () => {
@@ -9,7 +8,7 @@ const RateDropNotification = () => {
       {/* Image Section */}
       <div style={isMobile ? mobileImageContainerStyles : imageContainerStyles}>
         <img
-          src={RatesDropped}
+          src="/RatesDropped.png"
           alt="Rates Dropped"
           style={isMobile ? mobileImageStyles : imageStyles}
         />

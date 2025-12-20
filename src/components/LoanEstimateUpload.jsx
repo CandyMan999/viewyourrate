@@ -2,10 +2,9 @@ import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL ||
-  (window.location.hostname === "localhost"
-    ? "http://localhost:4000"
-    : "https://view-your-rate-7292aa3d3693.herokuapp.com");
+  (process.env.NEXT_PUBLIC_API_BASE_URL &&
+    process.env.NEXT_PUBLIC_API_BASE_URL.trim()) ||
+  "";
 
 const LoanEstimateUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -59,7 +58,8 @@ const LoanEstimateUpload = () => {
     formData.append("file", fileToUse);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/parse-le`, {
+      const apiHost = API_BASE_URL.replace(/\/$/, "");
+      const response = await fetch(`${apiHost}/api/parse-le`, {
         method: "POST",
         body: formData,
       });
