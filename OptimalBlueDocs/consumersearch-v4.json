@@ -1,0 +1,2642 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Best Execution Search Results",
+        "description": "This API product supports scaled and streamlined product \r\n            and pricing data to make it easier to display results directly to consumers.",
+        "version": "4"
+    },
+    "servers": [
+        {
+            "url": "https://marketplace.optimalblue.com/consumer"
+        },
+        {
+            "url": "https://marketplace2.optimalblue.com/consumer"
+        }
+    ],
+    "paths": {
+        "/api/businesschannels/{businessChannelId}/originators/{originatorId}/bestexsearch": {
+            "post": {
+                "tags": [
+                    "BestExSearchV4"
+                ],
+                "summary": "Best Execution Search",
+                "description": "An initiating call to the API, specifying a scenario for qualification purposes. The response will return the single best execution product at each rate \r\n            available to streamline results for direct to consumer applications. A flag can be sent for Optimal Blue to calculate the total loan amount for government \r\n            transactions, in which case the total loan upfront mortgage insurance premiums will be considered as fully financed. If any portion needs to be paid in \r\n            cash, or conventional borrower paid upfront MI is required please submit the entire Total Loan Amount container with the calculateTotalLoanAmount \r\n            field as \\\"false\\\". Please note that the fields within the \\\"expandedGuidelines\\\" container will only be evaluated for those products that are tied to the \r\n            \\\"productTypes\\\" of \\\"nonQM\\\". The product guidelines in the response are optional, and can be excluded from the response if you append ? \r\n            $deselect=Products/Guidelines to the end of the request.",
+                "operationId": "Best-Execution-Search",
+                "parameters": [
+                    {
+                        "name": "businessChannelId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 64170
+                        }
+                    },
+                    {
+                        "name": "originatorId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 749463
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.Request.PricingRequest"
+                            },
+                            "example": {
+                                "borrowerInformation": {
+                                    "citizenship": "USCitizen",
+                                    "firstName": "test",
+                                    "lastName": "test1",
+                                    "vaFirstTimeUse": true,
+                                    "firstTimeHomeBuyer": false,
+                                    "monthsReserves": 24,
+                                    "selfEmployed": true,
+                                    "waiveEscrows": false
+                                },
+                                "propertyInformation": {
+                                    "appraisedValue": 225000,
+                                    "occupancy": "PrimaryResidence",
+                                    "propertyStreetAddress": "string",
+                                    "county": "Collin",
+                                    "state": "TX",
+                                    "zipCode": "75024",
+                                    "propertyType": "SingleFamily",
+                                    "corporateRelocation": false,
+                                    "salesPrice": 225000,
+                                    "numberOfStories": 1,
+                                    "numberOfUnits": "OneUnit"
+                                },
+                                "loanInformation": {
+                                    "loanPurpose": "Purchase",
+                                    "lienType": "First",
+                                    "amortizationTypes": [
+                                        "Fixed"
+                                    ],
+                                    "armFixedTerms": [
+                                        "FiveYear"
+                                    ],
+                                    "automatedUnderwritingSystem": "NotSpecified",
+                                    "borrowerPaidMI": "Yes",
+                                    "buydown": "None",
+                                    "cashOutAmount": 0,
+                                    "desiredLockPeriod": 0,
+                                    "desiredPrice": 0,
+                                    "desiredRate": 0,
+                                    "feesIn": "No",
+                                    "expandedApprovalLevel": "NotApplicable",
+                                    "interestOnly": false,
+                                    "baseLoanAmount": 150000,
+                                    "secondLienAmount": 0,
+                                    "helocDrawnAmount": 0,
+                                    "helocLineAmount": 0,
+                                    "loanTerms": [
+                                        "ThirtyYear",
+                                        "TwentyFiveYear"
+                                    ],
+                                    "loanType": "Conventional",
+                                    "prepaymentPenalty": "None",
+                                    "exemptFromVAFundingFee": false,
+                                    "includeLOCompensationInPricing": "YesLenderPaid",
+                                    "calculateTotalLoanAmount": true,
+                                    "expandedGuidelines": {
+                                        "incomeVerificationType": "FullDoc",
+                                        "housingEventType": "None",
+                                        "housingEventSeasoning": "NotApplicable",
+                                        "bankruptcyType": "None",
+                                        "bankruptcyOutcome": "NotApplicable",
+                                        "bankruptcySeasoning": "NotApplicable",
+                                        "mortgageLatesx30_12Mos": 0,
+                                        "mortgageLatesx30_13to24Mos": 0,
+                                        "mortgageLatesx60_12Mos": 0,
+                                        "mortgageLatesx60_13to24Mos": 0,
+                                        "mortgageLatesx90_12Mos": 0,
+                                        "mortgageLatesx90_13to24Mos": 0,
+                                        "mortgageLatesx120_12Mos": 0,
+                                        "mortgageLatesx120_13to24Mos": 0,
+                                        "debtConsolidation": false,
+                                        "uniqueProperty": false
+                                    },
+                                    "representativeFICO": 850,
+                                    "loanLevelDebtToIncomeRatio": 18,
+                                    "totalMonthlyQualifyingIncome": 9000,
+                                    "customerInternalId": "OBSearch"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.Response.ConsumerPricingSearchResponse"
+                                },
+                                "example": {
+                                    "products": [
+                                        {
+                                            "apr": 0,
+                                            "productType": "StandardProducts",
+                                            "armIndex": "Treasury",
+                                            "armFirstCap": 0,
+                                            "armIndexValue": 0,
+                                            "armPeriodicCap": 0,
+                                            "armLifetimeCap": 0,
+                                            "armRelativeCap": 0,
+                                            "armMargin": 0,
+                                            "armSubsequentChangePeriod": "OneYear",
+                                            "armFixedTerm": "SixMonth",
+                                            "closingCost": 0,
+                                            "lastUpdate": "string",
+                                            "loanTerm": "ThirtyYear",
+                                            "lockPeriod": 0,
+                                            "price": 0,
+                                            "rate": 0,
+                                            "rebate": 0,
+                                            "discount": 0,
+                                            "principalAndInterest": 0,
+                                            "monthlyMI": 0,
+                                            "totalPayment": 0,
+                                            "amortizationTerm": "ThirtyYear",
+                                            "amortizationType": "Fixed",
+                                            "investorId": 0,
+                                            "investor": "string",
+                                            "loanType": "Conforming",
+                                            "priceStatus": "Available",
+                                            "pendingUpdate": true,
+                                            "productCode": "string",
+                                            "productId": 0,
+                                            "productName": "string",
+                                            "guidelines": [
+                                                {
+                                                    "documentDescription": "string",
+                                                    "guidelineLink": {
+                                                        "rel": "string",
+                                                        "href": "string",
+                                                        "action": "string",
+                                                        "fileExtension": "string",
+                                                        "types": [
+                                                            "string"
+                                                        ]
+                                                    }
+                                                }
+                                            ],
+                                            "constructionPeriodInterestRate": 0,
+                                            "constructionTermMonths": 0,
+                                            "constructionPermanentFinancingLoanTerm": 0,
+                                            "constructionPermanentFinancingAmortizationTerm": 0,
+                                            "loanTermIncludesConstructionTerm": true,
+                                            "collectMonthlyMIDuringConstructionTerm": true
+                                        }
+                                    ],
+                                    "acquisitionCost": 0,
+                                    "totalLoanAmountDetails": {
+                                        "totalLoanAmount": 0,
+                                        "upfrontPMI_MIP_FF_GF_Percent": 0,
+                                        "upfrontPMI_MIP_FF_GF_Amount": 0,
+                                        "upfrontPMI_MIP_FF_GF_PaidinCash": 0,
+                                        "upfrontPMI_MIP_FF_GF_FinancedAmount": 0
+                                    },
+                                    "cltv": 0,
+                                    "ltv": 0,
+                                    "hcltv": 0,
+                                    "amiPercentage": 0,
+                                    "amiPercentageFFIEC": 0,
+                                    "searchId": "string",
+                                    "searchTime": "string",
+                                    "customerInternalId": "string",
+                                    "additionalFields": {},
+                                    "messages": [
+                                        {
+                                            "code": "string",
+                                            "message": "string",
+                                            "modelState": {}
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                                },
+                                "example": {
+                                    "type": "string",
+                                    "title": "string",
+                                    "status": 0,
+                                    "detail": "string",
+                                    "instance": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                                },
+                                "example": {
+                                    "type": "string",
+                                    "title": "string",
+                                    "status": 0,
+                                    "detail": "string",
+                                    "instance": "string"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.ResponseMessageWithType"
+                                },
+                                "example": {
+                                    "code": 0,
+                                    "statusCode": 0,
+                                    "type": "None",
+                                    "message": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/businesschannels/{businessChannelId}/originators/{originatorId}/bestexsearch/{searchId}/products/{productId}": {
+            "get": {
+                "tags": [
+                    "BestExSearchV4"
+                ],
+                "summary": "Best Execution Product Details",
+                "description": "Once the eligible products are returned from the Best Execution Only request, an additional call can be made to receive all detailed pricing information \r\n            for a product. This will be derived from the search ID and product ID provided. The response will return all price, rate, lock period combinations \r\n            for the requested product. Additionally, all adjustments, ratio calculations, notes and advisories will be returned.",
+                "operationId": "Best-Execution-Product-Details",
+                "parameters": [
+                    {
+                        "name": "businessChannelId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 64170
+                        }
+                    },
+                    {
+                        "name": "originatorId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 749463
+                        }
+                    },
+                    {
+                        "name": "searchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.ConsumerProductQuote"
+                                },
+                                "example": {
+                                    "productName": "string",
+                                    "quotes": [
+                                        {
+                                            "rate": 0,
+                                            "lockPeriod": 0,
+                                            "lockExpirationDate": "string",
+                                            "apr": 0,
+                                            "price": 0,
+                                            "armMargin": 0,
+                                            "closingCost": 0,
+                                            "discountDollar": 0,
+                                            "discountPercent": 0,
+                                            "rebateDollar": 0,
+                                            "rebatePercent": 0,
+                                            "loCompensationDollar": 0,
+                                            "loCompensationPercent": 0,
+                                            "principalAndInterest": 0,
+                                            "totalCredit": 0,
+                                            "monthlyMi": 0,
+                                            "totalPayment": 0,
+                                            "constructionPeriodInterestRate": 0,
+                                            "adjustments": [
+                                                {
+                                                    "reason": "string",
+                                                    "adjustor": "string",
+                                                    "type": "string"
+                                                }
+                                            ],
+                                            "amiRuleApplied": true,
+                                            "notesAndAdvisories": [
+                                                "string"
+                                            ]
+                                        }
+                                    ],
+                                    "adjustments": [
+                                        {
+                                            "reason": "string",
+                                            "adjustor": "string",
+                                            "type": "string"
+                                        }
+                                    ],
+                                    "parQuotes": [
+                                        {
+                                            "parRate": 0,
+                                            "parPrice": 0,
+                                            "parLock": 0
+                                        }
+                                    ],
+                                    "searchId": "string",
+                                    "productId": 0,
+                                    "totalRateAdjustment": 0,
+                                    "totalPriceAdjustment": 0,
+                                    "totalSRPAdjustment": 0,
+                                    "totalMarginAdjustment": 0,
+                                    "notesAndAdvisories": [
+                                        "string"
+                                    ],
+                                    "armSubsequentChangePeriod": "OneYear",
+                                    "armIndex": "Treasury",
+                                    "armIndexValue": 0,
+                                    "armFirstCap": 0,
+                                    "armPeriodicCap": 0,
+                                    "armFixedTerm": "SixMonth",
+                                    "armLifetimeCap": 0,
+                                    "armRelativeCap": 0,
+                                    "constructionTermMonths": 0,
+                                    "loanTermIncludesConstructionTerm": true,
+                                    "originationFees": 0,
+                                    "investorId": 0,
+                                    "miRequiredOver80Ltv": true,
+                                    "interestOnlyTerm": 0,
+                                    "highBalance": "No",
+                                    "messages": [
+                                        {
+                                            "code": "string",
+                                            "message": "string",
+                                            "modelState": {}
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                                },
+                                "example": {
+                                    "type": "string",
+                                    "title": "string",
+                                    "status": 0,
+                                    "detail": "string",
+                                    "instance": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                                },
+                                "example": {
+                                    "type": "string",
+                                    "title": "string",
+                                    "status": 0,
+                                    "detail": "string",
+                                    "instance": "string"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.ResponseMessageWithType"
+                                },
+                                "example": {
+                                    "code": 0,
+                                    "statusCode": 0,
+                                    "type": "None",
+                                    "message": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/businesschannels/{businessChannelId}/originators/{originatorId}/bestexsearch/{searchId}/products/{productId}/amortizationschedule": {
+            "post": {
+                "tags": [
+                    "BestExSearchV4"
+                ],
+                "summary": "Amortization Schedule",
+                "description": "This endpoint will return the full payment stream for the Product provided in the route, including information for each month&apos;s payment, \r\n            monthly/annual mortgage insurance (if applicable) and any rate changes. For Adjustable Rate Mortgages those rate changes and associated payment \r\n            changes will be based on the fully indexed rate. This endpoint will also return the APR and the values used to determine the APR.",
+                "operationId": "Amortization-Schedule",
+                "parameters": [
+                    {
+                        "name": "businessChannelId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 64170
+                        }
+                    },
+                    {
+                        "name": "originatorId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 749463
+                        }
+                    },
+                    {
+                        "name": "searchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Marketplace.Pricing.Business.Common.Models.AmortizationScheduleRequest"
+                            },
+                            "example": {
+                                "rate": 0,
+                                "lockPeriod": 0,
+                                "loanLevelDebtToincomeRatio": 0
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.AmortizationScheduleDetails"
+                                },
+                                "example": {
+                                    "amortizationSchedule": [
+                                        {
+                                            "paymentNumber": 0,
+                                            "principalAndInterestPayment": 0,
+                                            "principalPayment": 0,
+                                            "interestPayment": 0,
+                                            "mortgageInsurancePayment": 0,
+                                            "totalPaymentAmount": 0,
+                                            "endingBalance": 0,
+                                            "rate": 0
+                                        }
+                                    ],
+                                    "apr": 0,
+                                    "baseLoanAmount": 0,
+                                    "totalLoanAmount": 0,
+                                    "prepaidFinanceCharge": 0,
+                                    "amountFinanced": 0,
+                                    "financeCharge": 0,
+                                    "totalOfPayments": 0
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                                },
+                                "example": {
+                                    "type": "string",
+                                    "title": "string",
+                                    "status": 0,
+                                    "detail": "string",
+                                    "instance": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                                },
+                                "example": {
+                                    "type": "string",
+                                    "title": "string",
+                                    "status": 0,
+                                    "detail": "string",
+                                    "instance": "string"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.ResponseMessageWithType"
+                                },
+                                "example": {
+                                    "code": 0,
+                                    "statusCode": 0,
+                                    "type": "None",
+                                    "message": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Marketplace.Models.Web.Models.Common.AmortizationScheduleDetails": {
+                "type": "object",
+                "properties": {
+                    "paymentStreamDisclaimer": {
+                        "type": "string"
+                    },
+                    "amortizationSchedule": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.Payment"
+                        }
+                    },
+                    "apr": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "baseLoanAmount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalLoanAmount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "prepaidFinanceCharge": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "amountFinanced": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "financeCharge": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalOfPayments": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "additionalProperties": false,
+                "example": {
+                    "amortizationSchedule": [
+                        {
+                            "paymentNumber": 0,
+                            "principalAndInterestPayment": 0,
+                            "principalPayment": 0,
+                            "interestPayment": 0,
+                            "mortgageInsurancePayment": 0,
+                            "totalPaymentAmount": 0,
+                            "endingBalance": 0,
+                            "rate": 0
+                        }
+                    ],
+                    "apr": 0,
+                    "baseLoanAmount": 0,
+                    "totalLoanAmount": 0,
+                    "prepaidFinanceCharge": 0,
+                    "amountFinanced": 0,
+                    "financeCharge": 0,
+                    "totalOfPayments": 0
+                }
+            },
+            "Marketplace.Models.Web.Models.Common.CustomField": {
+                "type": "object",
+                "properties": {
+                    "customFieldInputName": {
+                        "type": "string"
+                    },
+                    "customFieldValue": {
+                        "type": "string"
+                    },
+                    "columnName": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.Common.ExpandedGuidelines": {
+                "type": "object",
+                "properties": {
+                    "incomeVerificationType": {
+                        "enum": [
+                            "FullDoc",
+                            "PersonalBankStmt1Mo",
+                            "PersonalBankStmt6Mos",
+                            "PersonalBankStmt12Mos",
+                            "PersonalBankStmt18Mos",
+                            "PersonalBankStmt24Mos",
+                            "BusinessBankStmt1Mo",
+                            "BusinessBankStmt6Mos",
+                            "BusinessBankStmt12Mos",
+                            "BusinessBankStmt18Mos",
+                            "BusinessBankStmt24Mos",
+                            "OneYearAltDoc",
+                            "AssetRelated",
+                            "InvestorDscr",
+                            "RestrictedStock",
+                            "InvestorNoRatio",
+                            "PersonalBankStmt3Mos",
+                            "BusinessBankStmt3Mos",
+                            "TwoYearAltDoc",
+                            "WrittenVOE",
+                            "Stated",
+                            "OneYear1099",
+                            "TwoYear1099",
+                            "PLOneYear",
+                            "PLTwoYear",
+                            "NoIncomeVerification"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "IncomeVerificationType"
+                            }
+                        },
+                        "default": "FullDoc"
+                    },
+                    "housingEventType": {
+                        "enum": [
+                            "None",
+                            "DeedInLieu",
+                            "Foreclosure",
+                            "Modification",
+                            "ShortSale",
+                            "Forbearance"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "HousingEventType"
+                            }
+                        },
+                        "default": "None"
+                    },
+                    "housingEventSeasoning": {
+                        "enum": [
+                            "NotApplicable",
+                            "Last1To12Months",
+                            "Last13To24Months",
+                            "Last25To36Months",
+                            "Last37To48Months",
+                            "Last49To60Months",
+                            "MoreThanFiveYearsAgo"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "HousingEventSeasoning"
+                            }
+                        },
+                        "default": "NotApplicable"
+                    },
+                    "bankruptcyType": {
+                        "enum": [
+                            "None",
+                            "Chapter7",
+                            "Chapter11",
+                            "Chapter13"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "BankruptcyType"
+                            }
+                        },
+                        "default": "None"
+                    },
+                    "bankruptcyOutcome": {
+                        "enum": [
+                            "NotApplicable",
+                            "Discharged",
+                            "Dismissed",
+                            "OpenOrPending"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "BankruptcyOutcome"
+                            }
+                        },
+                        "default": "NotApplicable"
+                    },
+                    "bankruptcySeasoning": {
+                        "enum": [
+                            "NotApplicable",
+                            "Last1To12Months",
+                            "Last13To24Months",
+                            "Last25To36Months",
+                            "Last37To48Months",
+                            "Last49To60Months",
+                            "MoreThanFiveYearsAgo"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "BankruptcySeasoning"
+                            }
+                        },
+                        "default": "NotApplicable"
+                    },
+                    "mortgageLatesx30_12Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mortgageLatesx30_13to24Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mortgageLatesx60_12Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mortgageLatesx60_13to24Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mortgageLatesx90_12Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mortgageLatesx90_13to24Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mortgageLatesx120_12Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mortgageLatesx120_13to24Mos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "debtConsolidation": {
+                        "type": "boolean"
+                    },
+                    "uniqueProperty": {
+                        "type": "boolean"
+                    },
+                    "debtServiceCoverageRatio": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.Common.Payment": {
+                "type": "object",
+                "properties": {
+                    "paymentNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "principalAndInterestPayment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "principalPayment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "interestPayment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "mortgageInsurancePayment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalPaymentAmount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "endingBalance": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.Common.ResponseMessage": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "modelState": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.Common.ResponseMessageWithType": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "type": {
+                        "enum": [
+                            "None",
+                            "Warning",
+                            "Validation",
+                            "Error",
+                            "Informational",
+                            "Authorization"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "MessageType"
+                            }
+                        }
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.BorrowerCriteria": {
+                "required": [
+                    "citizenship"
+                ],
+                "type": "object",
+                "properties": {
+                    "citizenship": {
+                        "enum": [
+                            "USCitizen",
+                            "USCitizenAbroad",
+                            "PermResidentAlien",
+                            "NonPermResidentAlien",
+                            "ForeignNational"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "Citizenship"
+                            }
+                        }
+                    },
+                    "fico": {
+                        "maximum": 999,
+                        "minimum": 0,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "vaFirstTimeUse": {
+                        "type": "boolean"
+                    },
+                    "middleName": {
+                        "type": "string"
+                    },
+                    "suffix": {
+                        "type": "string"
+                    },
+                    "firstTimeHomeBuyer": {
+                        "type": "boolean"
+                    },
+                    "typeOfVeteran": {
+                        "enum": [
+                            "ActiveDuty",
+                            "NationalGuardOrReserves"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "VeteranType"
+                            }
+                        }
+                    },
+                    "monthsReserves": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "selfEmployed": {
+                        "type": "boolean"
+                    },
+                    "waiveEscrows": {
+                        "type": "boolean"
+                    },
+                    "disclosureDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "applicationDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "streetAddress1": {
+                        "type": "string"
+                    },
+                    "streetAddress2": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "zipCode": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.CoBorrowerCriteria": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "middleName": {
+                        "type": "string"
+                    },
+                    "suffix": {
+                        "type": "string"
+                    },
+                    "fico": {
+                        "maximum": 999,
+                        "minimum": 0,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "streetAddress1": {
+                        "type": "string"
+                    },
+                    "streetAddress2": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "zipCode": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "intentToOccupy": {
+                        "type": "boolean"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.ConsumerProductQuote": {
+                "type": "object",
+                "properties": {
+                    "productName": {
+                        "type": "string"
+                    },
+                    "quotes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.ConsumerQuote"
+                        }
+                    },
+                    "adjustments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.QuoteAdjustment"
+                        }
+                    },
+                    "parQuotes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.ParQuote"
+                        }
+                    },
+                    "searchId": {
+                        "type": "string"
+                    },
+                    "productId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalRateAdjustment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalPriceAdjustment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalSRPAdjustment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalMarginAdjustment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "notesAndAdvisories": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "armSubsequentChangePeriod": {
+                        "enum": [
+                            "OneYear",
+                            "SixMonth",
+                            "ThreeYear",
+                            "FiveYear",
+                            "FifteenYear",
+                            "OneMonth"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ArmSubsequentChangePeriodType"
+                            }
+                        }
+                    },
+                    "armIndex": {
+                        "enum": [
+                            "Treasury",
+                            "Libor",
+                            "COFI",
+                            "MTA",
+                            "Prime",
+                            "SOFR",
+                            "FarmCredit"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ArmIndex"
+                            }
+                        }
+                    },
+                    "armIndexValue": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armFirstCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armPeriodicCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armFixedTerm": {
+                        "enum": [
+                            "SixMonth",
+                            "OneYear",
+                            "ThreeYear",
+                            "FiveYear",
+                            "SevenYear",
+                            "TenYear",
+                            "TwoYear",
+                            "OneMonth",
+                            "ThreeMonth",
+                            "FifteenYear",
+                            "SixYear"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ARMFixedTerm"
+                            }
+                        }
+                    },
+                    "armLifetimeCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armRelativeCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "constructionTermMonths": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "loanTermIncludesConstructionTerm": {
+                        "type": "boolean"
+                    },
+                    "originationFees": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "investorId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "miRequiredOver80Ltv": {
+                        "type": "boolean"
+                    },
+                    "interestOnlyTerm": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "highBalance": {
+                        "enum": [
+                            "No",
+                            "Yes"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "HighBalanceType"
+                            }
+                        }
+                    },
+                    "messages": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.ResponseMessage"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.ConsumerQuote": {
+                "type": "object",
+                "properties": {
+                    "rate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "lockPeriod": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "lockExpirationDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "apr": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armMargin": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "closingCost": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "discountDollar": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "discountPercent": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "rebateDollar": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "rebatePercent": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "loCompensationDollar": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "loCompensationPercent": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "principalAndInterest": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalCredit": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "monthlyMi": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalPayment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "constructionPeriodInterestRate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "adjustments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.QuoteAdjustment"
+                        }
+                    },
+                    "amiRuleApplied": {
+                        "type": "boolean"
+                    },
+                    "notesAndAdvisories": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.CraInformation": {
+                "type": "object",
+                "properties": {
+                    "censusTractCode": {
+                        "type": "string"
+                    },
+                    "cbsaCode": {
+                        "type": "string"
+                    },
+                    "craVerifiedStateCode": {
+                        "type": "string"
+                    },
+                    "craVerifiedCountyCode": {
+                        "type": "string"
+                    },
+                    "craVerifiedAddress": {
+                        "type": "string"
+                    },
+                    "craVerifiedCity": {
+                        "type": "string"
+                    },
+                    "craVerifiedZipCode": {
+                        "type": "string"
+                    },
+                    "craVerifiedStateName": {
+                        "type": "string"
+                    },
+                    "craVerifiedCountyName": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.EligibleConsumerProduct": {
+                "type": "object",
+                "properties": {
+                    "apr": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "productType": {
+                        "enum": [
+                            "StandardProducts",
+                            "AffordableProducts",
+                            "HARP",
+                            "HeroProducts",
+                            "StudentLoanCORefi",
+                            "RenovationAndRehabilitation",
+                            "BondAndHFA",
+                            "HUDspecialty",
+                            "USDAStreamline",
+                            "ExpandedGuidelines"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ProductType"
+                            }
+                        }
+                    },
+                    "armIndex": {
+                        "enum": [
+                            "Treasury",
+                            "Libor",
+                            "COFI",
+                            "MTA",
+                            "Prime",
+                            "SOFR",
+                            "FarmCredit"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ArmIndex"
+                            }
+                        }
+                    },
+                    "armFirstCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armIndexValue": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armPeriodicCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armLifetimeCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armRelativeCap": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armMargin": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "armSubsequentChangePeriod": {
+                        "enum": [
+                            "OneYear",
+                            "SixMonth",
+                            "ThreeYear",
+                            "FiveYear",
+                            "FifteenYear",
+                            "OneMonth"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ArmSubsequentChangePeriodType"
+                            }
+                        }
+                    },
+                    "armFixedTerm": {
+                        "enum": [
+                            "SixMonth",
+                            "OneYear",
+                            "ThreeYear",
+                            "FiveYear",
+                            "SevenYear",
+                            "TenYear",
+                            "TwoYear",
+                            "OneMonth",
+                            "ThreeMonth",
+                            "FifteenYear",
+                            "SixYear"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ARMFixedTerm"
+                            }
+                        }
+                    },
+                    "closingCost": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "lastUpdate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "loanTerm": {
+                        "enum": [
+                            "ThirtyYear",
+                            "TwentyFiveYear",
+                            "TwentyYear",
+                            "FifteenYear",
+                            "TenYear",
+                            "SevenYear",
+                            "FiveYear",
+                            "FortyYear",
+                            "FourYear",
+                            "TwoYear",
+                            "ThreeMonth",
+                            "SixMonth",
+                            "NineMonth",
+                            "ThreeYear",
+                            "NineYear",
+                            "EightYear",
+                            "SixYear",
+                            "OneYear",
+                            "TwelveYear",
+                            "NonStandardTerm"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "LoanTerm"
+                            }
+                        }
+                    },
+                    "lockPeriod": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "rebate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "principalAndInterest": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "monthlyMI": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalPayment": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "amortizationTerm": {
+                        "enum": [
+                            "ThirtyYear",
+                            "TwentyFiveYear",
+                            "TwentyYear",
+                            "FifteenYear",
+                            "TenYear",
+                            "SevenYear",
+                            "FiveYear",
+                            "FortyYear",
+                            "FourYear",
+                            "TwoYear",
+                            "OneYear",
+                            "SixYear",
+                            "EightYear",
+                            "NineYear",
+                            "TwelveYear",
+                            "ThreeYear"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "AmortizationTerm"
+                            }
+                        }
+                    },
+                    "amortizationType": {
+                        "enum": [
+                            "Fixed",
+                            "ARM",
+                            "Balloon"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "AmortizationType"
+                            }
+                        }
+                    },
+                    "investorId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "investor": {
+                        "type": "string"
+                    },
+                    "loanType": {
+                        "enum": [
+                            "Conforming",
+                            "NonConforming",
+                            "FHA",
+                            "VA",
+                            "Conventional",
+                            "HELOC",
+                            "USDARuralHousing"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "LoanType"
+                            }
+                        }
+                    },
+                    "priceStatus": {
+                        "enum": [
+                            "Available",
+                            "Suspended",
+                            "Expired",
+                            "TodaysPricingExpired"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "AvailabilityStates"
+                            }
+                        }
+                    },
+                    "pendingUpdate": {
+                        "type": "boolean"
+                    },
+                    "productCode": {
+                        "type": "string"
+                    },
+                    "productId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productName": {
+                        "type": "string"
+                    },
+                    "guidelines": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.Guideline"
+                        }
+                    },
+                    "constructionPeriodInterestRate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "constructionTermMonths": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "constructionPermanentFinancingLoanTerm": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "constructionPermanentFinancingAmortizationTerm": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "loanTermIncludesConstructionTerm": {
+                        "type": "boolean"
+                    },
+                    "collectMonthlyMIDuringConstructionTerm": {
+                        "type": "boolean"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.Guideline": {
+                "type": "object",
+                "properties": {
+                    "documentDescription": {
+                        "type": "string"
+                    },
+                    "guidelineLink": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.Link"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.Link": {
+                "type": "object",
+                "properties": {
+                    "rel": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "action": {
+                        "type": "string"
+                    },
+                    "fileExtension": {
+                        "type": "string"
+                    },
+                    "types": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.LoanPricingCriteria": {
+                "required": [
+                    "amortizationTypes",
+                    "automatedUnderwritingSystem",
+                    "baseLoanAmount",
+                    "borrowerPaidMI",
+                    "buydown",
+                    "calculateTotalLoanAmount",
+                    "expandedApprovalLevel",
+                    "includeLOCompensationInPricing",
+                    "interestOnly",
+                    "lienType",
+                    "loanLevelDebtToIncomeRatio",
+                    "loanPurpose",
+                    "loanTerms",
+                    "loanType",
+                    "prepaymentPenalty",
+                    "representativeFICO"
+                ],
+                "type": "object",
+                "properties": {
+                    "loanPurpose": {
+                        "enum": [
+                            "Purchase",
+                            "RefiCashout",
+                            "RefiRateTermLimitedCO",
+                            "FHAStreamlineRefi",
+                            "VARateReduction",
+                            "SimpleRefinance"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "LoanPurpose"
+                            }
+                        }
+                    },
+                    "lienType": {
+                        "enum": [
+                            "First",
+                            "Second"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "LienType"
+                            }
+                        }
+                    },
+                    "amortizationTypes": {
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "Fixed",
+                                "ARM",
+                                "Balloon",
+                                "OptionArm"
+                            ],
+                            "type": "string",
+                            "x-ms-enum": {
+                                "name": "AmortizationType"
+                            }
+                        }
+                    },
+                    "armFixedTerms": {
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "SixMonth",
+                                "OneYear",
+                                "ThreeYear",
+                                "FiveYear",
+                                "SevenYear",
+                                "TenYear",
+                                "TwoYear",
+                                "OneMonth",
+                                "ThreeMonth",
+                                "FifteenYear",
+                                "SixYear"
+                            ],
+                            "type": "string",
+                            "x-ms-enum": {
+                                "name": "ARMFixedTerm"
+                            }
+                        }
+                    },
+                    "automatedUnderwritingSystem": {
+                        "enum": [
+                            "DU",
+                            "LP",
+                            "NotSpecified",
+                            "InvestorAUS",
+                            "ManualTraditional"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "AutomatedUnderwritingSystem"
+                            }
+                        }
+                    },
+                    "borrowerPaidMI": {
+                        "enum": [
+                            "Yes",
+                            "No"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "MIOption"
+                            }
+                        }
+                    },
+                    "buydown": {
+                        "enum": [
+                            "None",
+                            "ThreeTwoOne",
+                            "TwoOne",
+                            "OneZero",
+                            "OneOne"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "TemporaryBuydown"
+                            }
+                        }
+                    },
+                    "cashOutAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "desiredLockPeriod": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "desiredPrice": {
+                        "maximum": 200,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "desiredRate": {
+                        "maximum": 100,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "feesIn": {
+                        "enum": [
+                            "No",
+                            "Yes"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "FeesIn"
+                            }
+                        }
+                    },
+                    "expandedApprovalLevel": {
+                        "enum": [
+                            "NotApplicable",
+                            "LevelOne",
+                            "LevelTwo",
+                            "LevelThree",
+                            "LevelFour",
+                            "LevelFive"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ExpandedApprovalLevel"
+                            }
+                        }
+                    },
+                    "fhaCaseAssigned": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "interestOnly": {
+                        "type": "boolean"
+                    },
+                    "baseLoanAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalLoanAmountDetails": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.TotalLoanAmountDetails"
+                    },
+                    "secondLienAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "firstLienAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "helocDrawnAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "helocLineAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "loanTerms": {
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "ThirtyYear",
+                                "TwentyFiveYear",
+                                "TwentyYear",
+                                "FifteenYear",
+                                "TenYear",
+                                "SevenYear",
+                                "FiveYear",
+                                "FortyYear",
+                                "FourYear",
+                                "TwoYear",
+                                "ThreeMonth",
+                                "SixMonth",
+                                "NineMonth",
+                                "ThreeYear",
+                                "NineYear",
+                                "EightYear",
+                                "SixYear",
+                                "OneYear",
+                                "TwelveYear",
+                                "NonStandardTerm"
+                            ],
+                            "type": "string",
+                            "x-ms-enum": {
+                                "name": "LoanTerm"
+                            }
+                        }
+                    },
+                    "nonStandardTermMonths": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productTypes": {
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "StandardProducts",
+                                "AffordableProducts",
+                                "HARP",
+                                "HeroProducts",
+                                "StudentLoanCORefi",
+                                "RenovationAndRehabilitation",
+                                "BondAndHFA",
+                                "HUDspecialty",
+                                "USDAStreamline",
+                                "ExpandedGuidelines"
+                            ],
+                            "type": "string",
+                            "x-ms-enum": {
+                                "name": "ProductType"
+                            }
+                        }
+                    },
+                    "loanType": {
+                        "enum": [
+                            "Conforming",
+                            "NonConforming",
+                            "FHA",
+                            "VA",
+                            "Conventional",
+                            "HELOC",
+                            "USDARuralHousing"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "LoanType"
+                            }
+                        }
+                    },
+                    "prepaymentPenalty": {
+                        "enum": [
+                            "None",
+                            "OneYear",
+                            "TwoYear",
+                            "ThreeYear",
+                            "FourYear",
+                            "FiveYear"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "PrepaymentPenalty"
+                            }
+                        }
+                    },
+                    "exemptFromVAFundingFee": {
+                        "type": "boolean"
+                    },
+                    "includeLOCompensationInPricing": {
+                        "enum": [
+                            "YesLenderPaid",
+                            "NoBuyerPaid",
+                            "NoLenderPaid"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "LOCompensationType"
+                            }
+                        }
+                    },
+                    "customFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.CustomField"
+                        }
+                    },
+                    "externalStatus": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "leadSource": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "interestOnlyTerm": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "calculateTotalLoanAmount": {
+                        "type": "boolean"
+                    },
+                    "assetDepletion": {
+                        "enum": [
+                            "Yes",
+                            "No"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "YesOrNo"
+                            }
+                        }
+                    },
+                    "autoDebit": {
+                        "enum": [
+                            "Yes",
+                            "No"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "YesOrNo"
+                            }
+                        }
+                    },
+                    "employeeLoan": {
+                        "enum": [
+                            "Yes",
+                            "No"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "YesOrNo"
+                            }
+                        }
+                    },
+                    "communityAffordableSecond": {
+                        "enum": [
+                            "Yes",
+                            "No"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "YesOrNo"
+                            }
+                        }
+                    },
+                    "expandedGuidelines": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.ExpandedGuidelines"
+                    },
+                    "propertiesFinanced": {
+                        "maximum": 100,
+                        "minimum": 0,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "reducedMI": {
+                        "type": "boolean"
+                    },
+                    "constructionLoanType": {
+                        "enum": [
+                            "NotApplicable",
+                            "Construction",
+                            "ConstructionToPerm"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "ConstructionLoanType"
+                            }
+                        }
+                    },
+                    "costOfImprovements": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "presentValueOfLot": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "representativeFICO": {
+                        "maximum": 999,
+                        "minimum": 0,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "loanLevelDebtToIncomeRatio": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalMonthlyQualifyingIncome": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "additionalFields": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "customerInternalId": {
+                        "type": "string"
+                    },
+                    "losLoanNumber": {
+                        "type": "string"
+                    },
+                    "partnerLoanId": {
+                        "type": "string"
+                    },
+                    "missionScore": {
+                        "enum": [
+                            "Zero",
+                            "One",
+                            "Two",
+                            "Three",
+                            "Four",
+                            "Five",
+                            "Six",
+                            "Seven",
+                            "Eight",
+                            "Nine",
+                            "Ten",
+                            "Eleven",
+                            "Twelve",
+                            "Thirteen",
+                            "Fourteen",
+                            "Fifteen",
+                            "Sixteen",
+                            "Seventeen",
+                            "Eighteen",
+                            "Nineteen",
+                            "Twenty"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "MissionScoreType"
+                            }
+                        }
+                    },
+                    "dutyToServe": {
+                        "enum": [
+                            "Yes",
+                            "No"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "YesOrNo"
+                            }
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.ParQuote": {
+                "type": "object",
+                "properties": {
+                    "parRate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "parPrice": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "parLock": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.PropertySearchCriteria": {
+                "required": [
+                    "appraisedValue",
+                    "corporateRelocation",
+                    "numberOfStories",
+                    "numberOfUnits",
+                    "occupancy",
+                    "propertyType",
+                    "salesPrice"
+                ],
+                "type": "object",
+                "properties": {
+                    "appraisedValue": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "occupancy": {
+                        "enum": [
+                            "InvestmentProperty",
+                            "PrimaryResidence",
+                            "SecondHome"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "Occupancy"
+                            }
+                        }
+                    },
+                    "propertyStreetAddress": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "county": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "maxLength": 2147483647,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "zipCode": {
+                        "pattern": "^\\d{5}(-\\d{4})?$",
+                        "type": "string"
+                    },
+                    "fipsCode": {
+                        "maxLength": 5,
+                        "minLength": 0,
+                        "type": "string"
+                    },
+                    "propertyType": {
+                        "enum": [
+                            "SingleFamily",
+                            "Condo",
+                            "ManufacturedDoubleWide",
+                            "Condotel",
+                            "Modular",
+                            "PUD",
+                            "Timeshare",
+                            "ManufacturedSingleWide",
+                            "Coop",
+                            "NonWarrantableCondo",
+                            "Townhouse",
+                            "DetachedCondo"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "PropertyType"
+                            }
+                        }
+                    },
+                    "corporateRelocation": {
+                        "type": "boolean"
+                    },
+                    "salesPrice": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "numberOfStories": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "numberOfUnits": {
+                        "enum": [
+                            "OneUnit",
+                            "TwoUnits",
+                            "ThreeUnits",
+                            "FourUnits"
+                        ],
+                        "type": "string",
+                        "items": {
+                            "x-ms-enum": {
+                                "name": "NumberOfUnits"
+                            }
+                        }
+                    },
+                    "craInformation": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.CraInformation"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.QuoteAdjustment": {
+                "type": "object",
+                "properties": {
+                    "reason": {
+                        "type": "string"
+                    },
+                    "adjustor": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.Request.PricingRequest": {
+                "required": [
+                    "borrowerInformation",
+                    "loanInformation",
+                    "propertyInformation"
+                ],
+                "type": "object",
+                "properties": {
+                    "borrowerInformation": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.BorrowerCriteria"
+                    },
+                    "propertyInformation": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.PropertySearchCriteria"
+                    },
+                    "loanInformation": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.LoanPricingCriteria"
+                    },
+                    "coBorrowerInformation": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.CoBorrowerCriteria"
+                    }
+                },
+                "additionalProperties": false,
+                "example": {
+                    "borrowerInformation": {
+                        "citizenship": "USCitizen",
+                        "firstName": "test",
+                        "lastName": "test1",
+                        "vaFirstTimeUse": true,
+                        "firstTimeHomeBuyer": false,
+                        "monthsReserves": 24,
+                        "selfEmployed": true,
+                        "waiveEscrows": false
+                    },
+                    "propertyInformation": {
+                        "appraisedValue": 225000,
+                        "occupancy": "PrimaryResidence",
+                        "propertyStreetAddress": "string",
+                        "county": "Collin",
+                        "state": "TX",
+                        "zipCode": "75024",
+                        "propertyType": "SingleFamily",
+                        "corporateRelocation": false,
+                        "salesPrice": 225000,
+                        "numberOfStories": 1,
+                        "numberOfUnits": "OneUnit"
+                    },
+                    "loanInformation": {
+                        "loanPurpose": "Purchase",
+                        "lienType": "First",
+                        "amortizationTypes": [
+                            "Fixed"
+                        ],
+                        "armFixedTerms": [
+                            "FiveYear"
+                        ],
+                        "automatedUnderwritingSystem": "NotSpecified",
+                        "borrowerPaidMI": "Yes",
+                        "buydown": "None",
+                        "cashOutAmount": 0,
+                        "desiredLockPeriod": 0,
+                        "desiredPrice": 0,
+                        "desiredRate": 0,
+                        "feesIn": "No",
+                        "expandedApprovalLevel": "NotApplicable",
+                        "interestOnly": false,
+                        "baseLoanAmount": 150000,
+                        "secondLienAmount": 0,
+                        "helocDrawnAmount": 0,
+                        "helocLineAmount": 0,
+                        "loanTerms": [
+                            "ThirtyYear",
+                            "TwentyFiveYear"
+                        ],
+                        "loanType": "Conventional",
+                        "prepaymentPenalty": "None",
+                        "exemptFromVAFundingFee": false,
+                        "includeLOCompensationInPricing": "YesLenderPaid",
+                        "calculateTotalLoanAmount": true,
+                        "expandedGuidelines": {
+                            "incomeVerificationType": "FullDoc",
+                            "housingEventType": "None",
+                            "housingEventSeasoning": "NotApplicable",
+                            "bankruptcyType": "None",
+                            "bankruptcyOutcome": "NotApplicable",
+                            "bankruptcySeasoning": "NotApplicable",
+                            "mortgageLatesx30_12Mos": 0,
+                            "mortgageLatesx30_13to24Mos": 0,
+                            "mortgageLatesx60_12Mos": 0,
+                            "mortgageLatesx60_13to24Mos": 0,
+                            "mortgageLatesx90_12Mos": 0,
+                            "mortgageLatesx90_13to24Mos": 0,
+                            "mortgageLatesx120_12Mos": 0,
+                            "mortgageLatesx120_13to24Mos": 0,
+                            "debtConsolidation": false,
+                            "uniqueProperty": false
+                        },
+                        "representativeFICO": 850,
+                        "loanLevelDebtToIncomeRatio": 18,
+                        "totalMonthlyQualifyingIncome": 9000,
+                        "customerInternalId": "OBSearch"
+                    }
+                }
+            },
+            "Marketplace.Models.Web.Models.v4.Response.ConsumerPricingSearchResponse": {
+                "type": "object",
+                "properties": {
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.EligibleConsumerProduct"
+                        }
+                    },
+                    "acquisitionCost": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalLoanAmountDetails": {
+                        "$ref": "#/components/schemas/Marketplace.Models.Web.Models.v4.TotalLoanAmountDetails"
+                    },
+                    "cltv": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "ltv": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "hcltv": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "amiPercentage": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "amiPercentageFFIEC": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "searchId": {
+                        "type": "string"
+                    },
+                    "searchTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "customerInternalId": {
+                        "type": "string"
+                    },
+                    "additionalFields": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "messages": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Marketplace.Models.Web.Models.Common.ResponseMessage"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Models.Web.Models.v4.TotalLoanAmountDetails": {
+                "required": [
+                    "totalLoanAmount",
+                    "upfrontPMI_MIP_FF_GF_Amount",
+                    "upfrontPMI_MIP_FF_GF_FinancedAmount",
+                    "upfrontPMI_MIP_FF_GF_PaidinCash",
+                    "upfrontPMI_MIP_FF_GF_Percent"
+                ],
+                "type": "object",
+                "properties": {
+                    "totalLoanAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "upfrontPMI_MIP_FF_GF_Percent": {
+                        "maximum": 100,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "upfrontPMI_MIP_FF_GF_Amount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "upfrontPMI_MIP_FF_GF_PaidinCash": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "upfrontPMI_MIP_FF_GF_FinancedAmount": {
+                        "maximum": 1000000000000000,
+                        "minimum": 0,
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Marketplace.Pricing.Business.Common.Models.AmortizationScheduleRequest": {
+                "required": [
+                    "lockPeriod",
+                    "rate"
+                ],
+                "type": "object",
+                "properties": {
+                    "rate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "lockPeriod": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "loanLevelDebtToincomeRatio": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "detail": {
+                        "type": "string"
+                    },
+                    "instance": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": {}
+            }
+        }
+    }
+}

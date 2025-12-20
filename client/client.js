@@ -1,18 +1,14 @@
-const { GraphQLClient, gql } = require("graphql-request");
-// const { extractFiles } = require("extract-files"); // ❌ breaks on Node 24
-const FormData = require("form-data");
-const { SubscriptionClient } = require("subscriptions-transport-ws");
-const WebSocket = require("ws");
-const { GRAPHQL_HTTP_URI, GRAPHQL_WS_URI } = require("./config/endpoint");
+import { GraphQLClient, gql } from "graphql-request";
+
+// For browser environment, we'll use fetch for file uploads
+const GRAPHQL_HTTP_URI =
+  process.env.NEXT_PUBLIC_GRAPHQL_HTTP_URI || "http://localhost:4000/graphql";
+const GRAPHQL_WS_URI =
+  process.env.NEXT_PUBLIC_GRAPHQL_WS_URI || "ws://localhost:4000/graphql";
 
 const graphQLClient = new GraphQLClient(GRAPHQL_HTTP_URI);
-const subscriptionClient = new SubscriptionClient(
-  GRAPHQL_WS_URI,
-  { reconnect: true },
-  WebSocket
-);
 
-// Lazy-load extract-files ESM entrypoint (Node 24 compatible)
+// Lazy-load extract-files ESM entrypoint
 let _extractFiles;
 async function getExtractFiles() {
   if (_extractFiles) return _extractFiles;
@@ -20,16 +16,26 @@ async function getExtractFiles() {
   return _extractFiles;
 }
 
+// Function to determine if a value is a file (extractable)
+function isExtractable(value) {
+  return (
+    value instanceof File ||
+    value instanceof Blob ||
+    (typeof FileList !== "undefined" && value instanceof FileList)
+  );
+}
+
 async function request(query, variables = {}) {
   const operations = { query, variables };
 
   const extractFiles = await getExtractFiles();
-  const { clone, files } = extractFiles(operations);
+  const { clone, files } = extractFiles(operations, isExtractable);
 
   if (files.size === 0) {
     return graphQLClient.request(query, variables);
   }
 
+  // Handle file uploads using multipart/form-data
   const form = new FormData();
   form.append("operations", JSON.stringify(clone));
 
@@ -51,7 +57,6 @@ async function request(query, variables = {}) {
   const response = await fetch(GRAPHQL_HTTP_URI, {
     method: "POST",
     body: form,
-    headers: form.getHeaders ? form.getHeaders() : undefined,
   });
 
   const result = await response.json();
@@ -63,33 +68,14 @@ async function request(query, variables = {}) {
   return result.data;
 }
 
+// WebSocket subscriptions (for browser, you might want to use a different library)
+// For now, we'll export a placeholder
 function subscribe({ query, variables = {}, onNext, onError, onComplete }) {
-  const observable = subscriptionClient.request({ query, variables });
-  const subscription = observable.subscribe({
-    next: (value) => {
-      if (typeof onNext === "function") onNext(value);
-    },
-    error: (error) => {
-      if (typeof onError === "function") onError(error);
-    },
-    complete: () => {
-      if (typeof onComplete === "function") onComplete();
-    },
-  });
-
-  return () => subscription.unsubscribe();
+  // WebSocket subscriptions in browser would require a different setup
+  // This is a placeholder - you may want to use apollo-client or another library
+  console.warn("WebSocket subscriptions not yet implemented for browser");
+  return () => {};
 }
 
-if (require.main === module) {
-  console.log(
-    "Client ready. Import { request, subscribe, gql } to interact with the API."
-  );
-  console.log(`HTTP endpoint: ${GRAPHQL_HTTP_URI}`);
-  console.log(`WebSocket endpoint: ${GRAPHQL_WS_URI}`);
-}
-
-module.exports = {
-  request,
-  subscribe,
-  gql,
-};
+export { request, subscribe, gql };
+export default { request, subscribe, gql };
