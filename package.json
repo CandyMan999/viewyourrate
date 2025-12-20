@@ -2,12 +2,14 @@
   "name": "view_your_rate",
   "version": "0.2.0",
   "private": true,
-  "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "nodemon server.js",
-    "dev:client": "node client/client.js",
-    "start": "node server.js"
-  },
+ 
+    "scripts": {
+      "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+      "dev:server": "nodemon server.js",
+      "dev:client": "next dev -p 3000",
+      "start": "node server.js"
+    }
+  ,
   "dependencies": {
     "@graphql-tools/schema": "^9.0.19",
     "apollo-server-express": "^3.13.0",
@@ -21,8 +23,10 @@
     "graphql-request": "^7.1.0",
     "graphql-subscriptions": "^2.0.0",
     "graphql-upload-minimal": "^1.3.0",
+    "next": "^16.1.0",
     "nodemon": "^3.1.4",
     "react": "^18.3.1",
+    "react-dom": "^19.2.3",
     "subscriptions-transport-ws": "^0.11.0",
     "ws": "^8.18.0"
   }

@@ -1,0 +1,151 @@
+/* [project]/src/components/ratesSection/RatesSection.css [app-client] (css) */
+.rates-section {
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  z-index: 1000;
+  color: #f8fafc;
+  background: #070c1aeb;
+  border-top: 1px solid #94a3b82e;
+  height: 20vh;
+  max-height: 230px;
+  padding: .75rem 1.5rem .9rem;
+  font-family: Inter, Helvetica Neue, Arial, sans-serif;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.rates-section__apply {
+  position: absolute;
+  top: -1.6rem;
+  right: 1.75rem;
+}
+
+.rates-section__apply-button {
+  transform-origin: 100% 0;
+  margin-left: 0;
+  transform: scale(.9);
+  box-shadow: 0 14px 26px #0e172a8c;
+}
+
+.rates-section__content {
+  align-items: stretch;
+  gap: 1.1rem;
+  max-width: 85%;
+  height: 100%;
+  margin: 0 auto;
+  padding-right: .25rem;
+  display: flex;
+}
+
+.rates-section__sidebar {
+  flex: 0 0 225px;
+  grid-template-rows: auto auto auto 1fr;
+  row-gap: .4rem;
+  height: 100%;
+  display: grid;
+}
+
+.rates-section__eyebrow {
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #94a3b8d1;
+  font-size: .58rem;
+}
+
+.rates-section__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.rates-section__subtitle {
+  color: #e2e8f0b8;
+  margin: 0;
+  font-size: .68rem;
+  line-height: 1.3;
+}
+
+.rates-section__actions {
+  align-items: center;
+  display: flex;
+}
+
+.rates-section__cta {
+  color: #0f172a;
+  cursor: pointer;
+  background: linear-gradient(135deg, #60a5fa, #38bdf8);
+  border: none;
+  border-radius: 999px;
+  padding: .6rem 1.4rem;
+  font-size: .85rem;
+  font-weight: 600;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 10px 20px #38bdf838;
+}
+
+.rates-section__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 26px #38bdf847;
+}
+
+.rates-section__meta {
+  color: #94a3b8e0;
+  flex-direction: column;
+  gap: .3rem;
+  margin-top: auto;
+  font-size: .6rem;
+  display: flex;
+}
+
+.rates-section__timestamp {
+  color: #e2e8f0c7;
+  align-items: center;
+  gap: .35rem;
+  font-size: .62rem;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+.rates-section__disclaimer {
+  line-height: 1.25;
+}
+
+.rates-section__cards {
+  align-items: stretch;
+  gap: .85rem;
+  height: 100%;
+  padding-bottom: .3rem;
+  display: flex;
+  overflow-x: auto;
+}
+
+.rates-section__card {
+  flex: none;
+  height: 85%;
+}
+
+@media (max-width: 1200px) {
+  .rates-section__apply {
+    right: 1.2rem;
+  }
+
+  .rates-section__content {
+    gap: .85rem;
+    padding-right: 0;
+  }
+
+  .rates-section__sidebar {
+    flex-basis: 210px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .rates-section {
+    display: none;
+  }
+}
+
+/*# sourceMappingURL=src_components_ratesSection_RatesSection_css_bad6b30c._.single.css.map*/

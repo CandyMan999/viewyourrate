@@ -1,19 +1,29 @@
-const { GraphQLClient, gql } = require('graphql-request');
-const { extractFiles } = require('extract-files');
-const FormData = require('form-data');
-const { SubscriptionClient } = require('subscriptions-transport-ws');
-const WebSocket = require('ws');
-const { GRAPHQL_HTTP_URI, GRAPHQL_WS_URI } = require('./config/endpoint');
+const { GraphQLClient, gql } = require("graphql-request");
+// const { extractFiles } = require("extract-files"); // ❌ breaks on Node 24
+const FormData = require("form-data");
+const { SubscriptionClient } = require("subscriptions-transport-ws");
+const WebSocket = require("ws");
+const { GRAPHQL_HTTP_URI, GRAPHQL_WS_URI } = require("./config/endpoint");
 
 const graphQLClient = new GraphQLClient(GRAPHQL_HTTP_URI);
 const subscriptionClient = new SubscriptionClient(
   GRAPHQL_WS_URI,
   { reconnect: true },
-  WebSocket,
+  WebSocket
 );
+
+// Lazy-load extract-files ESM entrypoint (Node 24 compatible)
+let _extractFiles;
+async function getExtractFiles() {
+  if (_extractFiles) return _extractFiles;
+  _extractFiles = (await import("extract-files/extractFiles.mjs")).default;
+  return _extractFiles;
+}
 
 async function request(query, variables = {}) {
   const operations = { query, variables };
+
+  const extractFiles = await getExtractFiles();
   const { clone, files } = extractFiles(operations);
 
   if (files.size === 0) {
@@ -21,7 +31,7 @@ async function request(query, variables = {}) {
   }
 
   const form = new FormData();
-  form.append('operations', JSON.stringify(clone));
+  form.append("operations", JSON.stringify(clone));
 
   const map = {};
   let fileIndex = 0;
@@ -29,7 +39,7 @@ async function request(query, variables = {}) {
     map[fileIndex] = paths;
     fileIndex += 1;
   });
-  form.append('map', JSON.stringify(map));
+  form.append("map", JSON.stringify(map));
 
   fileIndex = 0;
   files.forEach((paths, file) => {
@@ -39,14 +49,14 @@ async function request(query, variables = {}) {
   });
 
   const response = await fetch(GRAPHQL_HTTP_URI, {
-    method: 'POST',
+    method: "POST",
     body: form,
     headers: form.getHeaders ? form.getHeaders() : undefined,
   });
 
   const result = await response.json();
   if (result.errors) {
-    const message = result.errors.map((error) => error.message).join('; ');
+    const message = result.errors.map((error) => error.message).join("; ");
     throw new Error(message);
   }
 
@@ -57,13 +67,13 @@ function subscribe({ query, variables = {}, onNext, onError, onComplete }) {
   const observable = subscriptionClient.request({ query, variables });
   const subscription = observable.subscribe({
     next: (value) => {
-      if (typeof onNext === 'function') onNext(value);
+      if (typeof onNext === "function") onNext(value);
     },
     error: (error) => {
-      if (typeof onError === 'function') onError(error);
+      if (typeof onError === "function") onError(error);
     },
     complete: () => {
-      if (typeof onComplete === 'function') onComplete();
+      if (typeof onComplete === "function") onComplete();
     },
   });
 
@@ -71,7 +81,9 @@ function subscribe({ query, variables = {}, onNext, onError, onComplete }) {
 }
 
 if (require.main === module) {
-  console.log('Client ready. Import { request, subscribe, gql } to interact with the API.');
+  console.log(
+    "Client ready. Import { request, subscribe, gql } to interact with the API."
+  );
   console.log(`HTTP endpoint: ${GRAPHQL_HTTP_URI}`);
   console.log(`WebSocket endpoint: ${GRAPHQL_WS_URI}`);
 }

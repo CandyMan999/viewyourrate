@@ -1,0 +1,257 @@
+/* [project]/src/components/mortgageResults/MortgageOptionsPage.css [app-client] (css) */
+.mortgage-options-page {
+  color: #13223a;
+  box-sizing: border-box;
+  background: linear-gradient(#f8faff 0%, #eef2ff 100%);
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 100vh;
+  padding: 1.5rem 1.25rem 2.25rem;
+  display: flex;
+}
+
+.options-summary-bar {
+  z-index: 10;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  background: #fffffffa;
+  border-radius: 14px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  position: sticky;
+  top: 4.1rem;
+  box-shadow: 0 10px 24px #13223a14;
+}
+
+.scenario-summary-text {
+  letter-spacing: .01em;
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 700;
+}
+
+.scenario-subtext {
+  color: #4a6288;
+  margin: .25rem 0 0;
+  font-size: .85rem;
+}
+
+.edit-scenario-button {
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #1a6bff 0%, #2950ff 100%);
+  border: none;
+  border-radius: 999px;
+  padding: .55rem 1.25rem;
+  font-size: .9rem;
+  font-weight: 600;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 8px 20px #2950ff38;
+}
+
+.edit-scenario-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px #2950ff59;
+}
+
+.options-main {
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  display: flex;
+}
+
+.options-hero {
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.options-hero h1 {
+  margin-bottom: .65rem;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+}
+
+.options-hero p {
+  color: #4a6288;
+  max-width: 540px;
+  margin: 0 auto;
+  font-size: .9rem;
+  line-height: 1.45;
+}
+
+.options-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  display: grid;
+}
+
+.option-card {
+  background: #fff;
+  border-radius: 16px;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.35rem;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 18px 36px #13223a14;
+}
+
+.option-card:after {
+  content: "";
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid #2950ff14;
+  position: absolute;
+  inset: 0;
+}
+
+.option-pill {
+  color: #1a3b6d;
+  background: #1a6bff14;
+  border-radius: 999px;
+  justify-content: center;
+  align-items: center;
+  padding: .3rem .9rem;
+  font-size: .8rem;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+.option-rate-block {
+  flex-direction: column;
+  gap: .4rem;
+  display: flex;
+}
+
+.option-subtitle {
+  color: #4a6288;
+  margin: .2rem 0 0;
+  font-size: .85rem;
+}
+
+.option-rate {
+  color: #112443;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.option-apr {
+  color: #516687;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.option-metric {
+  flex-direction: column;
+  gap: .2rem;
+  display: flex;
+}
+
+.metric-label {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #7b8ca8;
+  font-size: .75rem;
+}
+
+.metric-value {
+  color: #13223a;
+  font-size: .95rem;
+  font-weight: 700;
+}
+
+.metric-hint {
+  color: #7b8ca8;
+  font-size: .75rem;
+}
+
+.option-description {
+  color: #3a4c68;
+  margin: 0;
+  font-size: .85rem;
+  line-height: 1.45;
+}
+
+.option-actions {
+  flex-direction: column;
+  gap: .6rem;
+  display: flex;
+}
+
+.option-primary-button {
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #1a6bff 0%, #4b8bff 100%);
+  border: none;
+  border-radius: 10px;
+  padding: .65rem 1.25rem;
+  font-size: .9rem;
+  font-weight: 700;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 12px 26px #1a6bff47;
+}
+
+.option-primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 36px #1a6bff59;
+}
+
+.option-secondary-button {
+  color: #1a6bff;
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.option-secondary-button:hover {
+  text-decoration: underline;
+}
+
+.options-footer-note {
+  color: #4a6288;
+  background: #ffffffe6;
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  font-size: .78rem;
+  line-height: 1.5;
+  box-shadow: 0 14px 28px #13223a14;
+}
+
+@media (min-width: 900px) {
+  .mortgage-options-page {
+    padding: 1.75rem 4vw 2.5rem;
+  }
+
+  .option-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .option-secondary-button {
+    align-self: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .options-summary-bar {
+    padding: .95rem 1.2rem;
+    top: .5rem;
+  }
+
+  .option-card {
+    padding: 1.2rem;
+  }
+}
+
+/*# sourceMappingURL=src_components_mortgageResults_MortgageOptionsPage_css_bad6b30c._.single.css.map*/

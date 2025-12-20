@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/app/globals.css"],"sourcesContent":["@import \"../src/index.css\";\n@import \"../src/App.css\";\n@import \"../src/components/component1/Component1.css\";\n@import \"../src/components/ratesSection/RatesSection.css\";\n@import \"../src/components/ratesSection/RateCard.css\";\n@import \"../src/components/MortgageResultsPage.css\";\n@import \"../src/components/rateSectionMobile/RatesSectionMobile.css\";\n@import \"../src/components/applyButton/ApplyButton.css\";\n@import \"../src/components/pricingWidget/PricingWidget.css\";\n@import \"../src/components/navbar/Navbar.css\";\n@import \"../src/components/mortgageResults/MortgageOptionsPage.css\";\n"],"names":[],"mappings":""}}]
+}
