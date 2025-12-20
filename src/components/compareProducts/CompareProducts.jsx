@@ -486,6 +486,44 @@ const compareResultsStyles = `
   .recommended-card {
     padding: 20px;
   }
+
+  .section-title {
+    font-size: 1.35rem;
+  }
+
+  .primary-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 440px) {
+  .summary-content {
+    gap: 10px;
+  }
+
+  .scenario-summary-bar {
+    position: sticky;
+    top: 56px;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .recommended-card,
+  .comparison-cards-grid,
+  .rate-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-row {
+    gap: 12px;
+  }
+
+  .comparison-table-wrapper {
+    border-radius: 14px;
+  }
 }
 `;
 

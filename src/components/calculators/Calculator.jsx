@@ -19,17 +19,15 @@ const Calculator = ({ dispatch }) => {
     <div style={calculatorStyles}>
       <div
         style={{
-          position: "absolute",
-          top: isMobile ? "5%" : "40%",
-          left: "50%",
-          transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
+          position: "relative",
           zIndex: 1,
           color: "#f0f0f0",
           textAlign: "center",
-          padding: isMobile ? "1rem" : "2rem", // Reduced padding for mobile
-          maxWidth: isMobile ? "90%" : "600px", // Adjusted width for mobile
-          width: "80%",
-          borderRadius: "10px",
+          padding: isMobile ? "1.1rem 1.25rem 1.4rem" : "2rem 2.25rem", // Reduced padding for mobile
+          maxWidth: isMobile ? "640px" : "720px", // Adjusted width for mobile
+          width: "100%",
+          margin: "0 auto",
+          borderRadius: "12px",
           background: "rgba(30, 30, 30, 0.85)",
           boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
         }}
@@ -99,12 +97,16 @@ const calculatorStyles = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "100vh",
+  minHeight: "calc(100vh - 120px)",
   width: "100%",
+  padding: isMobile ? "96px 16px 64px" : "64px 24px",
+  boxSizing: "border-box",
 };
 
 const buttonContainerStyles = {
-  marginTop: "2rem",
+  marginTop: isMobile ? "1.25rem" : "2rem",
+  display: "grid",
+  gap: isMobile ? "0.75rem" : "1rem",
 };
 
 const buttonStyles = {
@@ -112,13 +114,14 @@ const buttonStyles = {
   alignItems: "center",
   justifyContent: "space-between",
   width: "100%",
-  margin: "0.5rem 0",
+  margin: 0,
   borderRadius: "10px",
   border: "none",
   cursor: "pointer",
   background: "#007bff",
   color: "#fff",
   boxShadow: "0 2px 12px white",
+  lineHeight: 1.25,
 };
 
 const iconStyles = {
