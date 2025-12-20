@@ -8,13 +8,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.9.0",
     "cheerio": "^1.0.0",
-    "concurrently": "^9.2.1",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "express-fileupload": "^1.5.2",
     "framer-motion": "^11.9.0",
-    "nodemon": "^3.1.11",
+    "next": "^14.2.5",
     "openai": "^6.9.0",
     "react": "^18.3.1",
     "react-device-detect": "^2.2.3",
@@ -25,12 +20,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "client": "react-scripts start",
-    "server": "nodemon server.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [

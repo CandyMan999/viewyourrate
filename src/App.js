@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   useContext,
   useReducer,
@@ -30,7 +32,6 @@ import reducer from "./reducer";
 import { isMobile } from "react-device-detect";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import background from "./pics/background.jpg";
 import { FiX } from "react-icons/fi";
 import { dummyRates } from "./data/dummyRates";
 
@@ -429,7 +430,7 @@ const baseMainContainerStyles = {
   position: "relative",
   minHeight: "100vh",
   overflow: "hidden",
-  backgroundImage: `url(${background})`,
+  backgroundImage: "url(/background.jpg)",
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",

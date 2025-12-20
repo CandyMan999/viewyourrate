@@ -9,7 +9,6 @@ import {
   FaPhone,
 } from "react-icons/fa";
 import { isMobile } from "react-device-detect";
-import NMLS from "../../pics/NMLS.png";
 
 const Footer = forwardRef((props, ref) => {
   // Common styles for both mobile and desktop
@@ -162,7 +161,7 @@ const Footer = forwardRef((props, ref) => {
 
         {/* Container for NMLS logo and house SVG */}
         <div style={logosContainerStyles}>
-          <img src={NMLS} alt="NMLS" style={logoStyles} />
+          <img src="/NMLS.png" alt="NMLS" style={logoStyles} />
           <svg
             width="86"
             height="85"
