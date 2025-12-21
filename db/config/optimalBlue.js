@@ -1,23 +1,31 @@
 const {
-  OB_USERNAME,
-  OB_PASSWORD,
-  OB_SANDBOX_BASE_URL,
-  OB_PROD_BASE_URL,
   OB_ENV,
+  PRICING_PROVIDER,
+  OB_BUSINESS_CHANNEL_ID,
+  OB_ORIGINATOR_ID,
 } = process.env;
 
-if (!OB_USERNAME || !OB_PASSWORD) {
-  throw new Error("Missing Optimal Blue credentials");
+const env = OB_ENV === "production" ? "production" : "sandbox";
+const provider = (PRICING_PROVIDER || "mock").toLowerCase();
+const isMockProvider = provider === "mock";
+const hasMarketplaceConfig = Boolean(
+  OB_BUSINESS_CHANNEL_ID && OB_ORIGINATOR_ID && process.env.OB_CLIENT_ID
+);
+
+if (!isMockProvider && !hasMarketplaceConfig) {
+  throw new Error(
+    "Missing Optimal Blue Marketplace configuration. Ensure OB_CLIENT_ID/SECRET/SCOPE and OB_BUSINESS_CHANNEL_ID/OB_ORIGINATOR_ID are set."
+  );
 }
 
-const isProduction = OB_ENV === "production";
+const OPTIMAL_BLUE_CONFIG = {
+  baseUrl: "https://marketplace.optimalblue.com",
+  env,
+  isConfigured: hasMarketplaceConfig,
+  businessChannelId: OB_BUSINESS_CHANNEL_ID,
+  originatorId: OB_ORIGINATOR_ID,
+};
 
 module.exports = {
-  OPTIMAL_BLUE_CONFIG: {
-    baseUrl: isProduction ? OB_PROD_BASE_URL : OB_SANDBOX_BASE_URL,
-    authHeader:
-      "Basic " +
-      Buffer.from(`${OB_USERNAME}:${OB_PASSWORD}`).toString("base64"),
-    env: isProduction ? "production" : "sandbox",
-  },
+  OPTIMAL_BLUE_CONFIG,
 };
