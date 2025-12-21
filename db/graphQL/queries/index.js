@@ -3,13 +3,17 @@ const {
   getMortgageRatesTypeDefs,
   getMortgageRatesResolver,
 } = require("./getMortgageRatesResolver");
+const { chatBotTypeDefs, chatBotResolver } = require("./chatBotResolver");
 
-const queryTypeDefs = [pingTypeDefs, getMortgageRatesTypeDefs].filter(Boolean);
+const queryTypeDefs = [pingTypeDefs, getMortgageRatesTypeDefs, chatBotTypeDefs].filter(
+  Boolean
+);
 
 const queryResolvers = {
   Query: {
     ping: pingResolver,
     getMortgageRates: getMortgageRatesResolver,
+    chatBot: chatBotResolver,
   },
 };
 
@@ -19,4 +23,5 @@ module.exports = {
   // Export individual resolvers for direct import
   pingResolver,
   getMortgageRatesResolver,
+  chatBotResolver,
 };
