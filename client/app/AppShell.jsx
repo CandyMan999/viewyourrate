@@ -35,21 +35,25 @@ function AppShell() {
     data: null,
     error: "",
   });
+  const [prefillData, setPrefillData] = useState(null);
 
   const handleStartRefinance = (paymentValue) => {
     setSeedPayment(paymentValue || seedPayment);
     dispatch({ type: "SET_MODE", mode: "Refinance" });
+    setPrefillData(null);
     setWidgetOpen(true);
   };
 
   const handleStartPurchase = (paymentValue) => {
     setSeedPayment(paymentValue || seedPayment);
     dispatch({ type: "SET_MODE", mode: "Purchase" });
+    setPrefillData(null);
     setWidgetOpen(true);
   };
 
   const handleScenarioComplete = (scenario) => {
     setPricingState({ status: "loading", data: null, error: "" });
+    setPrefillData(scenario);
     dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenario });
     setWidgetOpen(false);
   };
@@ -59,6 +63,13 @@ function AppShell() {
   const handleResetScenario = () => {
     dispatch({ type: "RESET_SCENARIO" });
     setPricingState({ status: "idle", data: null, error: "" });
+    setPrefillData(null);
+  };
+
+  const handleOpenWithPrefill = (overrides = {}) => {
+    const baseScenario = state.scenario || {};
+    setPrefillData({ ...baseScenario, ...overrides });
+    setWidgetOpen(true);
   };
 
   useEffect(() => {
@@ -131,6 +142,7 @@ function AppShell() {
         isOpen={widgetOpen}
         mode={state.mode}
         initialPayment={seedPayment}
+        prefillData={prefillData}
         onClose={handleCloseWidget}
         onComplete={handleScenarioComplete}
       />
@@ -142,9 +154,8 @@ function AppShell() {
           pricingStatus={pricingState.status}
           pricingError={pricingState.error}
           onRetryPricing={retryPricing}
-          onEdit={() => {
-            setWidgetOpen(true);
-          }}
+          onEdit={() => handleOpenWithPrefill()}
+          onFixLtv={handleOpenWithPrefill}
           onReset={handleResetScenario}
         />
       )}

@@ -23,6 +23,15 @@ function parseCurrency(value) {
   return Number.isNaN(num) ? null : num;
 }
 
+function formatCurrency(value) {
+  if (value === null || value === undefined) return "—";
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+}
+
 const creditBands = [
   { label: "780+", value: 780 },
   { label: "760 - 779", value: 760 },
@@ -87,7 +96,7 @@ const states = [
 
 const stepOrder = ["payment", "balance", "credit", "advanced"];
 
-const PricingWidget = ({ isOpen, mode, initialPayment, onClose, onComplete }) => {
+const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onComplete }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [formData, setFormData] = useState({
@@ -107,16 +116,68 @@ const PricingWidget = ({ isOpen, mode, initialPayment, onClose, onComplete }) =>
       setShowAdvanced(false);
       setFormData((prev) => ({
         ...prev,
-        maxMonthlyPayment: initialPayment || prev.maxMonthlyPayment,
+        maxMonthlyPayment: prefillData?.maxMonthlyPayment
+          ? formatCurrencyInput(prefillData.maxMonthlyPayment.toString())
+          : initialPayment || prev.maxMonthlyPayment,
+        stateSelection: prefillData?.stateSelection ?? prev.stateSelection,
+        existingLoanBalance: prefillData?.existingLoanBalance
+          ? formatCurrencyInput(prefillData.existingLoanBalance.toString())
+          : prev.existingLoanBalance,
+        estimatedHomeValue: prefillData?.estimatedHomeValue
+          ? formatCurrencyInput(prefillData.estimatedHomeValue.toString())
+          : prev.estimatedHomeValue,
+        creditScore: prefillData?.creditScore ?? prev.creditScore,
+        cashOutAmount: prefillData?.cashOutAmount
+          ? formatCurrencyInput(prefillData.cashOutAmount.toString())
+          : prev.cashOutAmount,
+        occupancy: prefillData?.occupancy ?? prev.occupancy,
+        propertyType: prefillData?.propertyType ?? prev.propertyType,
       }));
     }
-  }, [initialPayment, isOpen]);
+  }, [initialPayment, isOpen, prefillData]);
 
   const currentStep = stepOrder[stepIndex];
 
   const updateField = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
+  const ltvInfo = useMemo(() => {
+    const homeValue = parseCurrency(formData.estimatedHomeValue);
+    const balance = parseCurrency(formData.existingLoanBalance) ?? 0;
+    const cashOut = parseCurrency(formData.cashOutAmount) ?? 0;
+
+    if (!homeValue || homeValue <= 0) {
+      return {
+        percent: null,
+        indicator: "muted",
+        insight: "Add your home value and balance to see LTV in real time.",
+        cashOutNote: cashOut > 0 ? "Cash-out raises your LTV because it increases the loan amount." : "",
+      };
+    }
+
+    const ltvPercent = ((balance + cashOut) / homeValue) * 100;
+    let indicator = "green";
+    let insight = "This is a strong LTV range. Pricing is typically better below 80%.";
+
+    if (ltvPercent > 90) {
+      indicator = "red";
+      insight =
+        "Your LTV is high. Options may be limited or more expensive. Reducing cash-out or increasing home value/down payment can help.";
+    } else if (ltvPercent > 80) {
+      indicator = "amber";
+      insight = "Your LTV is above 80%. Many lenders add mortgage insurance or adjust pricing in this range.";
+    }
+
+    const cashOutNote =
+      cashOut > 0
+        ? "Cash-out increases your loan amount, which raises LTV. That can reduce available options."
+        : "";
+
+    return { percent: ltvPercent, indicator, insight, cashOutNote };
+  }, [formData.cashOutAmount, formData.estimatedHomeValue, formData.existingLoanBalance]);
+
+  const ltvChipValue = ltvInfo.percent === null ? "—" : `${ltvInfo.percent.toFixed(0)}%`;
 
   const canContinue = useMemo(() => {
     if (mode === "Purchase") {
@@ -400,6 +461,28 @@ const PricingWidget = ({ isOpen, mode, initialPayment, onClose, onComplete }) =>
                 />
               ))}
             </div>
+
+            {mode !== "Purchase" && currentStep === "balance" && (
+              <div className={styles.ltvBar}>
+                <div className={styles.chipRow}>
+                  <div className={`${styles.chip} ${styles[`chip-${ltvInfo.indicator}`]}`}>
+                    <span className={styles.chipLabel}>LTV</span>
+                    <span className={styles.chipValue}>{ltvChipValue}</span>
+                  </div>
+                  {parseCurrency(formData.cashOutAmount) ? (
+                    <div className={styles.chip}>
+                      <span className={styles.chipLabel}>Cash-out</span>
+                      <span className={styles.chipValue}>{formatCurrency(parseCurrency(formData.cashOutAmount))}</span>
+                    </div>
+                  ) : null}
+                </div>
+                <div className={styles.ltvInsight}>
+                  <p className={styles.insightTitle}>LTV insight</p>
+                  <p className={styles.insightText}>{ltvInfo.insight}</p>
+                  {ltvInfo.cashOutNote && <p className={styles.insightText}>{ltvInfo.cashOutNote}</p>}
+                </div>
+              </div>
+            )}
 
             <AnimatePresence mode="wait">
               <motion.div

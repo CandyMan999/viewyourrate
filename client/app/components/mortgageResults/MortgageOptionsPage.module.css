@@ -39,6 +39,128 @@
   gap: 8px;
 }
 
+.summaryBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.summaryText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+}
+
+.summaryLabel {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+  color: #8da2b5;
+}
+
+.summaryValue {
+  margin: 0;
+  color: #e9edf3;
+  font-weight: 600;
+}
+
+.chipRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.chipLabel {
+  color: #9eafc2;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chipValue {
+  color: #f5f7fa;
+  font-weight: 700;
+}
+
+.chip-green {
+  border-color: rgba(75, 225, 195, 0.5);
+  background: rgba(75, 225, 195, 0.12);
+}
+
+.chip-amber {
+  border-color: rgba(255, 201, 107, 0.6);
+  background: rgba(255, 201, 107, 0.12);
+}
+
+.chip-red {
+  border-color: rgba(255, 128, 128, 0.6);
+  background: rgba(255, 128, 128, 0.12);
+}
+
+.chip-muted {
+  opacity: 0.7;
+}
+
+.insightBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.insightTitle {
+  margin: 0 0 6px;
+  color: #cfd6dd;
+  font-weight: 700;
+}
+
+.insightText {
+  margin: 0;
+  color: #dfe6ed;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.tinyButton {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f5f7fa;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.tinyButton:hover {
+  border-color: rgba(75, 225, 195, 0.6);
+  background: rgba(75, 225, 195, 0.12);
+}
+
 .primaryButton,
 .secondaryButton {
   border: none;

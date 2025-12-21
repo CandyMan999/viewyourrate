@@ -10,6 +10,11 @@ function formatCurrency(value) {
   return value.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }
 
+function formatPercent(value) {
+  if (value === null || value === undefined) return "—";
+  return `${Number(value).toFixed(0)}%`;
+}
+
 const detailFields = [
   { key: "aprLabel", label: "APR" },
   { key: "rateLabel", label: "Rate" },
@@ -22,6 +27,7 @@ const MortgageOptionsPage = ({
   pricingStatus,
   pricingError,
   onEdit,
+  onFixLtv,
   onReset,
   onRetryPricing,
 }) => {
@@ -43,6 +49,46 @@ const MortgageOptionsPage = ({
         : null,
     ].filter(Boolean);
     return parts.join(", ");
+  }, [scenario]);
+
+  const ltvData = useMemo(() => {
+    const homeValue = scenario?.estimatedHomeValue;
+    if (!homeValue) {
+      return { percent: null, indicator: "muted", insight: "", fixLabel: "", fixOverrides: null };
+    }
+
+    const loanAmount = (scenario?.existingLoanBalance || 0) + (scenario?.cashOutAmount || 0);
+    const ltvPercent = (loanAmount / homeValue) * 100;
+    let indicator = "green";
+    let insight = "This is a strong LTV range. Pricing is typically better below 80%.";
+    let fixLabel = "";
+    let fixOverrides = null;
+
+    if (ltvPercent > 90) {
+      indicator = "red";
+      insight =
+        "Your LTV is high. Options may be limited or more expensive. Reducing cash-out or increasing home value/down payment can help.";
+      const targetLoan = homeValue * 0.8;
+      const suggestedCashOut = Math.max(0, Math.round(targetLoan - (scenario?.existingLoanBalance || 0)));
+      fixLabel = "Explore 80% LTV";
+      fixOverrides = { cashOutAmount: suggestedCashOut };
+    } else if (ltvPercent > 80) {
+      indicator = "amber";
+      insight =
+        "Your LTV is above 80%. Many lenders add mortgage insurance or adjust pricing in this range.";
+      if (scenario?.cashOutAmount) {
+        fixLabel = "Lower cash-out";
+        const reducedCashOut = Math.max(0, Math.round(scenario.cashOutAmount * 0.5));
+        fixOverrides = { cashOutAmount: reducedCashOut };
+      }
+    }
+
+    const cashOutNote =
+      scenario?.cashOutAmount && scenario.cashOutAmount > 0
+        ? "Cash-out increases your loan amount, which raises LTV. That can reduce available options."
+        : "";
+
+    return { percent: ltvPercent, indicator, insight, cashOutNote, fixLabel, fixOverrides };
   }, [scenario]);
 
   const formattedOptions = useMemo(() => {
@@ -253,6 +299,44 @@ const MortgageOptionsPage = ({
           </button>
         </div>
       </div>
+
+      <div className={styles.summaryBar}>
+        <div className={styles.summaryText}>
+          <p className={styles.summaryLabel}>Scenario summary</p>
+          <p className={styles.summaryValue}>{scenarioSummary || "We’ll fill this in as you add details."}</p>
+        </div>
+        <div className={styles.chipRow}>
+          <div className={`${styles.chip} ${styles[`chip-${ltvData.indicator}`]}`}>
+            <span className={styles.chipLabel}>LTV</span>
+            <span className={styles.chipValue}>{formatPercent(ltvData.percent)}</span>
+          </div>
+          {scenario?.cashOutAmount ? (
+            <div className={styles.chip}>
+              <span className={styles.chipLabel}>Cash-out</span>
+              <span className={styles.chipValue}>{formatCurrency(scenario.cashOutAmount)}</span>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      {ltvData.insight && (
+        <div className={styles.insightBox}>
+          <div>
+            <p className={styles.insightTitle}>LTV insight</p>
+            <p className={styles.insightText}>{ltvData.insight}</p>
+            {ltvData.cashOutNote && <p className={styles.insightText}>{ltvData.cashOutNote}</p>}
+          </div>
+          {ltvData.fixLabel && onFixLtv && ltvData.fixOverrides && (
+            <button
+              type="button"
+              className={styles.tinyButton}
+              onClick={() => onFixLtv(ltvData.fixOverrides)}
+            >
+              {ltvData.fixLabel}
+            </button>
+          )}
+        </div>
+      )}
 
       {renderBody()}
     </section>

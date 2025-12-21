@@ -67,6 +67,84 @@
   background: linear-gradient(90deg, #4be1c3, #2faad8);
 }
 
+.ltvBar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.chipRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.chipLabel {
+  color: #9eafc2;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chipValue {
+  color: #f5f7fa;
+  font-weight: 700;
+}
+
+.chip-green {
+  border-color: rgba(75, 225, 195, 0.5);
+  background: rgba(75, 225, 195, 0.12);
+}
+
+.chip-amber {
+  border-color: rgba(255, 201, 107, 0.6);
+  background: rgba(255, 201, 107, 0.12);
+}
+
+.chip-red {
+  border-color: rgba(255, 128, 128, 0.6);
+  background: rgba(255, 128, 128, 0.12);
+}
+
+.chip-muted {
+  opacity: 0.7;
+}
+
+.ltvInsight {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.insightTitle {
+  margin: 0;
+  color: #cfd6dd;
+  font-weight: 700;
+}
+
+.insightText {
+  margin: 0;
+  color: #dfe6ed;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
 .stepCard {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.04);
