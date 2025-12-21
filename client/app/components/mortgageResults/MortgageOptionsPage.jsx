@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import ChatExplainPill from "./ChatExplainPill";
 import styles from "./MortgageOptionsPage.module.css";
 
 function formatCurrency(value) {
@@ -12,7 +13,7 @@ function formatCurrency(value) {
 const detailFields = [
   { key: "apr", label: "APR" },
   { key: "rate", label: "Rate" },
-  { key: "points", label: "Points / Credits" },
+  { key: "points", label: "Points / Credits", explainable: true },
 ];
 
 const explanations = [
@@ -23,6 +24,18 @@ const explanations = [
 
 const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
   const [openDetail, setOpenDetail] = useState(null);
+
+  const scenarioSummary = useMemo(() => {
+    if (!scenario) return "";
+    const parts = [
+      scenario.quoteType ? `${scenario.quoteType.toLowerCase()} scenario` : null,
+      scenario.maxMonthlyPayment ? `target monthly payment ${formatCurrency(scenario.maxMonthlyPayment)}` : null,
+      scenario.stateSelection ? `property state ${scenario.stateSelection}` : null,
+      scenario.creditScore ? `credit score around ${scenario.creditScore}+` : null,
+      scenario.existingLoanBalance ? `current balance ${formatCurrency(scenario.existingLoanBalance)}` : null,
+    ].filter(Boolean);
+    return parts.join(", ");
+  }, [scenario]);
 
   const options = useMemo(() => {
     const basePayment = scenario?.maxMonthlyPayment || 2500;
@@ -54,12 +67,38 @@ const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
     ];
   }, [scenario]);
 
+  const headerPrompt = useMemo(
+    () =>
+      `Explain what "Refi matches for ${formatCurrency(
+        scenario?.maxMonthlyPayment || 2500
+      )}" means and how the options align to the borrower's payment target. Keep it concise.`,
+    [scenario?.maxMonthlyPayment]
+  );
+
+  const pointsPrompt = useMemo(
+    () =>
+      `Explain what Points / Credits mean on a mortgage option and how they impact closing costs versus monthly payment. Keep the answer short and practical.`,
+    []
+  );
+
+  const optionPrompt = (option) =>
+    `Explain why the "${option.label}" choice shows ${option.rate} rate, ${option.apr} APR, and ${option.points} for a ${
+      scenario?.quoteType || "refinance"
+    } borrower with ${scenarioSummary || "the provided scenario"}. Keep the summary to a couple sentences.`;
+
   return (
     <section className={styles.wrapper}>
       <div className={styles.header}>
         <div>
           <p className={styles.kicker}>Options aligned to your payment</p>
-          <h2 className={styles.title}>Refi matches for ${scenario?.maxMonthlyPayment?.toLocaleString("en-US") || "your target"}</h2>
+          <div className={styles.titleRow}>
+            <h2 className={styles.title}>Refi matches for ${scenario?.maxMonthlyPayment?.toLocaleString("en-US") || "your target"}</h2>
+            <ChatExplainPill
+              prompt={headerPrompt}
+              context={scenarioSummary}
+              className={styles.inlinePill}
+            />
+          </div>
         </div>
         <div className={styles.actions}>
           <button className={styles.secondaryButton} onClick={onReset}>
@@ -80,24 +119,34 @@ const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05, duration: 0.2 }}
           >
-            <p className={styles.label}>{option.label}</p>
+            <div className={styles.cardTop}>
+              <p className={styles.label}>{option.label}</p>
+              <ChatExplainPill
+                prompt={optionPrompt(option)}
+                context={scenarioSummary}
+                className={styles.inlinePill}
+              />
+            </div>
             <div className={styles.paymentRow}>
               <span className={styles.paymentValue}>{formatCurrency(option.payment)}</span>
               <span className={styles.paymentCaption}>Estimated monthly</span>
             </div>
             <div className={styles.metrics}>
-              <div className={styles.metric}>
-                <p className={styles.metricLabel}>APR</p>
-                <p className={styles.metricValue}>{option.apr}</p>
-              </div>
-              <div className={styles.metric}>
-                <p className={styles.metricLabel}>Rate</p>
-                <p className={styles.metricValue}>{option.rate}</p>
-              </div>
-              <div className={styles.metric}>
-                <p className={styles.metricLabel}>Points / Credits</p>
-                <p className={styles.metricValue}>{option.points}</p>
-              </div>
+              {detailFields.map((field) => (
+                <div key={field.key} className={styles.metric}>
+                  <div className={styles.metricLabelRow}>
+                    <p className={styles.metricLabel}>{field.label}</p>
+                    {field.explainable && (
+                      <ChatExplainPill
+                        prompt={pointsPrompt}
+                        context={scenarioSummary}
+                        className={styles.tinyPill}
+                      />
+                    )}
+                  </div>
+                  <p className={styles.metricValue}>{option[field.key]}</p>
+                </div>
+              ))}
             </div>
             <p className={styles.explanation}>{explanations[index]}</p>
 

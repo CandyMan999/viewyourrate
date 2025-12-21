@@ -3,3 +3,4 @@ export {
   GET_MORTGAGE_RATES_QUERY,
   default as getMortgageRatesQuery,
 } from "./getMortgageRatesQuery";
+export { CHAT_BOT_QUERY, default as chatBotQuery } from "./chatBotQuery";
