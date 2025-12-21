@@ -22,6 +22,7 @@ const getRefiPricingTypeDefs = /* GraphQL */ `
     occupancy: String
     propertyType: String
     termYears: Int
+    timestamp: String
   }
 
   type PricingOption {
