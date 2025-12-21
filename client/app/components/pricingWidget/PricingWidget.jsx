@@ -87,7 +87,7 @@ const states = [
 
 const stepOrder = ["payment", "balance", "credit", "advanced"];
 
-const PricingWidget = ({ isOpen, mode, initialPayment, onClose, onComplete }) => {
+const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onComplete }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [formData, setFormData] = useState({
@@ -107,10 +107,25 @@ const PricingWidget = ({ isOpen, mode, initialPayment, onClose, onComplete }) =>
       setShowAdvanced(false);
       setFormData((prev) => ({
         ...prev,
-        maxMonthlyPayment: initialPayment || prev.maxMonthlyPayment,
+        maxMonthlyPayment: prefillData?.maxMonthlyPayment
+          ? formatCurrencyInput(prefillData.maxMonthlyPayment.toString())
+          : initialPayment || prev.maxMonthlyPayment,
+        stateSelection: prefillData?.stateSelection ?? prev.stateSelection,
+        existingLoanBalance: prefillData?.existingLoanBalance
+          ? formatCurrencyInput(prefillData.existingLoanBalance.toString())
+          : prev.existingLoanBalance,
+        estimatedHomeValue: prefillData?.estimatedHomeValue
+          ? formatCurrencyInput(prefillData.estimatedHomeValue.toString())
+          : prev.estimatedHomeValue,
+        creditScore: prefillData?.creditScore ?? prev.creditScore,
+        cashOutAmount: prefillData?.cashOutAmount
+          ? formatCurrencyInput(prefillData.cashOutAmount.toString())
+          : prev.cashOutAmount,
+        occupancy: prefillData?.occupancy ?? prev.occupancy,
+        propertyType: prefillData?.propertyType ?? prev.propertyType,
       }));
     }
-  }, [initialPayment, isOpen]);
+  }, [initialPayment, isOpen, prefillData]);
 
   const currentStep = stepOrder[stepIndex];
 
