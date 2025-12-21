@@ -1,0 +1,134 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panel {
+  background: rgba(20, 24, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 760px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  color: #8da2b5;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 42px);
+  margin: 0 0 12px;
+  color: #f7f9fb;
+  line-height: 1.15;
+}
+
+.subtitle {
+  color: #cfd6dd;
+  margin: 0 0 28px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #e6ecf3;
+}
+
+.inputRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.paymentInput {
+  width: 100%;
+  background: #0f1218;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 18px;
+  color: #f7f9fb;
+  font-size: 18px;
+  letter-spacing: 0.01em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.paymentInput:focus {
+  outline: none;
+  border-color: #5ed4c4;
+  box-shadow: 0 0 0 4px rgba(94, 212, 196, 0.15);
+}
+
+.helper {
+  color: #8da2b5;
+  font-size: 13px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.primaryCta,
+.secondaryCta {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+
+.primaryCta {
+  background: linear-gradient(135deg, #4be1c3, #2faad8);
+  color: #0c1016;
+  box-shadow: 0 14px 30px rgba(75, 225, 195, 0.25);
+}
+
+.primaryCta:hover {
+  transform: translateY(-2px);
+}
+
+.secondaryCta {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f4f7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.secondaryActive {
+  border-color: #4be1c3;
+  color: #4be1c3;
+}
+
+.secondaryCta:hover {
+  transform: translateY(-1px);
+}
+
+.note {
+  margin-top: 10px;
+  color: #8da2b5;
+  font-size: 13px;
+}
+
+@media (min-width: 640px) {
+  .actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .panel {
+    padding: 40px 32px;
+  }
+}

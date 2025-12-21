@@ -1,0 +1,164 @@
+.wrapper {
+  margin: 40px auto 0;
+  max-width: 1100px;
+  padding: 0 4px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  color: #8da2b5;
+  margin: 0 0 6px;
+}
+
+.title {
+  margin: 0;
+  color: #f5f7fa;
+  font-size: clamp(22px, 3vw, 30px);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.primaryButton,
+.secondaryButton {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #4be1c3, #2faad8);
+  color: #0c1016;
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e9edf3;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.3);
+}
+
+.label {
+  color: #cfd6dd;
+  margin: 0 0 8px;
+}
+
+.paymentRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.paymentValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f7f9fb;
+}
+
+.paymentCaption {
+  color: #9eafc2;
+  font-size: 13px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.metric {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.metricLabel {
+  margin: 0 0 6px;
+  color: #9eafc2;
+  font-size: 13px;
+}
+
+.metricValue {
+  margin: 0;
+  color: #f5f7fa;
+  font-weight: 700;
+}
+
+.explanation {
+  margin: 0 0 10px;
+  color: #cfd6dd;
+  line-height: 1.5;
+}
+
+.details {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 10px;
+}
+
+.detailToggle {
+  background: none;
+  border: none;
+  color: #4be1c3;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.detailContent {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  color: #cfd6dd;
+}
+
+.detailLabel {
+  color: #9eafc2;
+}
+
+@media (max-width: 640px) {
+  .actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
