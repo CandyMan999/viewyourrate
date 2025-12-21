@@ -53,15 +53,22 @@ const getRefiPricingTypeDefs = /* GraphQL */ `
 `;
 
 const getRefiPricingResolver = async (_, { input }) => {
-  const pricing = await getPricing(input);
+  try {
+    const pricing = await getPricing(input);
 
-  return {
-    provider: pricing.provider || process.env.PRICING_PROVIDER || "mock",
-    generatedAt: pricing.generatedAt || new Date().toISOString(),
-    options: pricing.options || [],
-    searchId: pricing.searchId || null,
-    env: pricing.env || OPTIMAL_BLUE_CONFIG.env,
-  };
+    return {
+      provider: pricing.provider || process.env.PRICING_PROVIDER || "mock",
+      generatedAt: pricing.generatedAt || new Date().toISOString(),
+      options: pricing.options || [],
+      searchId: pricing.searchId || null,
+      env: pricing.env || OPTIMAL_BLUE_CONFIG.env,
+    };
+  } catch (error) {
+    console.error("getRefiPricing error:", error);
+    throw new Error(
+      error?.message || "We could not load pricing right now. Please try again."
+    );
+  }
 };
 
 module.exports = {

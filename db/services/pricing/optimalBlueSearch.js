@@ -158,16 +158,30 @@ function pickHeadlineOptions(products, scenario) {
 async function runBestExSearch(scenario) {
   const payload = mapScenarioToRequest(scenario);
   const client = getOptimalBlueClient();
-  const { data } = await client.post("/bestexsearch", payload);
-  const options = pickHeadlineOptions(data?.products || [], scenario);
 
-  return {
-    provider: "optimalBlue",
-    generatedAt: new Date().toISOString(),
-    searchId: data?.searchId,
-    options,
-    env: OPTIMAL_BLUE_CONFIG.env,
-  };
+  try {
+    const { data } = await client.post("/bestexsearch", payload);
+    const options = pickHeadlineOptions(data?.products || [], scenario);
+
+    return {
+      provider: "optimalBlue",
+      generatedAt: new Date().toISOString(),
+      searchId: data?.searchId,
+      options,
+      env: OPTIMAL_BLUE_CONFIG.env,
+    };
+  } catch (error) {
+    const status = error.response?.status;
+    const apiMessage =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      "Unknown pricing error";
+
+    throw new Error(
+      `Optimal Blue request failed${status ? ` (status ${status})` : ""}: ${apiMessage}`
+    );
+  }
 }
 
 module.exports = { runBestExSearch };
