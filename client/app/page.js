@@ -1,7 +1,7 @@
 "use client";
 
-import App from "../src/App";
+import AppShell from "./AppShell";
 
 export default function HomePage() {
-  return <App />;
+  return <AppShell />;
 }
