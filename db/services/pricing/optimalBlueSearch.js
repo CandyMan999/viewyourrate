@@ -1,4 +1,4 @@
-const { getOptimalBlueClient } = require("../../lib/optimalBlueClient");
+const { optimalBlueClient } = require("../../lib/optimalBlueClient");
 const { OPTIMAL_BLUE_CONFIG } = require("../../config/optimalBlue");
 const {
   calculateMonthlyPayment,
@@ -157,10 +157,10 @@ function pickHeadlineOptions(products, scenario) {
 
 async function runBestExSearch(scenario) {
   const payload = mapScenarioToRequest(scenario);
-  const client = getOptimalBlueClient();
+  const path = `/api/businesschannels/${OPTIMAL_BLUE_CONFIG.businessChannelId}/originators/${OPTIMAL_BLUE_CONFIG.originatorId}/bestexsearch`;
 
   try {
-    const { data } = await client.post("/bestexsearch", payload);
+    const { data } = await optimalBlueClient.post(path, payload);
     const options = pickHeadlineOptions(data?.products || [], scenario);
 
     return {
