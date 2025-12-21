@@ -4,16 +4,24 @@ const {
   getMortgageRatesResolver,
 } = require("./getMortgageRatesResolver");
 const { chatBotTypeDefs, chatBotResolver } = require("./chatBotResolver");
+const {
+  getRefiPricingTypeDefs,
+  getRefiPricingResolver,
+} = require("./getRefiPricingResolver");
 
-const queryTypeDefs = [pingTypeDefs, getMortgageRatesTypeDefs, chatBotTypeDefs].filter(
-  Boolean
-);
+const queryTypeDefs = [
+  pingTypeDefs,
+  getMortgageRatesTypeDefs,
+  chatBotTypeDefs,
+  getRefiPricingTypeDefs,
+].filter(Boolean);
 
 const queryResolvers = {
   Query: {
     ping: pingResolver,
     getMortgageRates: getMortgageRatesResolver,
     chatBot: chatBotResolver,
+    getRefiPricing: getRefiPricingResolver,
   },
 };
 
@@ -24,4 +32,5 @@ module.exports = {
   pingResolver,
   getMortgageRatesResolver,
   chatBotResolver,
+  getRefiPricingResolver,
 };

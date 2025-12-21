@@ -11,61 +11,64 @@ function formatCurrency(value) {
 }
 
 const detailFields = [
-  { key: "apr", label: "APR" },
-  { key: "rate", label: "Rate" },
-  { key: "points", label: "Points / Credits", explainable: true },
+  { key: "aprLabel", label: "APR" },
+  { key: "rateLabel", label: "Rate" },
+  { key: "pointsLabel", label: "Points / Credits", explainable: true },
 ];
 
-const explanations = [
-  "To get closest to your payment target, we used lender credits. That can raise the rate slightly but lowers upfront costs.",
-  "This option balances APR and payment for people who want stability without overpaying in points.",
-  "This option uses points to reduce rate/APR. Higher upfront cost but lower total interest over time.",
-];
-
-const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
+const MortgageOptionsPage = ({
+  scenario,
+  pricing,
+  pricingStatus,
+  pricingError,
+  onEdit,
+  onReset,
+  onRetryPricing,
+}) => {
   const [openDetail, setOpenDetail] = useState(null);
+  const isLoading = pricingStatus === "loading";
+  const hasError = pricingStatus === "error";
 
   const scenarioSummary = useMemo(() => {
     if (!scenario) return "";
     const parts = [
       scenario.quoteType ? `${scenario.quoteType.toLowerCase()} scenario` : null,
-      scenario.maxMonthlyPayment ? `target monthly payment ${formatCurrency(scenario.maxMonthlyPayment)}` : null,
+      scenario.maxMonthlyPayment
+        ? `target monthly payment ${formatCurrency(scenario.maxMonthlyPayment)}`
+        : null,
       scenario.stateSelection ? `property state ${scenario.stateSelection}` : null,
       scenario.creditScore ? `credit score around ${scenario.creditScore}+` : null,
-      scenario.existingLoanBalance ? `current balance ${formatCurrency(scenario.existingLoanBalance)}` : null,
+      scenario.existingLoanBalance
+        ? `current balance ${formatCurrency(scenario.existingLoanBalance)}`
+        : null,
     ].filter(Boolean);
     return parts.join(", ");
   }, [scenario]);
 
-  const options = useMemo(() => {
-    const basePayment = scenario?.maxMonthlyPayment || 2500;
-    return [
-      {
-        id: "lowest-payment",
-        label: "Lowest payment today",
-        payment: Math.round(basePayment * 0.95),
-        apr: "6.52%",
-        rate: "6.25%",
-        points: "+0.6 credits",
-      },
-      {
-        id: "balanced",
-        label: "Balanced",
-        payment: Math.round(basePayment),
-        apr: "6.27%",
-        rate: "6.10%",
-        points: "0 points",
-      },
-      {
-        id: "long-term",
-        label: "Lowest long-term cost",
-        payment: Math.round(basePayment * 1.02),
-        apr: "5.98%",
-        rate: "5.90%",
-        points: "-1.0 points",
-      },
-    ];
-  }, [scenario]);
+  const formattedOptions = useMemo(() => {
+    if (!pricing?.options?.length) return [];
+
+    return pricing.options.map((option) => {
+      const payment = option.monthlyPayment || scenario?.maxMonthlyPayment || 0;
+      const formatPercent = (value) =>
+        value === null || value === undefined ? "—" : `${Number(value).toFixed(3)}%`;
+
+      const formatPoints = (value) => {
+        if (value === null || value === undefined) return "—";
+        if (value === 0) return "0 points";
+        const absolute = Math.abs(value).toFixed(3);
+        return value > 0 ? `${absolute} points` : `${absolute} credits`;
+      };
+
+      return {
+        ...option,
+        payment,
+        aprLabel: formatPercent(option.apr ?? option.rate),
+        rateLabel: formatPercent(option.rate),
+        pointsLabel: formatPoints(option.points),
+      };
+    });
+  }, [pricing?.options, scenario?.maxMonthlyPayment]);
 
   const headerPrompt = useMemo(
     () =>
@@ -82,36 +85,51 @@ const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
   );
 
   const optionPrompt = (option) =>
-    `Explain why the "${option.label}" choice shows ${option.rate} rate, ${option.apr} APR, and ${option.points} for a ${
+    `Explain why the "${option.label}" choice shows a ${option.rateLabel} rate, ${option.aprLabel} APR, and ${option.pointsLabel} for a ${
       scenario?.quoteType || "refinance"
     } borrower with ${scenarioSummary || "the provided scenario"}. Keep the summary to a couple sentences.`;
 
-  return (
-    <section className={styles.wrapper}>
-      <div className={styles.header}>
-        <div>
-          <p className={styles.kicker}>Options aligned to your payment</p>
-          <div className={styles.titleRow}>
-            <h2 className={styles.title}>Refi matches for ${scenario?.maxMonthlyPayment?.toLocaleString("en-US") || "your target"}</h2>
-            <ChatExplainPill
-              prompt={headerPrompt}
-              context={scenarioSummary}
-              className={styles.inlinePill}
-            />
-          </div>
+  const renderBody = () => {
+    if (isLoading) {
+      return (
+        <div className={styles.cardGrid}>
+          {[0, 1, 2].map((index) => (
+            <div key={index} className={`${styles.card} ${styles.loadingCard}`}>
+              <div className={styles.loadingBar} />
+              <div className={styles.loadingBar} />
+              <div className={styles.loadingBar} />
+            </div>
+          ))}
         </div>
-        <div className={styles.actions}>
-          <button className={styles.secondaryButton} onClick={onReset}>
-            Start over
-          </button>
-          <button className={styles.primaryButton} onClick={onEdit}>
-            Adjust inputs
-          </button>
-        </div>
-      </div>
+      );
+    }
 
+    if (hasError) {
+      return (
+        <div className={styles.errorBox}>
+          <p className={styles.errorTitle}>We couldn’t load pricing right now.</p>
+          <p className={styles.errorText}>{pricingError || "Please try again."}</p>
+          <button type="button" className={styles.primaryButton} onClick={onRetryPricing}>
+            Try again
+          </button>
+        </div>
+      );
+    }
+
+    if (!formattedOptions.length) {
+      return (
+        <div className={styles.errorBox}>
+          <p className={styles.errorTitle}>No options available yet</p>
+          <p className={styles.errorText}>
+            We’ll show your top three refinance matches as soon as pricing is ready.
+          </p>
+        </div>
+      );
+    }
+
+    return (
       <div className={styles.cardGrid}>
-        {options.map((option, index) => (
+        {formattedOptions.map((option, index) => (
           <motion.div
             key={option.id}
             className={styles.card}
@@ -148,7 +166,7 @@ const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
                 </div>
               ))}
             </div>
-            <p className={styles.explanation}>{explanations[index]}</p>
+            {option.explanation && <p className={styles.explanation}>{option.explanation}</p>}
 
             <div className={styles.details}>
               <button
@@ -182,6 +200,26 @@ const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
                         {scenario?.creditScore ? `${scenario.creditScore}+` : "—"}
                       </span>
                     </div>
+                    {option.lockPeriodDays && (
+                      <div className={styles.detailRow}>
+                        <span className={styles.detailLabel}>Lock period</span>
+                        <span className={styles.detailValue}>{option.lockPeriodDays} days</span>
+                      </div>
+                    )}
+                    {option.cashToClose !== undefined && option.cashToClose !== null && (
+                      <div className={styles.detailRow}>
+                        <span className={styles.detailLabel}>Points / credits impact</span>
+                        <span className={styles.detailValue}>
+                          {formatCurrency(option.cashToClose)}
+                        </span>
+                      </div>
+                    )}
+                    {option.productName && (
+                      <div className={styles.detailRow}>
+                        <span className={styles.detailLabel}>Product</span>
+                        <span className={styles.detailValue}>{option.productName}</span>
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -189,6 +227,34 @@ const MortgageOptionsPage = ({ scenario, onEdit, onReset }) => {
           </motion.div>
         ))}
       </div>
+    );
+  };
+
+  return (
+    <section className={styles.wrapper}>
+      <div className={styles.header}>
+        <div>
+          <p className={styles.kicker}>Options aligned to your payment</p>
+          <div className={styles.titleRow}>
+            <h2 className={styles.title}>Refi matches for ${scenario?.maxMonthlyPayment?.toLocaleString("en-US") || "your target"}</h2>
+            <ChatExplainPill
+              prompt={headerPrompt}
+              context={scenarioSummary}
+              className={styles.inlinePill}
+            />
+          </div>
+        </div>
+        <div className={styles.actions}>
+          <button className={styles.secondaryButton} onClick={onReset}>
+            Start over
+          </button>
+          <button className={styles.primaryButton} onClick={onEdit}>
+            Adjust inputs
+          </button>
+        </div>
+      </div>
+
+      {renderBody()}
     </section>
   );
 };

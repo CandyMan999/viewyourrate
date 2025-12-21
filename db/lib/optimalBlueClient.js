@@ -1,24 +1,40 @@
 const axios = require("axios");
 const { OPTIMAL_BLUE_CONFIG } = require("../config/optimalBlue");
 
-const optimalBlueClient = axios.create({
-  baseURL: OPTIMAL_BLUE_CONFIG.baseUrl,
-  headers: {
-    Authorization: OPTIMAL_BLUE_CONFIG.authHeader,
-    "Content-Type": "application/json",
-  },
-  timeout: 15000,
-});
+let cachedClient;
 
-optimalBlueClient.interceptors.request.use((config) => {
-  if (process.env.NODE_ENV !== "production") {
-    console.log(
-      `[OB:${OPTIMAL_BLUE_CONFIG.env}]`,
-      config.method?.toUpperCase(),
-      config.url
+function getOptimalBlueClient() {
+  if (!OPTIMAL_BLUE_CONFIG.isConfigured) {
+    throw new Error(
+      "Optimal Blue client is not configured. Check OB_USERNAME, OB_PASSWORD, and base URLs."
     );
   }
-  return config;
-});
 
-module.exports = { optimalBlueClient };
+  if (!cachedClient) {
+    cachedClient = axios.create({
+      baseURL: OPTIMAL_BLUE_CONFIG.baseUrl,
+      headers: {
+        Authorization: OPTIMAL_BLUE_CONFIG.authHeader,
+        "Content-Type": "application/json",
+        "api-version": "4",
+        "Cache-Control": "no-cache",
+      },
+      timeout: 20000,
+    });
+
+    cachedClient.interceptors.request.use((config) => {
+      if (process.env.NODE_ENV !== "production") {
+        console.log(
+          `[OB:${OPTIMAL_BLUE_CONFIG.env}]`,
+          config.method?.toUpperCase(),
+          config.url
+        );
+      }
+      return config;
+    });
+  }
+
+  return cachedClient;
+}
+
+module.exports = { getOptimalBlueClient };
