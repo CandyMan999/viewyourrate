@@ -462,7 +462,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               ))}
             </div>
 
-            {mode !== "Purchase" && (
+            {mode !== "Purchase" && currentStep === "balance" && (
               <div className={styles.ltvBar}>
                 <div className={styles.chipRow}>
                   <div className={`${styles.chip} ${styles[`chip-${ltvInfo.indicator}`]}`}>
