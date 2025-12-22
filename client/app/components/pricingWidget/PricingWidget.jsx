@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import ExplainPill from "./ExplainPill";
 import styles from "./PricingWidget.module.css";
 
 function formatCurrencyInput(value) {
@@ -174,6 +175,12 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
     }
   }, [initialPayment, isOpen, prefillData]);
 
+  useEffect(() => {
+    if (!isOpen && prefillData?.downPaymentPercent) {
+      setDownPaymentMode("percent");
+    }
+  }, [isOpen, prefillData]);
+
   const stepOrder = mode === "Purchase" ? purchaseStepOrder : refiStepOrder;
   const currentStep = stepOrder[stepIndex] || stepOrder[0];
 
@@ -245,6 +252,29 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
     }
   }, [currentStep, formData, mode]);
 
+  const purchasePriceValue = parseCurrency(formData.purchasePrice) ?? 0;
+  const computedDownPaymentPercent =
+    downPaymentMode === "percent"
+      ? Number(formData.downPaymentPercent) || 0
+      : purchasePriceValue > 0
+        ? (((parseCurrency(formData.downPayment) ?? 0) / purchasePriceValue) * 100 || 0)
+        : 0;
+  const computedDownPaymentAmount =
+    downPaymentMode === "amount"
+      ? parseCurrency(formData.downPayment) ?? 0
+      : (purchasePriceValue * (Number(formData.downPaymentPercent) || 0)) / 100;
+
+  useEffect(() => {
+    if (mode !== "Purchase") return;
+    if (downPaymentMode !== "percent") return;
+    if (!purchasePriceValue) return;
+    const amount = (purchasePriceValue * (Number(formData.downPaymentPercent) || 0)) / 100;
+    setFormData((prev) => ({
+      ...prev,
+      downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
+    }));
+  }, [downPaymentMode, formData.downPaymentPercent, mode, purchasePriceValue]);
+
   const handleNext = () => {
     if (stepIndex < stepOrder.length - 1) {
       setStepIndex((prev) => prev + 1);
@@ -260,16 +290,9 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
   const handleSubmit = () => {
     if (mode === "Purchase") {
       const purchasePrice = parseCurrency(formData.purchasePrice) ?? 0;
-      const downPaymentAmount =
-        downPaymentMode === "amount"
-          ? parseCurrency(formData.downPayment)
-          : null;
+      const downPaymentAmount = computedDownPaymentAmount || null;
       const downPaymentPercentValue =
-        downPaymentMode === "percent"
-          ? Number.parseFloat(formData.downPaymentPercent) || null
-          : purchasePrice && downPaymentAmount
-            ? (downPaymentAmount / purchasePrice) * 100
-            : null;
+        computedDownPaymentPercent || (purchasePrice ? (computedDownPaymentAmount / purchasePrice) * 100 : null);
 
       const scenario = {
         quoteType: "Purchase",
@@ -323,6 +346,9 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="purchasePrice">
                 Home price
               </label>
+              <ExplainPill
+                prompt="Explain how the home price influences loan amount and monthly payment for a purchase."
+              />
               <input
                 id="purchasePrice"
                 className={styles.input}
@@ -337,6 +363,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                 <label className={styles.label} htmlFor="downPayment">
                   Down payment {downPaymentMode === "percent" ? "(%)" : ""}
                 </label>
+                <ExplainPill prompt="Explain how down payment percent and amount affect loan-to-value and pricing." />
                 <div className={styles.segmented}>
                   <button
                     type="button"
@@ -354,6 +381,27 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                   </button>
                 </div>
               </div>
+              <div className={styles.sliderRow}>
+                <input
+                  type="range"
+                  min="0"
+                  max="60"
+                  step="1"
+                  className={styles.slider}
+                  value={Math.min(Math.max(computedDownPaymentPercent || 0, 0), 60)}
+                  onChange={(e) => {
+                    const percentValue = Number(e.target.value) || 0;
+                    const amount = purchasePriceValue ? (purchasePriceValue * percentValue) / 100 : 0;
+                    setDownPaymentMode("percent");
+                    setFormData((prev) => ({
+                      ...prev,
+                      downPaymentPercent: percentValue.toString(),
+                      downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
+                    }));
+                  }}
+                />
+                <span className={styles.sliderValue}>{computedDownPaymentPercent.toFixed(0)}% down</span>
+              </div>
               {downPaymentMode === "amount" ? (
                 <input
                   id="downPayment"
@@ -361,7 +409,18 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                   inputMode="numeric"
                   placeholder="$90,000"
                   value={formData.downPayment}
-                  onChange={(e) => updateField("downPayment", formatCurrencyInput(e.target.value))}
+                  onChange={(e) => {
+                    const formatted = formatCurrencyInput(e.target.value);
+                    const amount = parseCurrency(formatted) ?? 0;
+                    const percent =
+                      purchasePriceValue > 0 ? (amount / purchasePriceValue) * 100 : null;
+                    setDownPaymentMode("amount");
+                    setFormData((prev) => ({
+                      ...prev,
+                      downPayment: formatted,
+                      downPaymentPercent: percent ? percent.toFixed(0) : prev.downPaymentPercent,
+                    }));
+                  }}
                 />
               ) : (
                 <input
@@ -371,7 +430,17 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                   inputMode="decimal"
                   placeholder="20"
                   value={formData.downPaymentPercent}
-                  onChange={(e) => updateField("downPaymentPercent", e.target.value)}
+                  onChange={(e) => {
+                    const percentValue = e.target.value;
+                    const percentNumber = Number(percentValue) || 0;
+                    const amount = purchasePriceValue ? (purchasePriceValue * percentNumber) / 100 : 0;
+                    setDownPaymentMode("percent");
+                    setFormData((prev) => ({
+                      ...prev,
+                      downPaymentPercent: percentValue,
+                      downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
+                    }));
+                  }}
                 />
               )}
             </div>
@@ -379,6 +448,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="stateSelection">
                 Property state
               </label>
+              <ExplainPill prompt="Explain why lenders need the property state for pricing a purchase." />
               <select
                 id="stateSelection"
                 className={styles.select}
@@ -397,6 +467,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="propertyZip">
                 ZIP code (optional)
               </label>
+              <ExplainPill prompt="Explain how ZIP code can influence mortgage options and estimates." />
               <input
                 id="propertyZip"
                 className={styles.input}
@@ -444,6 +515,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                 />
                 Veteran / eligible for VA
               </label>
+              <ExplainPill prompt="Explain how first-time buyer or veteran eligibility can impact mortgage programs and pricing." />
             </div>
           </div>
         );
@@ -456,6 +528,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="occupancy">
                 Occupancy
               </label>
+              <ExplainPill prompt="Explain the difference between primary residence, second home, and investment occupancy for mortgages." />
               <select
                 id="occupancy"
                 className={styles.select}
@@ -471,6 +544,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="propertyType">
                 Property type
               </label>
+              <ExplainPill prompt="Explain how property type (single-family, condo, townhome, multi-family) affects mortgage options." />
               <select
                 id="propertyType"
                 className={styles.select}
@@ -483,22 +557,25 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                 <option value="MultiFamily">Multi-family</option>
               </select>
             </div>
-            <div className={styles.fieldGroup}>
-              <label className={styles.label} htmlFor="propertyUnits">
-                Number of units
-              </label>
-              <select
-                id="propertyUnits"
-                className={styles.select}
-                value={formData.propertyUnits}
-                onChange={(e) => updateField("propertyUnits", e.target.value)}
-              >
-                <option value="OneUnit">1 unit</option>
-                <option value="TwoUnits">2 units</option>
-                <option value="ThreeUnits">3 units</option>
-                <option value="FourUnits">4 units</option>
-              </select>
-            </div>
+            {formData.propertyType === "MultiFamily" && (
+              <div className={styles.fieldGroup}>
+                <label className={styles.label} htmlFor="propertyUnits">
+                  Number of units
+                </label>
+                <ExplainPill prompt="Explain how the number of units in a multi-family property influences financing requirements." />
+                <select
+                  id="propertyUnits"
+                  className={styles.select}
+                  value={formData.propertyUnits}
+                  onChange={(e) => updateField("propertyUnits", e.target.value)}
+                >
+                  <option value="OneUnit">1 unit</option>
+                  <option value="TwoUnits">2 units</option>
+                  <option value="ThreeUnits">3 units</option>
+                  <option value="FourUnits">4 units</option>
+                </select>
+              </div>
+            )}
           </div>
         );
       case "loan":
@@ -511,6 +588,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="loanProgram">
                 Program
               </label>
+              <ExplainPill prompt="Explain the differences between Conventional, FHA, VA, and USDA mortgage programs." />
               <select
                 id="loanProgram"
                 className={styles.select}
@@ -527,6 +605,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="termYears">
                 Term
               </label>
+              <ExplainPill prompt="Explain how choosing a 30, 20, or 15 year term affects payment and interest." />
               <select
                 id="termYears"
                 className={styles.select}
@@ -542,6 +621,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="rateStructure">
                 Rate structure
               </label>
+              <ExplainPill prompt="Explain the difference between fixed-rate and adjustable-rate mortgages for buyers." />
               <select
                 id="rateStructure"
                 className={styles.select}
@@ -557,6 +637,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                 <label className={styles.label} htmlFor="armTerm">
                   ARM fixed term
                 </label>
+                <ExplainPill prompt="Explain what a 5/6 or 7/6 ARM fixed term means for mortgage payments and adjustments." />
                 <select
                   id="armTerm"
                   className={styles.select}
@@ -573,6 +654,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="desiredLockPeriodDays">
                 Desired lock period (days, optional)
               </label>
+              <ExplainPill prompt="Explain what a rate lock period is and how it impacts a purchase loan." />
               <input
                 id="desiredLockPeriodDays"
                 className={styles.input}
@@ -713,13 +795,14 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                   className={styles.advancedFields}
                 >
                   <div className={styles.fieldGroup}>
-                    <label className={styles.label} htmlFor="cashOutAmount">
-                      Cash-out amount (optional)
-                    </label>
-                    <input
-                      id="cashOutAmount"
-                      className={styles.input}
-                      type="text"
+                  <label className={styles.label} htmlFor="cashOutAmount">
+                    Cash-out amount (optional)
+                  </label>
+                  <ExplainPill prompt="Explain what cash-out means on a refinance and how it changes the loan amount." />
+                  <input
+                    id="cashOutAmount"
+                    className={styles.input}
+                    type="text"
                       inputMode="numeric"
                       placeholder="$20,000"
                       value={formData.cashOutAmount}
@@ -732,33 +815,35 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                     <label className={styles.label} htmlFor="occupancy">
                       Occupancy
                     </label>
+                    <ExplainPill prompt="Explain how occupancy (primary, second home, investment) affects refinance pricing." />
                     <select
-                      id="occupancy"
-                      className={styles.select}
-                      value={formData.occupancy}
-                      onChange={(e) => updateField("occupancy", e.target.value)}
-                    >
-                      <option value="">Primary</option>
-                      <option value="Second Home">Second Home</option>
-                      <option value="Investment">Investment</option>
-                    </select>
-                  </div>
-                  <div className={styles.fieldGroup}>
+                    id="occupancy"
+                    className={styles.select}
+                    value={formData.occupancy}
+                    onChange={(e) => updateField("occupancy", e.target.value)}
+                  >
+                    <option value="PrimaryResidence">Primary</option>
+                    <option value="Second Home">Second Home</option>
+                    <option value="Investment">Investment</option>
+                  </select>
+                </div>
+                <div className={styles.fieldGroup}>
                     <label className={styles.label} htmlFor="propertyType">
                       Property type
                     </label>
+                    <ExplainPill prompt="Explain how property type (single family, condo, townhome, multi-unit) affects refinance options." />
                     <select
-                      id="propertyType"
-                      className={styles.select}
-                      value={formData.propertyType}
-                      onChange={(e) => updateField("propertyType", e.target.value)}
-                    >
-                      <option value="">Single Family</option>
-                      <option value="Condo">Condo</option>
-                      <option value="Townhome">Townhome</option>
-                      <option value="Multi-unit">Multi-unit</option>
-                    </select>
-                  </div>
+                    id="propertyType"
+                    className={styles.select}
+                    value={formData.propertyType}
+                    onChange={(e) => updateField("propertyType", e.target.value)}
+                  >
+                    <option value="Single Family">Single Family</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Townhome">Townhome</option>
+                    <option value="Multi-unit">Multi-unit</option>
+                  </select>
+                </div>
                 </motion.div>
               )}
             </AnimatePresence>

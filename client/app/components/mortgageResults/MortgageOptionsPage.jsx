@@ -397,7 +397,7 @@ const MortgageOptionsPage = ({
         </div>
       </div>
 
-      {ltvData.insight && (
+      {scenario?.quoteType !== "Purchase" && ltvData.insight && (
         <div className={styles.insightBox}>
           <div>
             <p className={styles.insightTitle}>LTV insight</p>
