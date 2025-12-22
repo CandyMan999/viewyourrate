@@ -4,16 +4,36 @@ const {
   HEADLINE_OPTIONS,
 } = require("./helpers");
 
-function mockPricingResponse(scenario) {
+function mockPricingResponse(scenario, { kind = "refi" } = {}) {
   const {
     existingLoanBalance = 400000,
     termYears = 30,
     maxMonthlyPayment,
+    purchasePrice,
+    downPayment,
+    downPaymentPercent,
   } = scenario;
+
+  const inferredKind =
+    kind ||
+    (scenario?.quoteType && scenario.quoteType.toLowerCase() === "purchase"
+      ? "purchase"
+      : "refi");
+
+  const price = Number(purchasePrice) || 0;
+  const downPaymentAmount = Number.isFinite(Number(downPayment))
+    ? Number(downPayment)
+    : price && Number.isFinite(Number(downPaymentPercent))
+      ? (price * Number(downPaymentPercent)) / 100
+      : 0;
+  const purchaseLoanAmount = Math.max(price - downPaymentAmount, 0);
 
   // Baseline assumptions
   const baseRate = 6.5;
-  const loanAmount = existingLoanBalance;
+  const loanAmount =
+    inferredKind === "purchase" && purchaseLoanAmount > 0
+      ? purchaseLoanAmount
+      : existingLoanBalance;
 
   const buildOption = ({ label, rateOffset, points }) => {
     const rate = baseRate + rateOffset;
@@ -52,8 +72,15 @@ function mockPricingResponse(scenario) {
     }),
   ];
 
-  // Optional: sort by closeness to target payment
-  if (maxMonthlyPayment) {
+  // Optional: sort for payment-first experience
+  if (inferredKind === "purchase") {
+    options.sort((a, b) => {
+      if (a.monthlyPayment === b.monthlyPayment) {
+        return a.apr - b.apr;
+      }
+      return a.monthlyPayment - b.monthlyPayment;
+    });
+  } else if (maxMonthlyPayment) {
     options.sort(
       (a, b) =>
         Math.abs(a.monthlyPayment - maxMonthlyPayment) -

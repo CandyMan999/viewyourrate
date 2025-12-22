@@ -4,8 +4,12 @@ import React, { useEffect, useMemo, useReducer, useState } from "react";
 import HeroSection from "./components/HeroSection";
 import PricingWidget from "./components/pricingWidget/PricingWidget";
 import MortgageOptionsPage from "./components/mortgageResults/MortgageOptionsPage";
+import PurchaseOptionsPage from "./components/purchaseResults/PurchaseOptionsPage";
 import { request } from "../client";
-import { GET_REFI_PRICING_QUERY } from "../graphQL/queries";
+import {
+  GET_PURCHASE_PRICING_QUERY,
+  GET_REFI_PRICING_QUERY,
+} from "../graphQL/queries";
 import styles from "./AppShell.module.css";
 
 const initialState = {
@@ -79,13 +83,18 @@ function AppShell() {
     const fetchPricing = async () => {
       setPricingState({ status: "loading", data: null, error: "" });
       try {
-        const data = await request(GET_REFI_PRICING_QUERY, {
+        const activeQuery =
+          state.mode === "Purchase"
+            ? GET_PURCHASE_PRICING_QUERY
+            : GET_REFI_PRICING_QUERY;
+        const data = await request(activeQuery, {
           input: state.scenario,
         });
         if (cancelled) return;
+        const response = data?.getPurchasePricing || data?.getRefiPricing || null;
         setPricingState({
           status: "success",
-          data: data?.getRefiPricing || null,
+          data: response,
           error: "",
         });
       } catch (error) {
@@ -107,14 +116,22 @@ function AppShell() {
 
   const activeScenario = useMemo(() => state.scenario, [state.scenario]);
 
+  useEffect(() => {
+    if (activeScenario && widgetOpen) {
+      setWidgetOpen(false);
+    }
+  }, [activeScenario, widgetOpen]);
+
   const retryPricing = () => {
     if (activeScenario) {
       setPricingState({ status: "loading", data: null, error: "" });
-      request(GET_REFI_PRICING_QUERY, { input: activeScenario })
+      const activeQuery =
+        state.mode === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
+      request(activeQuery, { input: activeScenario })
         .then((data) =>
           setPricingState({
             status: "success",
-            data: data?.getRefiPricing || null,
+            data: data?.getPurchasePricing || data?.getRefiPricing || null,
             error: "",
           })
         )
@@ -138,27 +155,40 @@ function AppShell() {
         activeMode={state.mode}
       />
 
-      <PricingWidget
-        isOpen={widgetOpen}
-        mode={state.mode}
-        initialPayment={seedPayment}
-        prefillData={prefillData}
-        onClose={handleCloseWidget}
-        onComplete={handleScenarioComplete}
-      />
-
-      {activeScenario && (
-        <MortgageOptionsPage
-          scenario={activeScenario}
-          pricing={pricingState.data}
-          pricingStatus={pricingState.status}
-          pricingError={pricingState.error}
-          onRetryPricing={retryPricing}
-          onEdit={() => handleOpenWithPrefill()}
-          onFixLtv={handleOpenWithPrefill}
-          onReset={handleResetScenario}
+      {(!activeScenario || widgetOpen) && (
+        <PricingWidget
+          isOpen={widgetOpen && !activeScenario}
+          mode={state.mode}
+          initialPayment={seedPayment}
+          prefillData={prefillData}
+          onClose={handleCloseWidget}
+          onComplete={handleScenarioComplete}
         />
       )}
+
+      {activeScenario &&
+        (state.mode === "Purchase" ? (
+          <PurchaseOptionsPage
+            scenario={activeScenario}
+            pricing={pricingState.data}
+            pricingStatus={pricingState.status}
+            pricingError={pricingState.error}
+            onRetryPricing={retryPricing}
+            onEdit={() => handleOpenWithPrefill()}
+            onReset={handleResetScenario}
+          />
+        ) : (
+          <MortgageOptionsPage
+            scenario={activeScenario}
+            pricing={pricingState.data}
+            pricingStatus={pricingState.status}
+            pricingError={pricingState.error}
+            onRetryPricing={retryPricing}
+            onEdit={() => handleOpenWithPrefill()}
+            onFixLtv={handleOpenWithPrefill}
+            onReset={handleResetScenario}
+          />
+        ))}
     </div>
   );
 }

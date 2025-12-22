@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import ExplainPill from "./ExplainPill";
 import styles from "./PricingWidget.module.css";
 
 function formatCurrencyInput(value) {
@@ -94,11 +95,13 @@ const states = [
   "WY",
 ];
 
-const stepOrder = ["payment", "balance", "credit", "advanced"];
+const refiStepOrder = ["payment", "balance", "credit", "advanced"];
+const purchaseStepOrder = ["price", "borrower", "property", "loan"];
 
 const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onComplete }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [downPaymentMode, setDownPaymentMode] = useState("amount");
   const [formData, setFormData] = useState({
     maxMonthlyPayment: "",
     stateSelection: "",
@@ -106,14 +109,33 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
     estimatedHomeValue: "",
     creditScore: "",
     cashOutAmount: "",
-    occupancy: "",
-    propertyType: "",
+    occupancy: "PrimaryResidence",
+    propertyType: "SingleFamily",
+    purchasePrice: "",
+    downPayment: "",
+    downPaymentPercent: "",
+    propertyZip: "",
+    propertyUnits: "OneUnit",
+    loanProgram: "Conventional",
+    termYears: 30,
+    rateStructure: "Fixed",
+    armTerm: "",
+    firstTimeBuyer: false,
+    veteranStatus: false,
+    desiredLockPeriodDays: "",
   });
 
   useEffect(() => {
     if (isOpen) {
       setStepIndex(0);
       setShowAdvanced(false);
+      setDownPaymentMode(
+        prefillData?.downPaymentPercent
+          ? "percent"
+          : prefillData?.downPayment
+            ? "amount"
+            : "amount"
+      );
       setFormData((prev) => ({
         ...prev,
         maxMonthlyPayment: prefillData?.maxMonthlyPayment
@@ -132,11 +154,35 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
           : prev.cashOutAmount,
         occupancy: prefillData?.occupancy ?? prev.occupancy,
         propertyType: prefillData?.propertyType ?? prev.propertyType,
+        purchasePrice: prefillData?.purchasePrice
+          ? formatCurrencyInput(prefillData.purchasePrice.toString())
+          : prev.purchasePrice,
+        downPayment: prefillData?.downPayment
+          ? formatCurrencyInput(prefillData.downPayment.toString())
+          : prev.downPayment,
+        downPaymentPercent: prefillData?.downPaymentPercent?.toString() ?? prev.downPaymentPercent,
+        propertyZip: prefillData?.propertyZip ?? prev.propertyZip,
+        propertyUnits: prefillData?.propertyUnits ?? prev.propertyUnits,
+        loanProgram: prefillData?.loanProgram ?? prev.loanProgram,
+        termYears: prefillData?.termYears ?? prev.termYears,
+        rateStructure: prefillData?.rateStructure ?? prev.rateStructure,
+        armTerm: prefillData?.armTerm ?? prev.armTerm,
+        firstTimeBuyer: prefillData?.firstTimeBuyer ?? prev.firstTimeBuyer,
+        veteranStatus: prefillData?.veteranStatus ?? prev.veteranStatus,
+        desiredLockPeriodDays:
+          prefillData?.desiredLockPeriodDays?.toString() ?? prev.desiredLockPeriodDays,
       }));
     }
   }, [initialPayment, isOpen, prefillData]);
 
-  const currentStep = stepOrder[stepIndex];
+  useEffect(() => {
+    if (!isOpen && prefillData?.downPaymentPercent) {
+      setDownPaymentMode("percent");
+    }
+  }, [isOpen, prefillData]);
+
+  const stepOrder = mode === "Purchase" ? purchaseStepOrder : refiStepOrder;
+  const currentStep = stepOrder[stepIndex] || stepOrder[0];
 
   const updateField = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -181,7 +227,17 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
 
   const canContinue = useMemo(() => {
     if (mode === "Purchase") {
-      return true;
+      switch (currentStep) {
+        case "price":
+          return Boolean(formData.purchasePrice && formData.stateSelection);
+        case "borrower":
+          return Boolean(formData.creditScore);
+        case "property":
+          return Boolean(formData.occupancy);
+        case "loan":
+        default:
+          return Boolean(formData.loanProgram);
+      }
     }
     switch (currentStep) {
       case "payment":
@@ -196,6 +252,38 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
     }
   }, [currentStep, formData, mode]);
 
+  const purchasePriceValue = parseCurrency(formData.purchasePrice) ?? 0;
+  const computedDownPaymentPercent =
+    downPaymentMode === "percent"
+      ? Number(formData.downPaymentPercent) || 0
+      : purchasePriceValue > 0
+        ? (((parseCurrency(formData.downPayment) ?? 0) / purchasePriceValue) * 100 || 0)
+        : 0;
+  const computedDownPaymentAmount =
+    downPaymentMode === "amount"
+      ? parseCurrency(formData.downPayment) ?? 0
+      : (purchasePriceValue * (Number(formData.downPaymentPercent) || 0)) / 100;
+
+  useEffect(() => {
+    if (mode !== "Purchase") return;
+    if (!purchasePriceValue) return;
+
+    if (downPaymentMode === "percent") {
+      const amount = (purchasePriceValue * (Number(formData.downPaymentPercent) || 0)) / 100;
+      setFormData((prev) => ({
+        ...prev,
+        downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
+      }));
+    } else {
+      const amount = parseCurrency(formData.downPayment) ?? 0;
+      const percent = purchasePriceValue > 0 ? (amount / purchasePriceValue) * 100 : 0;
+      setFormData((prev) => ({
+        ...prev,
+        downPaymentPercent: percent ? percent.toFixed(0) : prev.downPaymentPercent,
+      }));
+    }
+  }, [downPaymentMode, formData.downPayment, formData.downPaymentPercent, mode, purchasePriceValue]);
+
   const handleNext = () => {
     if (stepIndex < stepOrder.length - 1) {
       setStepIndex((prev) => prev + 1);
@@ -209,8 +297,40 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
   };
 
   const handleSubmit = () => {
+    if (mode === "Purchase") {
+      const purchasePrice = parseCurrency(formData.purchasePrice) ?? 0;
+      const downPaymentAmount = computedDownPaymentAmount || null;
+      const downPaymentPercentValue =
+        computedDownPaymentPercent || (purchasePrice ? (computedDownPaymentAmount / purchasePrice) * 100 : null);
+
+      const scenario = {
+        quoteType: "Purchase",
+        purchasePrice,
+        downPayment: downPaymentMode === "amount" ? downPaymentAmount : null,
+        downPaymentPercent: downPaymentPercentValue,
+        creditScore: formData.creditScore,
+        stateSelection: formData.stateSelection,
+        propertyZip: formData.propertyZip || null,
+        occupancy: formData.occupancy || "PrimaryResidence",
+        propertyType: formData.propertyType || "SingleFamily",
+        propertyUnits: formData.propertyUnits || "OneUnit",
+        loanProgram: formData.loanProgram || "Conventional",
+        termYears: Number(formData.termYears) || 30,
+        rateStructure: formData.rateStructure || "Fixed",
+        armTerm: formData.armTerm || null,
+        firstTimeBuyer: Boolean(formData.firstTimeBuyer),
+        veteranStatus: Boolean(formData.veteranStatus),
+        desiredLockPeriodDays: formData.desiredLockPeriodDays
+          ? Number(formData.desiredLockPeriodDays)
+          : null,
+        timestamp: new Date().toISOString(),
+      };
+      onComplete?.(scenario);
+      return;
+    }
+
     const scenario = {
-      quoteType: mode === "Purchase" ? "Purchase" : "Refinance",
+      quoteType: "Refinance",
       maxMonthlyPayment: parseCurrency(formData.maxMonthlyPayment) ?? 0,
       stateSelection: formData.stateSelection,
       existingLoanBalance: parseCurrency(formData.existingLoanBalance),
@@ -224,29 +344,359 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
     onComplete?.(scenario);
   };
 
+  const renderPurchaseStep = () => {
+    switch (currentStep) {
+      case "price":
+        return (
+          <div className={styles.stepCard}>
+            <p className={styles.stepTitle}>What’s the home price and down payment?</p>
+            <p className={styles.stepSubtitle}>We only collect the essentials to price your purchase.</p>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="purchasePrice">
+                Home price
+              </label>
+              <ExplainPill
+                prompt="Explain how the home price influences loan amount and monthly payment for a purchase."
+              />
+              <input
+                id="purchasePrice"
+                className={styles.input}
+                inputMode="numeric"
+                placeholder="$450,000"
+                value={formData.purchasePrice}
+                onChange={(e) => updateField("purchasePrice", formatCurrencyInput(e.target.value))}
+              />
+            </div>
+            <div className={styles.fieldGroup}>
+              <div className={styles.splitRow}>
+                <label className={styles.label} htmlFor="downPayment">
+                  Down payment {downPaymentMode === "percent" ? "(%)" : ""}
+                </label>
+                <ExplainPill prompt="Explain how down payment percent and amount affect loan-to-value and pricing." />
+                <div className={styles.segmented}>
+                  <button
+                    type="button"
+                    className={`${styles.segment} ${downPaymentMode === "amount" ? styles.segmentActive : ""}`}
+                    onClick={() => setDownPaymentMode("amount")}
+                  >
+                    $
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.segment} ${downPaymentMode === "percent" ? styles.segmentActive : ""}`}
+                    onClick={() => setDownPaymentMode("percent")}
+                  >
+                    %
+                  </button>
+                </div>
+              </div>
+              <div className={styles.sliderRow}>
+                <input
+                  type="range"
+                  min="0"
+                  max="60"
+                  step="1"
+                  className={styles.slider}
+                  value={Math.min(Math.max(computedDownPaymentPercent || 0, 0), 60)}
+                  onChange={(e) => {
+                    const percentValue = Number(e.target.value) || 0;
+                    const amount = purchasePriceValue ? (purchasePriceValue * percentValue) / 100 : 0;
+                    setDownPaymentMode("percent");
+                    setFormData((prev) => ({
+                      ...prev,
+                      downPaymentPercent: percentValue.toString(),
+                      downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
+                    }));
+                  }}
+                />
+                <div className={styles.dpChip}>
+                  <span aria-hidden>✅</span>
+                  <span>{computedDownPaymentPercent.toFixed(0)}% down</span>
+                  <span>{formatCurrency(computedDownPaymentAmount || 0)}</span>
+                </div>
+              </div>
+              {downPaymentMode === "amount" ? (
+                <input
+                  id="downPayment"
+                  className={styles.input}
+                  inputMode="numeric"
+                  placeholder="$90,000"
+                  value={formData.downPayment}
+                  onChange={(e) => {
+                    const formatted = formatCurrencyInput(e.target.value);
+                    const amount = parseCurrency(formatted) ?? 0;
+                    const percent =
+                      purchasePriceValue > 0 ? (amount / purchasePriceValue) * 100 : null;
+                    setDownPaymentMode("amount");
+                    setFormData((prev) => ({
+                      ...prev,
+                      downPayment: formatted,
+                      downPaymentPercent: percent ? percent.toFixed(0) : prev.downPaymentPercent,
+                    }));
+                  }}
+                />
+              ) : (
+                <input
+                  id="downPaymentPercent"
+                  className={styles.input}
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="20"
+                  value={formData.downPaymentPercent}
+                  onChange={(e) => {
+                    const percentValue = e.target.value;
+                    const percentNumber = Number(percentValue) || 0;
+                    const amount = purchasePriceValue ? (purchasePriceValue * percentNumber) / 100 : 0;
+                    setDownPaymentMode("percent");
+                    setFormData((prev) => ({
+                      ...prev,
+                      downPaymentPercent: percentValue,
+                      downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
+                    }));
+                  }}
+                />
+              )}
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="stateSelection">
+                Property state
+              </label>
+              <ExplainPill prompt="Explain why lenders need the property state for pricing a purchase." />
+              <select
+                id="stateSelection"
+                className={styles.select}
+                value={formData.stateSelection}
+                onChange={(e) => updateField("stateSelection", e.target.value)}
+              >
+                <option value="">Select state</option>
+                {states.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="propertyZip">
+                ZIP code (optional)
+              </label>
+              <ExplainPill prompt="Explain how ZIP code can influence mortgage options and estimates." />
+              <input
+                id="propertyZip"
+                className={styles.input}
+                inputMode="numeric"
+                placeholder="94103"
+                value={formData.propertyZip}
+                onChange={(e) => updateField("propertyZip", e.target.value)}
+              />
+            </div>
+          </div>
+        );
+      case "borrower":
+        return (
+          <div className={styles.stepCard}>
+            <p className={styles.stepTitle}>About you</p>
+            <p className={styles.stepSubtitle}>A quick snapshot helps tailor pricing.</p>
+            <div className={styles.bandGrid}>
+              {creditBands.map((band) => (
+                <button
+                  key={band.value}
+                  type="button"
+                  className={`${styles.bandButton} ${
+                    formData.creditScore === band.value ? styles.bandActive : ""
+                  }`}
+                  onClick={() => updateField("creditScore", band.value)}
+                >
+                  {band.label}
+                </button>
+              ))}
+            </div>
+            <div className={styles.checkboxRow}>
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={formData.firstTimeBuyer}
+                  onChange={(e) => updateField("firstTimeBuyer", e.target.checked)}
+                />
+                First-time homebuyer
+              </label>
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={formData.veteranStatus}
+                  onChange={(e) => updateField("veteranStatus", e.target.checked)}
+                />
+                Veteran / eligible for VA
+              </label>
+              <ExplainPill prompt="Explain how first-time buyer or veteran eligibility can impact mortgage programs and pricing." />
+            </div>
+          </div>
+        );
+      case "property":
+        return (
+          <div className={styles.stepCard}>
+            <p className={styles.stepTitle}>Property details</p>
+            <p className={styles.stepSubtitle}>Just occupancy and type for now.</p>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="occupancy">
+                Occupancy
+              </label>
+              <ExplainPill prompt="Explain the difference between primary residence, second home, and investment occupancy for mortgages." />
+              <select
+                id="occupancy"
+                className={styles.select}
+                value={formData.occupancy}
+                onChange={(e) => updateField("occupancy", e.target.value)}
+              >
+                <option value="PrimaryResidence">Primary residence</option>
+                <option value="SecondHome">Second home</option>
+                <option value="InvestmentProperty">Investment</option>
+              </select>
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="propertyType">
+                Property type
+              </label>
+              <ExplainPill prompt="Explain how property type (single-family, condo, townhome, multi-family) affects mortgage options." />
+              <select
+                id="propertyType"
+                className={styles.select}
+                value={formData.propertyType}
+                onChange={(e) => updateField("propertyType", e.target.value)}
+              >
+                <option value="SingleFamily">Single-family</option>
+                <option value="Condo">Condo</option>
+                <option value="Townhome">Townhome</option>
+                <option value="MultiFamily">Multi-family</option>
+              </select>
+            </div>
+            {formData.propertyType === "MultiFamily" && (
+              <div className={styles.fieldGroup}>
+                <label className={styles.label} htmlFor="propertyUnits">
+                  Number of units
+                </label>
+                <ExplainPill prompt="Explain how the number of units in a multi-family property influences financing requirements." />
+                <select
+                  id="propertyUnits"
+                  className={styles.select}
+                  value={formData.propertyUnits}
+                  onChange={(e) => updateField("propertyUnits", e.target.value)}
+                >
+                  <option value="OneUnit">1 unit</option>
+                  <option value="TwoUnits">2 units</option>
+                  <option value="ThreeUnits">3 units</option>
+                  <option value="FourUnits">4 units</option>
+                </select>
+              </div>
+            )}
+          </div>
+        );
+      case "loan":
+      default:
+        return (
+          <div className={styles.stepCard}>
+            <p className={styles.stepTitle}>Loan preferences</p>
+            <p className={styles.stepSubtitle}>We’ll keep it simple and payment-first.</p>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="loanProgram">
+                Program
+              </label>
+              <ExplainPill
+                prompt={`Explain the ${formData.loanProgram || "Conventional"} loan program for homebuyers, including who it fits best.`}
+              />
+              <select
+                id="loanProgram"
+                className={styles.select}
+                value={formData.loanProgram}
+                onChange={(e) => updateField("loanProgram", e.target.value)}
+              >
+                <option value="Conventional">Conventional</option>
+                <option value="FHA">FHA</option>
+                <option value="VA">VA</option>
+                <option value="USDA">USDA</option>
+              </select>
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="termYears">
+                Term
+              </label>
+              <ExplainPill prompt="Explain how choosing a 30, 20, or 15 year term affects payment and interest." />
+              <select
+                id="termYears"
+                className={styles.select}
+                value={formData.termYears}
+                onChange={(e) => updateField("termYears", Number(e.target.value))}
+              >
+                <option value={30}>30 years</option>
+                <option value={20}>20 years</option>
+                <option value={15}>15 years</option>
+              </select>
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="rateStructure">
+                Rate structure
+              </label>
+              <ExplainPill
+                prompt={`Explain a ${formData.rateStructure || "Fixed"} mortgage structure for a purchase loan and when it makes sense.`}
+              />
+              <select
+                id="rateStructure"
+                className={styles.select}
+                value={formData.rateStructure}
+                onChange={(e) => updateField("rateStructure", e.target.value)}
+              >
+                <option value="Fixed">Fixed</option>
+                <option value="ARM">ARM</option>
+              </select>
+            </div>
+            {formData.rateStructure === "ARM" && (
+              <div className={styles.fieldGroup}>
+                <label className={styles.label} htmlFor="armTerm">
+                  ARM fixed term
+                </label>
+                <ExplainPill
+                  prompt={`Explain what a ${formData.armTerm || "selected"} ARM fixed term (like 5/6 or 7/6) means for payments and adjustments.`}
+                />
+                <select
+                  id="armTerm"
+                  className={styles.select}
+                  value={formData.armTerm}
+                  onChange={(e) => updateField("armTerm", e.target.value)}
+                >
+                  <option value="">Select term</option>
+                  <option value="FiveYear">5/6</option>
+                  <option value="SevenYear">7/6</option>
+                </select>
+              </div>
+            )}
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="desiredLockPeriodDays">
+                Desired lock period
+              </label>
+              <ExplainPill prompt="Explain what a rate lock period is and why buyers choose 30, 45, 60, or 90 days." />
+              <select
+                id="desiredLockPeriodDays"
+                className={styles.select}
+                value={formData.desiredLockPeriodDays || ""}
+                onChange={(e) => updateField("desiredLockPeriodDays", e.target.value)}
+              >
+                <option value="">Let the lender show options</option>
+                <option value="15">15 days</option>
+                <option value="30">30 days</option>
+                <option value="45">45 days</option>
+                <option value="60">60 days</option>
+                <option value="75">75 days</option>
+                <option value="90">90 days</option>
+              </select>
+            </div>
+          </div>
+        );
+    }
+  };
+
   const renderStep = () => {
     if (mode === "Purchase") {
-      return (
-        <div className={styles.stepCard}>
-          <p className={styles.stepTitle}>Purchase flow</p>
-          <p className={styles.stepSubtitle}>Purchase is available. We’ll reuse this intake soon.</p>
-          <div className={styles.fieldGroup}>
-            <label className={styles.label} htmlFor="maxPaymentPurchase">
-              Max monthly payment
-            </label>
-            <input
-              id="maxPaymentPurchase"
-              className={styles.input}
-              value={formData.maxMonthlyPayment}
-              placeholder="$2,500"
-              onChange={(e) => updateField("maxMonthlyPayment", formatCurrencyInput(e.target.value))}
-            />
-          </div>
-          <button className={styles.primaryButton} onClick={handleSubmit}>
-            Continue to purchase options
-          </button>
-        </div>
-      );
+      return renderPurchaseStep();
     }
 
     switch (currentStep) {
@@ -369,13 +819,14 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                   className={styles.advancedFields}
                 >
                   <div className={styles.fieldGroup}>
-                    <label className={styles.label} htmlFor="cashOutAmount">
-                      Cash-out amount (optional)
-                    </label>
-                    <input
-                      id="cashOutAmount"
-                      className={styles.input}
-                      type="text"
+                  <label className={styles.label} htmlFor="cashOutAmount">
+                    Cash-out amount (optional)
+                  </label>
+                  <ExplainPill prompt="Explain what cash-out means on a refinance and how it changes the loan amount." />
+                  <input
+                    id="cashOutAmount"
+                    className={styles.input}
+                    type="text"
                       inputMode="numeric"
                       placeholder="$20,000"
                       value={formData.cashOutAmount}
@@ -388,33 +839,35 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                     <label className={styles.label} htmlFor="occupancy">
                       Occupancy
                     </label>
+                    <ExplainPill prompt="Explain how occupancy (primary, second home, investment) affects refinance pricing." />
                     <select
-                      id="occupancy"
-                      className={styles.select}
-                      value={formData.occupancy}
-                      onChange={(e) => updateField("occupancy", e.target.value)}
-                    >
-                      <option value="">Primary</option>
-                      <option value="Second Home">Second Home</option>
-                      <option value="Investment">Investment</option>
-                    </select>
-                  </div>
-                  <div className={styles.fieldGroup}>
+                    id="occupancy"
+                    className={styles.select}
+                    value={formData.occupancy}
+                    onChange={(e) => updateField("occupancy", e.target.value)}
+                  >
+                    <option value="PrimaryResidence">Primary</option>
+                    <option value="Second Home">Second Home</option>
+                    <option value="Investment">Investment</option>
+                  </select>
+                </div>
+                <div className={styles.fieldGroup}>
                     <label className={styles.label} htmlFor="propertyType">
                       Property type
                     </label>
+                    <ExplainPill prompt="Explain how property type (single family, condo, townhome, multi-unit) affects refinance options." />
                     <select
-                      id="propertyType"
-                      className={styles.select}
-                      value={formData.propertyType}
-                      onChange={(e) => updateField("propertyType", e.target.value)}
-                    >
-                      <option value="">Single Family</option>
-                      <option value="Condo">Condo</option>
-                      <option value="Townhome">Townhome</option>
-                      <option value="Multi-unit">Multi-unit</option>
-                    </select>
-                  </div>
+                    id="propertyType"
+                    className={styles.select}
+                    value={formData.propertyType}
+                    onChange={(e) => updateField("propertyType", e.target.value)}
+                  >
+                    <option value="Single Family">Single Family</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Townhome">Townhome</option>
+                    <option value="Multi-unit">Multi-unit</option>
+                  </select>
+                </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -446,7 +899,9 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
             <div className={styles.header}>
               <div>
                 <p className={styles.modeLabel}>{mode === "Purchase" ? "Purchase" : "Refinance"}</p>
-                <h3 className={styles.modalTitle}>Refi intake</h3>
+                <h3 className={styles.modalTitle}>
+                  {mode === "Purchase" ? "Purchase intake" : "Refi intake"}
+                </h3>
               </div>
               <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close">
                 ×
@@ -496,38 +951,36 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               </motion.div>
             </AnimatePresence>
 
-            {mode !== "Purchase" && (
-              <div className={styles.footer}>
+            <div className={styles.footer}>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={handleBack}
+                disabled={stepIndex === 0}
+              >
+                Back
+              </button>
+              {!isLastStep && (
                 <button
                   type="button"
-                  className={styles.secondaryButton}
-                  onClick={handleBack}
-                  disabled={stepIndex === 0}
+                  className={styles.primaryButton}
+                  disabled={!canContinue}
+                  onClick={handleNext}
                 >
-                  Back
+                  Continue
                 </button>
-                {!isLastStep && (
-                  <button
-                    type="button"
-                    className={styles.primaryButton}
-                    disabled={!canContinue}
-                    onClick={handleNext}
-                  >
-                    Continue
-                  </button>
-                )}
-                {isLastStep && (
-                  <button
-                    type="button"
-                    className={styles.primaryButton}
-                    disabled={!canContinue}
-                    onClick={handleSubmit}
-                  >
-                    See my options
-                  </button>
-                )}
-              </div>
-            )}
+              )}
+              {isLastStep && (
+                <button
+                  type="button"
+                  className={styles.primaryButton}
+                  disabled={!canContinue}
+                  onClick={handleSubmit}
+                >
+                  See my options
+                </button>
+              )}
+            </div>
           </motion.div>
         </motion.div>
       )}

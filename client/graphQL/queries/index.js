@@ -8,3 +8,7 @@ export {
   GET_REFI_PRICING_QUERY,
   default as getRefiPricingQuery,
 } from "./getRefiPricingQuery";
+export {
+  GET_PURCHASE_PRICING_QUERY,
+  default as getPurchasePricingQuery,
+} from "./getPurchasePricingQuery";
