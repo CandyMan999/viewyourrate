@@ -21,19 +21,6 @@
   overflow-y: auto;
 }
 
-.panelWrapper {
-  width: 100%;
-}
-
-.panel {
-  background: linear-gradient(160deg, rgba(15, 18, 24, 0.94), rgba(15, 18, 24, 0.82));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  padding: 18px 18px 16px;
-  color: #e9edf3;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-}
-
 .header {
   display: flex;
   align-items: center;
@@ -52,13 +39,6 @@
 .modalTitle {
   margin: 0;
   font-size: 22px;
-}
-
-.headerDescription {
-  margin: 6px 0 0;
-  color: #9eafc2;
-  font-size: 14px;
-  line-height: 1.4;
 }
 
 .closeButton {

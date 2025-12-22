@@ -1,0 +1,132 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(8, 10, 14, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #4be1c3, #2faad8);
+  display: grid;
+  place-items: center;
+  color: #0c1016;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.brandTitle {
+  margin: 0;
+  font-weight: 700;
+  color: #f7f9fb;
+}
+
+.brandSub {
+  margin: 0;
+  color: #9eafc2;
+  font-size: 12px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #cfd6dd;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.link:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.active {
+  border-color: rgba(75, 225, 195, 0.4);
+  background: rgba(75, 225, 195, 0.12);
+  color: #4be1c3;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f1f4f7;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.segmented {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.segment {
+  border: none;
+  background: transparent;
+  color: #cfd6dd;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.segmentActive {
+  background: rgba(75, 225, 195, 0.18);
+  color: #0c1016;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .links {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

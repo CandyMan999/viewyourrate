@@ -1,0 +1,177 @@
+.wrapper {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  color: #8da2b5;
+}
+
+.title {
+  margin: 4px 0 6px;
+  color: #f7f9fb;
+}
+
+.subtitle {
+  margin: 0;
+  color: #cfd6dd;
+  max-width: 720px;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+}
+
+.secondary,
+.primary {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f7f9fb;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.primary {
+  background: linear-gradient(135deg, #4be1c3, #2faad8);
+  color: #0c1016;
+}
+
+.dropzone {
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.dropzoneActive {
+  border-color: rgba(75, 225, 195, 0.6);
+  background: rgba(75, 225, 195, 0.08);
+}
+
+.dropLabel {
+  margin: 0 0 4px;
+  color: #f7f9fb;
+  font-weight: 700;
+}
+
+.dropSub {
+  margin: 0 0 8px;
+  color: #9eafc2;
+}
+
+.fileName {
+  margin: 0 0 8px;
+  color: #cfd6dd;
+  font-weight: 600;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.statusBadge[data-state="uploading"] {
+  background: rgba(47, 170, 216, 0.12);
+  border-color: rgba(47, 170, 216, 0.4);
+  color: #7ad7ff;
+}
+
+.statusBadge[data-state="success"] {
+  background: rgba(75, 225, 195, 0.12);
+  border-color: rgba(75, 225, 195, 0.4);
+  color: #4be1c3;
+}
+
+.statusBadge[data-state="error"] {
+  background: rgba(255, 99, 132, 0.1);
+  border-color: rgba(255, 99, 132, 0.4);
+  color: #ffb3c2;
+}
+
+.errorText {
+  color: #ffb3c2;
+  font-weight: 600;
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.resultCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.resultCardWide {
+  grid-column: span 2;
+  background: rgba(75, 225, 195, 0.08);
+  border: 1px solid rgba(75, 225, 195, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.resultLabel {
+  margin: 0 0 6px;
+  color: #9eafc2;
+  font-size: 13px;
+}
+
+.resultValue {
+  margin: 0;
+  color: #f7f9fb;
+  font-weight: 700;
+}
+
+.resultMeta {
+  margin: 4px 0 0;
+  color: #0c1016;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .resultCardWide {
+    grid-column: span 1;
+  }
+}
