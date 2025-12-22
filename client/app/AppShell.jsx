@@ -5,7 +5,10 @@ import HeroSection from "./components/HeroSection";
 import PricingWidget from "./components/pricingWidget/PricingWidget";
 import MortgageOptionsPage from "./components/mortgageResults/MortgageOptionsPage";
 import { request } from "../client";
-import { GET_REFI_PRICING_QUERY } from "../graphQL/queries";
+import {
+  GET_PURCHASE_PRICING_QUERY,
+  GET_REFI_PRICING_QUERY,
+} from "../graphQL/queries";
 import styles from "./AppShell.module.css";
 
 const initialState = {
@@ -79,13 +82,18 @@ function AppShell() {
     const fetchPricing = async () => {
       setPricingState({ status: "loading", data: null, error: "" });
       try {
-        const data = await request(GET_REFI_PRICING_QUERY, {
+        const activeQuery =
+          state.mode === "Purchase"
+            ? GET_PURCHASE_PRICING_QUERY
+            : GET_REFI_PRICING_QUERY;
+        const data = await request(activeQuery, {
           input: state.scenario,
         });
         if (cancelled) return;
+        const response = data?.getPurchasePricing || data?.getRefiPricing || null;
         setPricingState({
           status: "success",
-          data: data?.getRefiPricing || null,
+          data: response,
           error: "",
         });
       } catch (error) {
@@ -110,11 +118,13 @@ function AppShell() {
   const retryPricing = () => {
     if (activeScenario) {
       setPricingState({ status: "loading", data: null, error: "" });
-      request(GET_REFI_PRICING_QUERY, { input: activeScenario })
+      const activeQuery =
+        state.mode === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
+      request(activeQuery, { input: activeScenario })
         .then((data) =>
           setPricingState({
             status: "success",
-            data: data?.getRefiPricing || null,
+            data: data?.getPurchasePricing || data?.getRefiPricing || null,
             error: "",
           })
         )

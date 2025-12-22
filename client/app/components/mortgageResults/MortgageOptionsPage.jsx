@@ -37,6 +37,21 @@ const MortgageOptionsPage = ({
 
   const scenarioSummary = useMemo(() => {
     if (!scenario) return "";
+
+    if (scenario.quoteType === "Purchase") {
+      const parts = [
+        `purchase in ${scenario.stateSelection || "your state"}`,
+        scenario.purchasePrice ? `home price ${formatCurrency(scenario.purchasePrice)}` : null,
+        scenario.downPayment
+          ? `down payment ${formatCurrency(scenario.downPayment)}`
+          : scenario.downPaymentPercent
+            ? `${Number(scenario.downPaymentPercent).toFixed(0)}% down`
+            : null,
+        scenario.creditScore ? `credit score around ${scenario.creditScore}+` : null,
+      ].filter(Boolean);
+      return parts.join(", ");
+    }
+
     const parts = [
       scenario.quoteType ? `${scenario.quoteType.toLowerCase()} scenario` : null,
       scenario.maxMonthlyPayment
@@ -52,12 +67,23 @@ const MortgageOptionsPage = ({
   }, [scenario]);
 
   const ltvData = useMemo(() => {
-    const homeValue = scenario?.estimatedHomeValue;
+    const homeValue =
+      scenario?.quoteType === "Purchase"
+        ? scenario?.purchasePrice
+        : scenario?.estimatedHomeValue;
     if (!homeValue) {
       return { percent: null, indicator: "muted", insight: "", fixLabel: "", fixOverrides: null };
     }
 
-    const loanAmount = (scenario?.existingLoanBalance || 0) + (scenario?.cashOutAmount || 0);
+    const loanAmount =
+      scenario?.quoteType === "Purchase"
+        ? Math.max(
+            (scenario?.purchasePrice || 0) -
+              (scenario?.downPayment ||
+                ((scenario?.downPaymentPercent || 0) / 100) * (scenario?.purchasePrice || 0)),
+            0
+          )
+        : (scenario?.existingLoanBalance || 0) + (scenario?.cashOutAmount || 0);
     const ltvPercent = (loanAmount / homeValue) * 100;
     let indicator = "green";
     let insight = "This is a strong LTV range. Pricing is typically better below 80%.";
@@ -84,9 +110,11 @@ const MortgageOptionsPage = ({
     }
 
     const cashOutNote =
-      scenario?.cashOutAmount && scenario.cashOutAmount > 0
-        ? "Cash-out increases your loan amount, which raises LTV. That can reduce available options."
-        : "";
+      scenario?.quoteType === "Purchase"
+        ? ""
+        : scenario?.cashOutAmount && scenario.cashOutAmount > 0
+          ? "Cash-out increases your loan amount, which raises LTV. That can reduce available options."
+          : "";
 
     return { percent: ltvPercent, indicator, insight, cashOutNote, fixLabel, fixOverrides };
   }, [scenario]);
@@ -94,7 +122,19 @@ const MortgageOptionsPage = ({
   const formattedOptions = useMemo(() => {
     if (!pricing?.options?.length) return [];
 
-    return pricing.options.map((option) => {
+    const sortedOptions =
+      scenario?.quoteType === "Purchase"
+        ? [...pricing.options].sort((a, b) => {
+            if (a.monthlyPayment === b.monthlyPayment) {
+              const aprA = a.apr ?? a.rate ?? 0;
+              const aprB = b.apr ?? b.rate ?? 0;
+              return aprA - aprB;
+            }
+            return (a.monthlyPayment || 0) - (b.monthlyPayment || 0);
+          })
+        : pricing.options;
+
+    return sortedOptions.map((option) => {
       const payment = option.monthlyPayment || scenario?.maxMonthlyPayment || 0;
       const formatPercent = (value) =>
         value === null || value === undefined ? "—" : `${Number(value).toFixed(3)}%`;
@@ -116,13 +156,15 @@ const MortgageOptionsPage = ({
     });
   }, [pricing?.options, scenario?.maxMonthlyPayment]);
 
-  const headerPrompt = useMemo(
-    () =>
-      `Explain what "Refi matches for ${formatCurrency(
-        scenario?.maxMonthlyPayment || 2500
-      )}" means and how the options align to the borrower's payment target. Keep it concise.`,
-    [scenario?.maxMonthlyPayment]
-  );
+  const headerPrompt = useMemo(() => {
+    if (scenario?.quoteType === "Purchase") {
+      return `Explain how we sorted purchase options by monthly payment, then APR, and why that helps a buyer choose with confidence. Keep it concise.`;
+    }
+
+    return `Explain what "Refi matches for ${formatCurrency(
+      scenario?.maxMonthlyPayment || 2500
+    )}" means and how the options align to the borrower's payment target. Keep it concise.`;
+  }, [scenario?.maxMonthlyPayment, scenario?.quoteType]);
 
   const pointsPrompt = useMemo(
     () =>
@@ -236,6 +278,26 @@ const MortgageOptionsPage = ({
                         <span className={styles.detailValue}>{option[field.key]}</span>
                       </div>
                     ))}
+                    {scenario?.quoteType === "Purchase" && (
+                      <>
+                        <div className={styles.detailRow}>
+                          <span className={styles.detailLabel}>Price</span>
+                          <span className={styles.detailValue}>
+                            {formatCurrency(scenario?.purchasePrice)}
+                          </span>
+                        </div>
+                        <div className={styles.detailRow}>
+                          <span className={styles.detailLabel}>Down payment</span>
+                          <span className={styles.detailValue}>
+                            {scenario?.downPayment
+                              ? formatCurrency(scenario.downPayment)
+                              : scenario?.downPaymentPercent
+                                ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
+                                : "—"}
+                          </span>
+                        </div>
+                      </>
+                    )}
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>State</span>
                       <span className={styles.detailValue}>{scenario?.stateSelection || "—"}</span>
@@ -282,7 +344,11 @@ const MortgageOptionsPage = ({
         <div>
           <p className={styles.kicker}>Options aligned to your payment</p>
           <div className={styles.titleRow}>
-            <h2 className={styles.title}>Refi matches for ${scenario?.maxMonthlyPayment?.toLocaleString("en-US") || "your target"}</h2>
+            <h2 className={styles.title}>
+              {scenario?.quoteType === "Purchase"
+                ? "Purchase matches sorted by monthly payment"
+                : `Refi matches for ${formatCurrency(scenario?.maxMonthlyPayment) || "your target"}`}
+            </h2>
             <ChatExplainPill
               prompt={headerPrompt}
               context={scenarioSummary}
@@ -310,6 +376,18 @@ const MortgageOptionsPage = ({
             <span className={styles.chipLabel}>LTV</span>
             <span className={styles.chipValue}>{formatPercent(ltvData.percent)}</span>
           </div>
+          {scenario?.quoteType === "Purchase" ? (
+            <div className={styles.chip}>
+              <span className={styles.chipLabel}>Down payment</span>
+              <span className={styles.chipValue}>
+                {scenario.downPayment
+                  ? formatCurrency(scenario.downPayment)
+                  : scenario.downPaymentPercent
+                    ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
+                    : "—"}
+              </span>
+            </div>
+          ) : null}
           {scenario?.cashOutAmount ? (
             <div className={styles.chip}>
               <span className={styles.chipLabel}>Cash-out</span>

@@ -7,6 +7,8 @@ const { chatBotTypeDefs, chatBotResolver } = require("./chatBotResolver");
 const {
   getRefiPricingTypeDefs,
   getRefiPricingResolver,
+  getPurchasePricingResolver,
+  getProductDetailsResolver,
 } = require("./getRefiPricingResolver");
 
 const queryTypeDefs = [
@@ -22,6 +24,8 @@ const queryResolvers = {
     getMortgageRates: getMortgageRatesResolver,
     chatBot: chatBotResolver,
     getRefiPricing: getRefiPricingResolver,
+    getPurchasePricing: getPurchasePricingResolver,
+    getProductDetails: getProductDetailsResolver,
   },
 };
 

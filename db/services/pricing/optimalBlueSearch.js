@@ -8,7 +8,7 @@ const {
 
 const DEFAULT_TERM_YEARS = 30;
 
-function mapScenarioToRequest(scenario = {}) {
+function mapRefiScenarioToRequest(scenario = {}) {
   const {
     maxMonthlyPayment,
     stateSelection,
@@ -36,6 +36,8 @@ function mapScenarioToRequest(scenario = {}) {
 
   const loanPurpose =
     Number(cashOutAmount) > 0 ? "RefiCashout" : "RefiRateTermLimitedCO";
+
+  const baseLoanAmount = existingLoanBalance || estimatedHomeValue || 400000;
 
   return {
     borrowerInformation: {
@@ -69,7 +71,134 @@ function mapScenarioToRequest(scenario = {}) {
       prepaymentPenalty: "None",
       representativeFICO: creditScore || 760,
       cashOutAmount: cashOutAmount || 0,
-      baseLoanAmount: existingLoanBalance || 400000,
+      baseLoanAmount,
+    },
+  };
+}
+
+function mapPurchaseScenarioToRequest(scenario = {}) {
+  const {
+    purchasePrice,
+    downPayment,
+    downPaymentPercent,
+    creditScore,
+    stateSelection,
+    propertyZip,
+    occupancy = "PrimaryResidence",
+    propertyType = "SingleFamily",
+    propertyUnits = "OneUnit",
+    loanProgram = "Conventional",
+    termYears = DEFAULT_TERM_YEARS,
+    rateStructure = "Fixed",
+    armTerm,
+    firstTimeBuyer = false,
+    veteranStatus,
+    desiredLockPeriodDays,
+  } = scenario;
+
+  const price = Number(purchasePrice) || 0;
+  const downPaymentAmount = Number.isFinite(Number(downPayment))
+    ? Number(downPayment)
+    : price && Number.isFinite(Number(downPaymentPercent))
+      ? (price * Number(downPaymentPercent)) / 100
+      : 0;
+  const baseLoanAmount = Math.max(price - downPaymentAmount, 0);
+  const estimatedLtv = price > 0 ? (baseLoanAmount / price) * 100 : null;
+
+  const occupancyMap = {
+    Primary: "PrimaryResidence",
+    PrimaryResidence: "PrimaryResidence",
+    Second: "SecondHome",
+    "Second Home": "SecondHome",
+    SecondHome: "SecondHome",
+    Investment: "InvestmentProperty",
+    InvestmentProperty: "InvestmentProperty",
+  };
+
+  const propertyTypeMap = {
+    "Single Family": "SingleFamily",
+    SingleFamily: "SingleFamily",
+    Condo: "Condo",
+    Townhome: "Townhouse",
+    Townhouse: "Townhouse",
+    MultiFamily: "MultiFamily",
+    "Multi-unit": "MultiFamily",
+  };
+
+  const loanTermsMap = {
+    30: "ThirtyYear",
+    25: "TwentyFiveYear",
+    20: "TwentyYear",
+    15: "FifteenYear",
+  };
+
+  const amortizationTypes =
+    rateStructure && rateStructure.toLowerCase() === "arm" ? ["Arm"] : ["Fixed"];
+
+  const borrowerPaidMI =
+    loanProgram === "Conventional" && estimatedLtv && estimatedLtv > 80 ? "Yes" : "No";
+
+  const calculateTotalLoanAmount =
+    loanProgram === "FHA" || loanProgram === "VA" || loanProgram === "USDA";
+
+  const vaFirstTimeUse = loanProgram === "VA" ? Boolean(veteranStatus) : undefined;
+
+  return {
+    borrowerInformation: {
+      citizenship: "USCitizen",
+      fico: creditScore || 760,
+      firstTimeHomeBuyer: Boolean(firstTimeBuyer),
+      vaFirstTimeUse,
+      selfEmployed: false,
+      monthsReserves: 0,
+      waiveEscrows: false,
+    },
+    propertyInformation: {
+      appraisedValue: price,
+      salesPrice: price,
+      occupancy: occupancyMap[occupancy] || "PrimaryResidence",
+      propertyType: propertyTypeMap[propertyType] || "SingleFamily",
+      state: stateSelection,
+      zipCode: propertyZip || undefined,
+      corporateRelocation: false,
+      numberOfStories: 1,
+      numberOfUnits: propertyUnits || "OneUnit",
+    },
+    loanInformation: {
+      loanPurpose: "Purchase",
+      lienType: "First",
+      amortizationTypes,
+      armFixedTerms:
+        amortizationTypes.includes("Arm") && armTerm ? [armTerm] : undefined,
+      automatedUnderwritingSystem: "NotSpecified",
+      borrowerPaidMI,
+      buydown: "None",
+      calculateTotalLoanAmount,
+      expandedApprovalLevel: "NotApplicable",
+      includeLOCompensationInPricing: "YesLenderPaid",
+      interestOnly: false,
+      loanLevelDebtToIncomeRatio: 36,
+      loanTerms: [loanTermsMap[termYears] || "ThirtyYear"],
+      loanType: loanProgram || "Conventional",
+      prepaymentPenalty: "None",
+      representativeFICO: creditScore || 760,
+      cashOutAmount: 0,
+      baseLoanAmount,
+      secondLienAmount: 0,
+      helocDrawnAmount: 0,
+      helocLineAmount: 0,
+      feesIn: "No",
+      calculateResubordination: false,
+      cashToClose: 0,
+      desiredLockPeriod: desiredLockPeriodDays || 0,
+      desiredRate: 0,
+      desiredPrice: 0,
+    },
+    context: {
+      baseLoanAmount,
+      estimatedLtv,
+      termYears,
+      desiredLockPeriodDays,
     },
   };
 }
@@ -84,12 +213,12 @@ function termYearsFromLoanTerm(loanTerm) {
   return map[loanTerm] || DEFAULT_TERM_YEARS;
 }
 
-function normalizeProduct(product, scenario) {
-  const loanAmount = scenario.existingLoanBalance || 400000;
+function normalizeProduct(product, context = {}) {
+  const loanAmount = context.loanAmount || 400000;
   const rate = Number(product.rate ?? 0);
   const apr = product.apr ? Number(product.apr) : null;
   const price = Number(product.price ?? 0);
-  const termYears = termYearsFromLoanTerm(product.loanTerm) || DEFAULT_TERM_YEARS;
+  const termYears = termYearsFromLoanTerm(product.loanTerm) || context.termYears || DEFAULT_TERM_YEARS;
   const monthlyPayment =
     product.totalPayment ||
     product.principalAndInterest ||
@@ -101,21 +230,50 @@ function normalizeProduct(product, scenario) {
     rate: Number(rate.toFixed(3)),
     apr: apr !== null ? Number(apr.toFixed(3)) : Number(rate.toFixed(3)),
     points: Number(price.toFixed(3)),
+    principalAndInterest: product.principalAndInterest
+      ? Number(product.principalAndInterest)
+      : undefined,
+    totalPayment: product.totalPayment ? Number(product.totalPayment) : undefined,
     monthlyPayment: Math.round(monthlyPayment),
     cashToClose: Math.round(loanAmount * (price / 100)),
     termYears,
-    lockPeriodDays: product.lockPeriod || 30,
+    lockPeriodDays: product.lockPeriod || context.desiredLockPeriodDays || 30,
   };
 }
 
-function pickHeadlineOptions(products, scenario) {
+function pickHeadlineOptions(products, scenario, options = {}) {
+  const { prioritizePayment = false, contextLoanAmount, contextTermYears } = options;
   if (!products?.length) return [];
 
   const normalized = products
-    .map((product) => normalizeProduct(product, scenario))
+    .map((product) =>
+      normalizeProduct(product, {
+        loanAmount: contextLoanAmount || scenario.baseLoanAmount || scenario.existingLoanBalance,
+        termYears: contextTermYears || scenario.termYears,
+        desiredLockPeriodDays: scenario.desiredLockPeriodDays,
+      })
+    )
     .filter((p) => Number.isFinite(p.rate));
 
   if (!normalized.length) return [];
+
+  if (prioritizePayment) {
+    const sorted = [...normalized].sort((a, b) => {
+      if (a.monthlyPayment === b.monthlyPayment) {
+        if (a.apr !== null && b.apr !== null) {
+          return a.apr - b.apr;
+        }
+        return a.rate - b.rate;
+      }
+      return a.monthlyPayment - b.monthlyPayment;
+    });
+
+    return sorted.slice(0, HEADLINE_OPTIONS.length).map((option, index) => ({
+      ...option,
+      label: HEADLINE_OPTIONS[index],
+      explanation: getExplanation(HEADLINE_OPTIONS[index]),
+    }));
+  }
 
   const byRate = [...normalized].sort((a, b) => a.rate - b.rate);
   const byPayment = [...normalized].sort(
@@ -155,13 +313,30 @@ function pickHeadlineOptions(products, scenario) {
   }));
 }
 
-async function runBestExSearch(scenario) {
-  const payload = mapScenarioToRequest(scenario);
-  const path = `/api/businesschannels/${OPTIMAL_BLUE_CONFIG.businessChannelId}/originators/${OPTIMAL_BLUE_CONFIG.originatorId}/bestexsearch`;
+async function runBestExSearch(scenario, { kind = "refi" } = {}) {
+  const mapped =
+    kind === "purchase" ? mapPurchaseScenarioToRequest(scenario) : mapRefiScenarioToRequest(scenario);
+  const payload =
+    mapped?.borrowerInformation && mapped?.propertyInformation && mapped?.loanInformation
+      ? {
+          borrowerInformation: mapped.borrowerInformation,
+          propertyInformation: mapped.propertyInformation,
+          loanInformation: mapped.loanInformation,
+        }
+      : { ...mapped };
+  const contextLoanAmount = mapped?.loanInformation?.baseLoanAmount || mapped?.context?.baseLoanAmount;
+  const path = `/consumer/api/businesschannels/${OPTIMAL_BLUE_CONFIG.businessChannelId}/originators/${OPTIMAL_BLUE_CONFIG.originatorId}/bestexsearch`;
 
   try {
     const { data } = await optimalBlueClient.post(path, payload);
-    const options = pickHeadlineOptions(data?.products || [], scenario);
+    const options = pickHeadlineOptions(data?.products || [], scenario, {
+      prioritizePayment: kind === "purchase",
+      contextLoanAmount,
+      contextTermYears:
+        mapped?.loanInformation?.loanTerms?.length === 1
+          ? termYearsFromLoanTerm(mapped.loanInformation.loanTerms[0])
+          : scenario.termYears,
+    });
 
     return {
       provider: "optimalBlue",
@@ -184,4 +359,41 @@ async function runBestExSearch(scenario) {
   }
 }
 
-module.exports = { runBestExSearch };
+async function getProductDetails(searchId, productId) {
+  if (!searchId || typeof productId === "undefined") {
+    throw new Error("Missing searchId or productId for Optimal Blue product details");
+  }
+
+  const path = `/consumer/api/businesschannels/${OPTIMAL_BLUE_CONFIG.businessChannelId}/originators/${OPTIMAL_BLUE_CONFIG.originatorId}/bestexsearch/${searchId}/products/${productId}`;
+
+  try {
+    const { data } = await optimalBlueClient.get(path);
+    const quotes = Array.isArray(data?.quotes)
+      ? data.quotes.map((quote) => ({
+          ...normalizeProduct(quote),
+          notesAndAdvisories: quote.notesAndAdvisories || [],
+        }))
+      : [];
+
+    return {
+      ...data,
+      searchId,
+      productId,
+      quotes,
+      notesAndAdvisories: data?.notesAndAdvisories || [],
+    };
+  } catch (error) {
+    const status = error.response?.status;
+    const apiMessage =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      "Unknown product details error";
+
+    throw new Error(
+      `Optimal Blue product details failed${status ? ` (status ${status})` : ""}: ${apiMessage}`
+    );
+  }
+}
+
+module.exports = { runBestExSearch, getProductDetails };
