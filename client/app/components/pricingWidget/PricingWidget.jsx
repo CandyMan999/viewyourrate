@@ -98,7 +98,17 @@ const states = [
 const refiStepOrder = ["payment", "balance", "credit", "advanced"];
 const purchaseStepOrder = ["price", "borrower", "property", "loan"];
 
-const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onComplete }) => {
+const PricingWidget = ({
+  isOpen = true,
+  mode,
+  initialPayment,
+  prefillData,
+  onClose,
+  onComplete,
+  variant = "modal",
+  title,
+  description,
+}) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [downPaymentMode, setDownPaymentMode] = useState("amount");
@@ -879,109 +889,116 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
   };
 
   const isLastStep = stepIndex === stepOrder.length - 1;
+  const isPanel = variant === "panel";
+  const shouldRender = isPanel ? isOpen !== false : isOpen;
+
+  const shell = (
+    <motion.div
+      className={isPanel ? styles.panel : styles.modal}
+      initial={{ scale: isPanel ? 1 : 0.96, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: isPanel ? 1 : 0.96, opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className={styles.header}>
+        <div>
+          <p className={styles.modeLabel}>{mode === "Purchase" ? "Purchase" : "Refinance"}</p>
+          <h3 className={styles.modalTitle}>{title || (mode === "Purchase" ? "Purchase intake" : "Refi intake")}</h3>
+          {description && <p className={styles.headerDescription}>{description}</p>}
+        </div>
+        {!isPanel && (
+          <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close">
+            ×
+          </button>
+        )}
+      </div>
+
+      <div className={styles.progress}>
+        {stepOrder.map((step, index) => (
+          <div
+            key={step}
+            className={`${styles.progressDot} ${index <= stepIndex ? styles.progressActive : ""}`}
+          />
+        ))}
+      </div>
+
+      {mode !== "Purchase" && currentStep === "balance" && (
+        <div className={styles.ltvBar}>
+          <div className={styles.chipRow}>
+            <div className={`${styles.chip} ${styles[`chip-${ltvInfo.indicator}`]}`}>
+              <span className={styles.chipLabel}>LTV</span>
+              <span className={styles.chipValue}>{ltvChipValue}</span>
+            </div>
+            {parseCurrency(formData.cashOutAmount) ? (
+              <div className={styles.chip}>
+                <span className={styles.chipLabel}>Cash-out</span>
+                <span className={styles.chipValue}>{formatCurrency(parseCurrency(formData.cashOutAmount))}</span>
+              </div>
+            ) : null}
+          </div>
+          <div className={styles.ltvInsight}>
+            <p className={styles.insightTitle}>LTV insight</p>
+            <p className={styles.insightText}>{ltvInfo.insight}</p>
+            {ltvInfo.cashOutNote && <p className={styles.insightText}>{ltvInfo.cashOutNote}</p>}
+          </div>
+        </div>
+      )}
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep + mode}
+          initial={{ opacity: 0, x: 12 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -12 }}
+          transition={{ duration: 0.2 }}
+        >
+          {renderStep()}
+        </motion.div>
+      </AnimatePresence>
+
+      <div className={styles.footer}>
+        <button
+          type="button"
+          className={styles.secondaryButton}
+          onClick={handleBack}
+          disabled={stepIndex === 0}
+        >
+          Back
+        </button>
+        {!isLastStep && (
+          <button
+            type="button"
+            className={styles.primaryButton}
+            disabled={!canContinue}
+            onClick={handleNext}
+          >
+            Continue
+          </button>
+        )}
+        {isLastStep && (
+          <button type="button" className={styles.primaryButton} disabled={!canContinue} onClick={handleSubmit}>
+            See my options
+          </button>
+        )}
+      </div>
+    </motion.div>
+  );
+
+  if (isPanel) {
+    if (!shouldRender) return null;
+    return <div className={styles.panelWrapper}>{shell}</div>;
+  }
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {shouldRender && (
         <motion.div
           className={styles.overlay}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.div
-            className={styles.modal}
-            initial={{ scale: 0.96, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.96, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className={styles.header}>
-              <div>
-                <p className={styles.modeLabel}>{mode === "Purchase" ? "Purchase" : "Refinance"}</p>
-                <h3 className={styles.modalTitle}>
-                  {mode === "Purchase" ? "Purchase intake" : "Refi intake"}
-                </h3>
-              </div>
-              <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close">
-                ×
-              </button>
-            </div>
-
-            <div className={styles.progress}>
-              {stepOrder.map((step, index) => (
-                <div
-                  key={step}
-                  className={`${styles.progressDot} ${index <= stepIndex ? styles.progressActive : ""}`}
-                />
-              ))}
-            </div>
-
-            {mode !== "Purchase" && currentStep === "balance" && (
-              <div className={styles.ltvBar}>
-                <div className={styles.chipRow}>
-                  <div className={`${styles.chip} ${styles[`chip-${ltvInfo.indicator}`]}`}>
-                    <span className={styles.chipLabel}>LTV</span>
-                    <span className={styles.chipValue}>{ltvChipValue}</span>
-                  </div>
-                  {parseCurrency(formData.cashOutAmount) ? (
-                    <div className={styles.chip}>
-                      <span className={styles.chipLabel}>Cash-out</span>
-                      <span className={styles.chipValue}>{formatCurrency(parseCurrency(formData.cashOutAmount))}</span>
-                    </div>
-                  ) : null}
-                </div>
-                <div className={styles.ltvInsight}>
-                  <p className={styles.insightTitle}>LTV insight</p>
-                  <p className={styles.insightText}>{ltvInfo.insight}</p>
-                  {ltvInfo.cashOutNote && <p className={styles.insightText}>{ltvInfo.cashOutNote}</p>}
-                </div>
-              </div>
-            )}
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep + mode}
-                initial={{ opacity: 0, x: 12 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }}
-                transition={{ duration: 0.2 }}
-              >
-                {renderStep()}
-              </motion.div>
-            </AnimatePresence>
-
-            <div className={styles.footer}>
-              <button
-                type="button"
-                className={styles.secondaryButton}
-                onClick={handleBack}
-                disabled={stepIndex === 0}
-              >
-                Back
-              </button>
-              {!isLastStep && (
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={!canContinue}
-                  onClick={handleNext}
-                >
-                  Continue
-                </button>
-              )}
-              {isLastStep && (
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={!canContinue}
-                  onClick={handleSubmit}
-                >
-                  See my options
-                </button>
-              )}
-            </div>
-          </motion.div>
+          {shell}
         </motion.div>
       )}
     </AnimatePresence>

@@ -1,102 +1,97 @@
 "use client";
 
-import React, { useEffect, useMemo, useReducer, useState } from "react";
-import HeroSection from "./components/HeroSection";
+import React, { useEffect, useMemo, useState } from "react";
+import Header from "./components/Header";
 import PricingWidget from "./components/pricingWidget/PricingWidget";
 import MortgageOptionsPage from "./components/mortgageResults/MortgageOptionsPage";
-import PurchaseOptionsPage from "./components/purchaseResults/PurchaseOptionsPage";
+import HomeScreen from "./screens/HomeScreen";
+import ResultsScreen from "./screens/ResultsScreen";
 import { request } from "../client";
-import {
-  GET_PURCHASE_PRICING_QUERY,
-  GET_REFI_PRICING_QUERY,
-} from "../graphQL/queries";
+import { GET_PURCHASE_PRICING_QUERY, GET_REFI_PRICING_QUERY } from "../graphQL/queries";
 import styles from "./AppShell.module.css";
 
-const initialState = {
-  mode: "Refinance",
-  scenario: null,
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "SET_MODE":
-      return { ...state, mode: action.mode };
-    case "SET_MORTGAGE_SCENARIO":
-      return { ...state, scenario: action.payload };
-    case "RESET_SCENARIO":
-      return { ...state, scenario: null };
-    default:
-      return state;
-  }
-}
-
 function AppShell() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [widgetOpen, setWidgetOpen] = useState(false);
-  const [seedPayment, setSeedPayment] = useState("$2,500");
+  const [mode, setMode] = useState("Refinance");
+  const [scenario, setScenario] = useState(null);
+  const [view, setView] = useState("home");
+  const [prefillData, setPrefillData] = useState(null);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [initialPayment, setInitialPayment] = useState("$2,500");
   const [pricingState, setPricingState] = useState({
     status: "idle",
     data: null,
     error: "",
   });
-  const [prefillData, setPrefillData] = useState(null);
 
-  const handleStartRefinance = (paymentValue) => {
-    setSeedPayment(paymentValue || seedPayment);
-    dispatch({ type: "SET_MODE", mode: "Refinance" });
-    setPrefillData(null);
-    setWidgetOpen(true);
+  const updateMode = (nextMode) => {
+    setMode(nextMode);
+    if (view !== "home") {
+      setView("home");
+    }
   };
 
-  const handleStartPurchase = (paymentValue) => {
-    setSeedPayment(paymentValue || seedPayment);
-    dispatch({ type: "SET_MODE", mode: "Purchase" });
-    setPrefillData(null);
-    setWidgetOpen(true);
-  };
+  const handleScenarioComplete = (completedScenario) => {
+    const normalizedMode =
+      completedScenario?.quoteType === "Purchase" ? "Purchase" : "Refinance";
 
-  const handleScenarioComplete = (scenario) => {
+    setMode(normalizedMode);
+    setScenario(completedScenario);
+    setPrefillData(completedScenario);
+    setView("results");
     setPricingState({ status: "loading", data: null, error: "" });
-    setPrefillData(scenario);
-    dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenario });
-    setWidgetOpen(false);
   };
-
-  const handleCloseWidget = () => setWidgetOpen(false);
 
   const handleResetScenario = () => {
-    dispatch({ type: "RESET_SCENARIO" });
-    setPricingState({ status: "idle", data: null, error: "" });
+    setScenario(null);
     setPrefillData(null);
+    setPricingState({ status: "idle", data: null, error: "" });
+    setView("home");
   };
 
-  const handleOpenWithPrefill = (overrides = {}) => {
-    const baseScenario = state.scenario || {};
+  const handleOpenEditor = (overrides = {}) => {
+    const baseScenario = scenario || {};
     setPrefillData({ ...baseScenario, ...overrides });
-    setWidgetOpen(true);
+    setEditorOpen(true);
+  };
+
+  const handleCloseEditor = () => setEditorOpen(false);
+
+  const activeScenario = useMemo(() => scenario, [scenario]);
+
+  const fetchPricing = async (active = activeScenario) => {
+    if (!active) return;
+    setPricingState({ status: "loading", data: null, error: "" });
+
+    try {
+      const activeQuery =
+        active.quoteType === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
+      const data = await request(activeQuery, { input: active });
+      const response = data?.getPurchasePricing || data?.getRefiPricing || null;
+      setPricingState({ status: "success", data: response, error: "" });
+    } catch (error) {
+      setPricingState({
+        status: "error",
+        data: null,
+        error: error?.message || "Unable to fetch pricing right now.",
+      });
+    }
   };
 
   useEffect(() => {
-    if (!state.scenario) return undefined;
+    if (!activeScenario) return undefined;
     let cancelled = false;
 
-    const fetchPricing = async () => {
+    const run = async () => {
       setPricingState({ status: "loading", data: null, error: "" });
       try {
         const activeQuery =
-          state.mode === "Purchase"
+          activeScenario.quoteType === "Purchase"
             ? GET_PURCHASE_PRICING_QUERY
             : GET_REFI_PRICING_QUERY;
-        const data = await request(activeQuery, {
-          input: state.scenario,
-        });
+        const data = await request(activeQuery, { input: activeScenario });
         if (cancelled) return;
         const response = data?.getPurchasePricing || data?.getRefiPricing || null;
-        setPricingState({
-          status: "success",
-          data: response,
-          error: "",
-        });
+        setPricingState({ status: "success", data: response, error: "" });
       } catch (error) {
         if (cancelled) return;
         setPricingState({
@@ -107,88 +102,75 @@ function AppShell() {
       }
     };
 
-    fetchPricing();
+    run();
 
     return () => {
       cancelled = true;
     };
-  }, [state.scenario]);
-
-  const activeScenario = useMemo(() => state.scenario, [state.scenario]);
-
-  useEffect(() => {
-    if (activeScenario && widgetOpen) {
-      setWidgetOpen(false);
-    }
-  }, [activeScenario, widgetOpen]);
+  }, [activeScenario]);
 
   const retryPricing = () => {
-    if (activeScenario) {
-      setPricingState({ status: "loading", data: null, error: "" });
-      const activeQuery =
-        state.mode === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
-      request(activeQuery, { input: activeScenario })
-        .then((data) =>
-          setPricingState({
-            status: "success",
-            data: data?.getPurchasePricing || data?.getRefiPricing || null,
-            error: "",
-          })
-        )
-        .catch((error) =>
-          setPricingState({
-            status: "error",
-            data: null,
-            error: error?.message || "Unable to fetch pricing right now.",
-          })
-        );
-    }
+    if (!activeScenario) return;
+    fetchPricing(activeScenario);
   };
+
+  const inlinePrefill = useMemo(
+    () => (view === "home" ? null : prefillData),
+    [prefillData, view]
+  );
 
   return (
     <div className={styles.appShell}>
-      <HeroSection
-        paymentValue={seedPayment}
-        onPaymentChange={setSeedPayment}
-        onStartRefinance={handleStartRefinance}
-        onStartPurchase={handleStartPurchase}
-        activeMode={state.mode}
-      />
+      <div className={styles.gradient} />
+      <div className={styles.headerRow}>
+        <Header mode={mode} onModeChange={updateMode} onStartOver={handleResetScenario} />
+      </div>
 
-      {(!activeScenario || widgetOpen) && (
-        <PricingWidget
-          isOpen={widgetOpen && !activeScenario}
-          mode={state.mode}
-          initialPayment={seedPayment}
-          prefillData={prefillData}
-          onClose={handleCloseWidget}
-          onComplete={handleScenarioComplete}
-        />
-      )}
-
-      {activeScenario &&
-        (state.mode === "Purchase" ? (
-          <PurchaseOptionsPage
+      <main className={styles.mainContent}>
+        {view === "results" && activeScenario ? (
+          <ResultsScreen
+            mode={mode}
             scenario={activeScenario}
-            pricing={pricingState.data}
-            pricingStatus={pricingState.status}
-            pricingError={pricingState.error}
-            onRetryPricing={retryPricing}
-            onEdit={() => handleOpenWithPrefill()}
+            pricingState={pricingState}
+            onEdit={handleOpenEditor}
             onReset={handleResetScenario}
-          />
+            onRetryPricing={retryPricing}
+          >
+            <MortgageOptionsPage
+              scenario={activeScenario}
+              pricing={pricingState.data}
+              pricingStatus={pricingState.status}
+              pricingError={pricingState.error}
+              onRetryPricing={retryPricing}
+              onEdit={() => handleOpenEditor()}
+              onFixLtv={handleOpenEditor}
+              onReset={handleResetScenario}
+            />
+          </ResultsScreen>
         ) : (
-          <MortgageOptionsPage
-            scenario={activeScenario}
-            pricing={pricingState.data}
-            pricingStatus={pricingState.status}
-            pricingError={pricingState.error}
-            onRetryPricing={retryPricing}
-            onEdit={() => handleOpenWithPrefill()}
-            onFixLtv={handleOpenWithPrefill}
-            onReset={handleResetScenario}
+          <HomeScreen
+            mode={mode}
+            onModeChange={updateMode}
+            paymentValue={initialPayment}
+            onPaymentChange={setInitialPayment}
+            onScenarioComplete={handleScenarioComplete}
+            prefillData={inlinePrefill}
           />
-        ))}
+        )}
+      </main>
+
+      <PricingWidget
+        variant="modal"
+        isOpen={editorOpen}
+        mode={mode}
+        initialPayment={initialPayment}
+        prefillData={prefillData}
+        onClose={handleCloseEditor}
+        onComplete={(nextScenario) => {
+          handleScenarioComplete(nextScenario);
+          handleCloseEditor();
+        }}
+      />
     </div>
   );
 }
