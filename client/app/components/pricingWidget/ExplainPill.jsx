@@ -13,6 +13,11 @@ const ExplainPill = ({ prompt, context }) => {
   const [error, setError] = useState("");
 
   const handleClick = async () => {
+    if (isOpen && !isLoading) {
+      setIsOpen(false);
+      return;
+    }
+
     setIsOpen(true);
     setIsLoading(true);
     setError("");
@@ -41,7 +46,10 @@ const ExplainPill = ({ prompt, context }) => {
         aria-expanded={isOpen}
       >
         <span aria-hidden>💬</span>
-        <span>{isLoading ? "Thinking…" : "Explain this"}</span>
+        <span>{isLoading ? "Thinking…" : isOpen ? "Hide explanation" : "Explain this"}</span>
+        <span className={styles.chevron} aria-hidden>
+          {isOpen ? "▾" : "▸"}
+        </span>
       </button>
       {isOpen && (
         <div className={styles.explainReply} aria-live="polite">

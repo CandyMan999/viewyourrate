@@ -155,14 +155,16 @@ function AppShell() {
         activeMode={state.mode}
       />
 
-      <PricingWidget
-        isOpen={widgetOpen}
-        mode={state.mode}
-        initialPayment={seedPayment}
-        prefillData={prefillData}
-        onClose={handleCloseWidget}
-        onComplete={handleScenarioComplete}
-      />
+      {(!activeScenario || widgetOpen) && (
+        <PricingWidget
+          isOpen={widgetOpen && !activeScenario}
+          mode={state.mode}
+          initialPayment={seedPayment}
+          prefillData={prefillData}
+          onClose={handleCloseWidget}
+          onComplete={handleScenarioComplete}
+        />
+      )}
 
       {activeScenario &&
         (state.mode === "Purchase" ? (

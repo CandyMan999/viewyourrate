@@ -13,6 +13,11 @@ const ChatExplainPill = ({ prompt, context, className }) => {
   const [error, setError] = useState("");
 
   const handleClick = async () => {
+    if (isOpen && !isLoading) {
+      setIsOpen(false);
+      return;
+    }
+
     setIsOpen(true);
     setIsLoading(true);
     setError("");
@@ -44,7 +49,10 @@ const ChatExplainPill = ({ prompt, context, className }) => {
         aria-expanded={isOpen}
       >
         <span aria-hidden>💬</span>
-        <span>{isLoading ? "Thinking…" : "Explain this"}</span>
+        <span>{isLoading ? "Thinking…" : isOpen ? "Hide explanation" : "Explain this"}</span>
+        <span className={styles.chatChevron} aria-hidden>
+          {isOpen ? "▾" : "▸"}
+        </span>
       </button>
       {isOpen && (
         <div className={styles.chatResponse} aria-live="polite">

@@ -266,14 +266,23 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
 
   useEffect(() => {
     if (mode !== "Purchase") return;
-    if (downPaymentMode !== "percent") return;
     if (!purchasePriceValue) return;
-    const amount = (purchasePriceValue * (Number(formData.downPaymentPercent) || 0)) / 100;
-    setFormData((prev) => ({
-      ...prev,
-      downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
-    }));
-  }, [downPaymentMode, formData.downPaymentPercent, mode, purchasePriceValue]);
+
+    if (downPaymentMode === "percent") {
+      const amount = (purchasePriceValue * (Number(formData.downPaymentPercent) || 0)) / 100;
+      setFormData((prev) => ({
+        ...prev,
+        downPayment: amount ? formatCurrencyInput(amount.toFixed(0)) : "",
+      }));
+    } else {
+      const amount = parseCurrency(formData.downPayment) ?? 0;
+      const percent = purchasePriceValue > 0 ? (amount / purchasePriceValue) * 100 : 0;
+      setFormData((prev) => ({
+        ...prev,
+        downPaymentPercent: percent ? percent.toFixed(0) : prev.downPaymentPercent,
+      }));
+    }
+  }, [downPaymentMode, formData.downPayment, formData.downPaymentPercent, mode, purchasePriceValue]);
 
   const handleNext = () => {
     if (stepIndex < stepOrder.length - 1) {
@@ -400,7 +409,11 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                     }));
                   }}
                 />
-                <span className={styles.sliderValue}>{computedDownPaymentPercent.toFixed(0)}% down</span>
+                <div className={styles.dpChip}>
+                  <span aria-hidden>✅</span>
+                  <span>{computedDownPaymentPercent.toFixed(0)}% down</span>
+                  <span>{formatCurrency(computedDownPaymentAmount || 0)}</span>
+                </div>
               </div>
               {downPaymentMode === "amount" ? (
                 <input
@@ -588,7 +601,9 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="loanProgram">
                 Program
               </label>
-              <ExplainPill prompt="Explain the differences between Conventional, FHA, VA, and USDA mortgage programs." />
+              <ExplainPill
+                prompt={`Explain the ${formData.loanProgram || "Conventional"} loan program for homebuyers, including who it fits best.`}
+              />
               <select
                 id="loanProgram"
                 className={styles.select}
@@ -621,7 +636,9 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
               <label className={styles.label} htmlFor="rateStructure">
                 Rate structure
               </label>
-              <ExplainPill prompt="Explain the difference between fixed-rate and adjustable-rate mortgages for buyers." />
+              <ExplainPill
+                prompt={`Explain a ${formData.rateStructure || "Fixed"} mortgage structure for a purchase loan and when it makes sense.`}
+              />
               <select
                 id="rateStructure"
                 className={styles.select}
@@ -637,7 +654,9 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
                 <label className={styles.label} htmlFor="armTerm">
                   ARM fixed term
                 </label>
-                <ExplainPill prompt="Explain what a 5/6 or 7/6 ARM fixed term means for mortgage payments and adjustments." />
+                <ExplainPill
+                  prompt={`Explain what a ${formData.armTerm || "selected"} ARM fixed term (like 5/6 or 7/6) means for payments and adjustments.`}
+                />
                 <select
                   id="armTerm"
                   className={styles.select}
@@ -652,18 +671,23 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
             )}
             <div className={styles.fieldGroup}>
               <label className={styles.label} htmlFor="desiredLockPeriodDays">
-                Desired lock period (days, optional)
+                Desired lock period
               </label>
-              <ExplainPill prompt="Explain what a rate lock period is and how it impacts a purchase loan." />
-              <input
+              <ExplainPill prompt="Explain what a rate lock period is and why buyers choose 30, 45, 60, or 90 days." />
+              <select
                 id="desiredLockPeriodDays"
-                className={styles.input}
-                type="number"
-                inputMode="numeric"
-                placeholder="30"
-                value={formData.desiredLockPeriodDays}
+                className={styles.select}
+                value={formData.desiredLockPeriodDays || ""}
                 onChange={(e) => updateField("desiredLockPeriodDays", e.target.value)}
-              />
+              >
+                <option value="">Let the lender show options</option>
+                <option value="15">15 days</option>
+                <option value="30">30 days</option>
+                <option value="45">45 days</option>
+                <option value="60">60 days</option>
+                <option value="75">75 days</option>
+                <option value="90">90 days</option>
+              </select>
             </div>
           </div>
         );

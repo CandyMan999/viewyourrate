@@ -17,6 +17,8 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
   padding: 20px 20px 16px;
   color: #e9edf3;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .header {
@@ -311,6 +313,11 @@
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
+.chevron {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
 .explainButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
@@ -341,6 +348,23 @@
   color: #ffb3b3;
   margin: 0;
   font-size: 13px;
+}
+
+.dpChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(75, 225, 195, 0.12);
+  border: 1px solid rgba(75, 225, 195, 0.5);
+  color: #e6f7f1;
+  font-weight: 700;
+}
+
+.dpChip span:first-child {
+  color: #4be1c3;
+  font-weight: 900;
 }
 
 .footer {
