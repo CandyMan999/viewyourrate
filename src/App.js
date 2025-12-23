@@ -126,7 +126,7 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
   );
 };
 
-const navItems = [
+const baseNavItems = [
   { name: "Home", index: 0 },
   { name: "Calculators", index: 1 },
   { name: "Component1", index: 2 },
@@ -260,11 +260,11 @@ const App = () => {
 
   const handleNavClick = (index) => {
     if (showCompare) {
-      setShowCompare(false);
+      return;
     }
 
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: index });
-    if (navItems[index].name === "Contact") {
+    if (baseNavItems[index].name === "Contact") {
       scrollToFooter();
     } else {
       scrollToTop();
@@ -349,14 +349,15 @@ const App = () => {
   }, []);
 
   if (showCompare && activeScenario) {
+    const compareNavItems = [{ name: "Compare Products", index: 0 }];
     return (
       <Context.Provider value={{ state, dispatch }}>
         <div style={appStyles} ref={topRef}>
           <Navbar
             onNavClick={handleNavClick}
             toggleDrawer={toggleDrawer}
-            navItems={navItems}
-            activeComponent={state.activeComponent}
+            navItems={compareNavItems}
+            activeComponent={0}
             ref={navbarRef}
             showHeader
           />
@@ -385,7 +386,7 @@ const App = () => {
         <Navbar
           onNavClick={handleNavClick}
           toggleDrawer={toggleDrawer}
-          navItems={navItems}
+          navItems={baseNavItems}
           activeComponent={state.activeComponent}
           ref={navbarRef}
           showHeader={showHeader}
@@ -396,7 +397,7 @@ const App = () => {
           toggleDrawer={toggleDrawer}
           active={state.activeComponent}
           handleNavClick={handleNavClick}
-          navItems={navItems}
+          navItems={baseNavItems}
         />
         {/* Main container with background image */}
         <div style={mainContainerStyles}>
