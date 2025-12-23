@@ -46,7 +46,7 @@ const componentsList = [
   "HeroSection",
   "Calculator",
   "Component1",
-  "Component2",
+  "Beat My Estimate",
   "Component3",
 ];
 const ApplyNowWidget = ({ isVisible, onClose }) => {
@@ -131,7 +131,7 @@ const baseNavItems = [
   { name: "Home", index: 0 },
   { name: "Calculators", index: 1 },
   { name: "Compare Products", index: 2 },
-  { name: "Component2", index: 3 },
+  { name: "Beat My Estimate", index: 3 },
   { name: "Component3", index: 4 },
   { name: "Contact", index: 5 },
 ];
@@ -305,7 +305,7 @@ const App = () => {
         return <Calculator dispatch={dispatch} />;
       case "Component1":
         return <Component1 />;
-      case "Component2":
+      case "Beat My Estimate":
         return <Component2 />;
       case "Component3":
         return <Component3 />;

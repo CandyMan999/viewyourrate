@@ -99,9 +99,9 @@ const BeatMyEstimateWidget = ({ isVisible, onClose }) => {
     backgroundColor: "rgba(0, 0, 0, 0.55)",
     display: "flex",
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
     zIndex: 1200,
-    padding: "2rem 1rem",
+    padding: "6.5rem 1.5rem 2.5rem",
     boxSizing: "border-box",
     backdropFilter: "blur(4px)",
     WebkitBackdropFilter: "blur(4px)",
@@ -110,10 +110,12 @@ const BeatMyEstimateWidget = ({ isVisible, onClose }) => {
   const widgetStyles = {
     width: "100%",
     maxWidth: "980px",
+    maxHeight: "calc(100vh - 8rem)",
     borderRadius: "18px",
     overflow: "hidden",
     boxShadow: "0 20px 45px rgba(15, 33, 60, 0.25)",
     backgroundColor: "#fff",
+    overflowY: "auto",
   };
 
   const panelStyles = {
