@@ -126,10 +126,10 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
   );
 };
 
-const navItems = [
+const baseNavItems = [
   { name: "Home", index: 0 },
   { name: "Calculators", index: 1 },
-  { name: "Component1", index: 2 },
+  { name: "Compare Products", index: 2 },
   { name: "Component2", index: 3 },
   { name: "Component3", index: 4 },
   { name: "Contact", index: 5 },
@@ -182,6 +182,10 @@ const App = () => {
     setPricingState({ status: "idle", data: null, error: "" });
     setPrefillData(null);
     setShowCompare(false);
+  };
+
+  const handleSelectOption = () => {
+    dispatch({ type: "SHOW_APPLY_NOW_WIDGET", payload: true });
   };
 
   useEffect(() => {
@@ -260,7 +264,7 @@ const App = () => {
     }
 
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: index });
-    if (navItems[index].name === "Contact") {
+    if (baseNavItems[index].name === "Contact") {
       scrollToFooter();
     } else {
       scrollToTop();
@@ -311,7 +315,7 @@ const App = () => {
 
   useEffect(() => {
     const activeComponentName = componentsList[state.activeComponent];
-    const activeNavItem = navItems.find(
+    const activeNavItem = baseNavItems.find(
       (item) => item.name === activeComponentName
     );
     if (activeNavItem) {
@@ -345,14 +349,15 @@ const App = () => {
   }, []);
 
   if (showCompare && activeScenario) {
+    const compareIndex = baseNavItems.findIndex((item) => item.name === "Compare Products");
     return (
       <Context.Provider value={{ state, dispatch }}>
         <div style={appStyles} ref={topRef}>
           <Navbar
             onNavClick={handleNavClick}
             toggleDrawer={toggleDrawer}
-            navItems={navItems}
-            activeComponent={state.activeComponent}
+            navItems={baseNavItems}
+            activeComponent={compareIndex === -1 ? state.activeComponent : compareIndex}
             ref={navbarRef}
             showHeader
           />
@@ -361,6 +366,7 @@ const App = () => {
             quoteMode={quoteMode}
             pricingState={pricingState}
             onRetryPricing={retryPricing}
+            onSelectOption={handleSelectOption}
             onEdit={() => {
               setPrefillData(activeScenario);
               setShowCompare(false);
@@ -380,7 +386,7 @@ const App = () => {
         <Navbar
           onNavClick={handleNavClick}
           toggleDrawer={toggleDrawer}
-          navItems={navItems}
+          navItems={baseNavItems}
           activeComponent={state.activeComponent}
           ref={navbarRef}
           showHeader={showHeader}
@@ -391,7 +397,7 @@ const App = () => {
           toggleDrawer={toggleDrawer}
           active={state.activeComponent}
           handleNavClick={handleNavClick}
-          navItems={navItems}
+          navItems={baseNavItems}
         />
         {/* Main container with background image */}
         <div style={mainContainerStyles}>
@@ -457,6 +463,7 @@ const App = () => {
               pricingStatus={pricingState.status}
               pricingError={pricingState.error}
               onRetryPricing={retryPricing}
+              onSelectOption={handleSelectOption}
               onEdit={() => {
                 setPrefillData(activeScenario);
                 dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
@@ -470,6 +477,7 @@ const App = () => {
               pricingStatus={pricingState.status}
               pricingError={pricingState.error}
               onRetryPricing={retryPricing}
+              onSelectOption={handleSelectOption}
               onEdit={() => {
                 setPrefillData(activeScenario);
                 dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });

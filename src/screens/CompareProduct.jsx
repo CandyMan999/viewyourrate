@@ -15,6 +15,7 @@ const CompareProduct = ({
   onRetryPricing,
   onEdit,
   onReset,
+  onSelectOption,
 }) => {
   if (!scenario) return null;
 
@@ -28,6 +29,7 @@ const CompareProduct = ({
         onRetryPricing={onRetryPricing}
         onEdit={onEdit}
         onReset={onReset}
+        onSelectOption={onSelectOption}
       />
     ) : (
       <MortgageOptionsPage
@@ -39,6 +41,7 @@ const CompareProduct = ({
         onEdit={onEdit}
         onFixLtv={onEdit}
         onReset={onReset}
+        onSelectOption={onSelectOption}
       />
     );
 

@@ -52,6 +52,85 @@
   flex-wrap: wrap;
 }
 
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #f5f7fa;
+  font-size: 20px;
+}
+
+.sectionSubtitle {
+  margin: 6px 0 0;
+  color: #9eafc2;
+  font-size: 14px;
+}
+
+.sectionControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.sortControl {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #cfd6dd;
+  font-size: 13px;
+}
+
+.sortSelect {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #f5f7fa;
+  font-size: 13px;
+}
+
+.filterChip {
+  border-radius: 999px;
+  border: 1px solid rgba(75, 225, 195, 0.4);
+  background: rgba(255, 255, 255, 0.02);
+  color: #cfeee8;
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filterChipActive {
+  background: rgba(75, 225, 195, 0.18);
+  color: #f5f7fa;
+}
+
+.showAllRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.showAllButton {
+  border: none;
+  background: none;
+  color: #4be1c3;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .summaryText {
   display: flex;
   flex-direction: column;
@@ -269,13 +348,38 @@
   padding-top: 10px;
 }
 
-.detailToggle {
+.cardActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.detailButton {
   background: none;
-  border: none;
-  color: #4be1c3;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #e9edf3;
+  border-radius: 999px;
+  padding: 8px 12px;
   font-weight: 600;
   cursor: pointer;
-  padding: 0;
+}
+
+.cardCta {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #4be1c3, #2faad8);
+  color: #0c1016;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 10px 20px rgba(47, 170, 216, 0.25);
+}
+
+.cardCta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(47, 170, 216, 0.3);
 }
 
 .detailContent {
@@ -293,6 +397,113 @@
 
 .detailLabel {
   color: #9eafc2;
+}
+
+.recommendedBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(75, 225, 195, 0.16);
+  color: #8ff0db;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 16, 22, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1200;
+}
+
+.modalCard {
+  width: min(520px, 100%);
+  background: #0f1115;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.modalClose {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #9eafc2;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.modalKicker {
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  color: #8da2b5;
+}
+
+.modalTitle {
+  margin: 0;
+  color: #f5f7fa;
+  font-size: 22px;
+}
+
+.modalStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.modalStatLabel {
+  display: block;
+  color: #9eafc2;
+  font-size: 12px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.modalStatValue {
+  color: #f5f7fa;
+  font-weight: 700;
+}
+
+.modalDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.modalExplanation {
+  margin: 0 0 12px;
+  color: #cfd6dd;
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .chatExplain {
@@ -393,6 +604,26 @@
 .errorText {
   margin: 0;
   color: #cfd6dd;
+}
+
+.noticeBox {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(75, 225, 195, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.noticeTitle {
+  margin: 0 0 6px;
+  font-weight: 700;
+  color: #e9edf3;
+}
+
+.noticeText {
+  margin: 0;
+  color: #cfd6dd;
+  font-size: 14px;
 }
 
 @media (max-width: 640px) {

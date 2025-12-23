@@ -15,6 +15,57 @@ function formatPercent(value) {
   return `${Number(value).toFixed(0)}%`;
 }
 
+const defaultFallbackOptions = [
+  {
+    id: "fallback-1",
+    label: "Lowest monthly",
+    rate: 6.125,
+    apr: 6.3,
+    points: 0.25,
+    monthlyPayment: 2420,
+    cashToClose: 21800,
+    lockPeriodDays: 30,
+    productName: "30-Year Fixed",
+    explanation: "Balanced payment and costs for buyers who want predictability.",
+  },
+  {
+    id: "fallback-2",
+    label: "Low cash to close",
+    rate: 6.375,
+    apr: 6.52,
+    points: -0.5,
+    monthlyPayment: 2485,
+    cashToClose: 18400,
+    lockPeriodDays: 45,
+    productName: "30-Year Fixed with credit",
+    explanation: "Higher rate with credits to reduce upfront cash needs.",
+  },
+  {
+    id: "fallback-3",
+    label: "Lower rate",
+    rate: 5.875,
+    apr: 6.12,
+    points: 1.0,
+    monthlyPayment: 2325,
+    cashToClose: 25700,
+    lockPeriodDays: 60,
+    productName: "30-Year Fixed buydown",
+    explanation: "Lower rate with points for stronger long-term savings.",
+  },
+  {
+    id: "fallback-4",
+    label: "Shorter term",
+    rate: 5.65,
+    apr: 5.88,
+    points: 0.75,
+    monthlyPayment: 2680,
+    cashToClose: 23600,
+    lockPeriodDays: 45,
+    productName: "20-Year Fixed",
+    explanation: "Higher payment but faster equity buildup.",
+  },
+];
+
 const detailFields = [
   { key: "aprLabel", label: "APR" },
   { key: "rateLabel", label: "Rate" },
@@ -30,10 +81,18 @@ const MortgageOptionsPage = ({
   onFixLtv,
   onReset,
   onRetryPricing,
+  onSelectOption,
 }) => {
-  const [openDetail, setOpenDetail] = useState(null);
-  const isLoading = pricingStatus === "loading";
-  const hasError = pricingStatus === "error";
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedSort, setSelectedSort] = useState("payment");
+  const [showAll, setShowAll] = useState(false);
+  const [filters, setFilters] = useState({
+    noPoints: false,
+  });
+  const hasPricingOptions = Boolean(pricing?.options?.length);
+  const isLoading = pricingStatus === "loading" && hasPricingOptions;
+  const hasError = pricingStatus === "error" && hasPricingOptions;
+  const isFallback = !hasPricingOptions;
 
   const scenarioSummary = useMemo(() => {
     if (!scenario) return "";
@@ -48,6 +107,7 @@ const MortgageOptionsPage = ({
             ? `${Number(scenario.downPaymentPercent).toFixed(0)}% down`
             : null,
         scenario.creditScore ? `credit score around ${scenario.creditScore}+` : null,
+        scenario.loanProgram ? `${scenario.loanProgram} program` : null,
       ].filter(Boolean);
       return parts.join(", ");
     }
@@ -120,11 +180,12 @@ const MortgageOptionsPage = ({
   }, [scenario]);
 
   const formattedOptions = useMemo(() => {
-    if (!pricing?.options?.length) return [];
+    const rawOptions =
+      pricing?.options?.length > 0 ? pricing.options : defaultFallbackOptions;
 
     const sortedOptions =
       scenario?.quoteType === "Purchase"
-        ? [...pricing.options].sort((a, b) => {
+        ? [...rawOptions].sort((a, b) => {
             if (a.monthlyPayment === b.monthlyPayment) {
               const aprA = a.apr ?? a.rate ?? 0;
               const aprB = b.apr ?? b.rate ?? 0;
@@ -132,7 +193,7 @@ const MortgageOptionsPage = ({
             }
             return (a.monthlyPayment || 0) - (b.monthlyPayment || 0);
           })
-        : pricing.options;
+        : rawOptions;
 
     return sortedOptions.map((option) => {
       const payment = option.monthlyPayment || scenario?.maxMonthlyPayment || 0;
@@ -154,7 +215,37 @@ const MortgageOptionsPage = ({
         pointsLabel: formatPoints(option.points),
       };
     });
-  }, [pricing?.options, scenario?.maxMonthlyPayment]);
+  }, [pricing?.options, scenario?.maxMonthlyPayment, scenario?.quoteType]);
+
+  const filteredSortedOptions = useMemo(() => {
+    let result = [...formattedOptions];
+
+    if (filters.noPoints) {
+      result = result.filter((option) => Number(option.points ?? 0) <= 0);
+    }
+
+    switch (selectedSort) {
+      case "cash":
+        result.sort((a, b) => (a.cashToClose ?? 0) - (b.cashToClose ?? 0));
+        break;
+      case "rate":
+        result.sort((a, b) => (a.rate ?? 0) - (b.rate ?? 0));
+        break;
+      case "payment":
+      default:
+        result.sort((a, b) => (a.payment ?? 0) - (b.payment ?? 0));
+        break;
+    }
+
+    return result;
+  }, [formattedOptions, filters.noPoints, selectedSort]);
+
+  const recommendedOptions = useMemo(() => filteredSortedOptions.slice(0, 3), [filteredSortedOptions]);
+
+  const visibleOptions = useMemo(() => {
+    if (showAll) return filteredSortedOptions;
+    return filteredSortedOptions.slice(0, 6);
+  }, [filteredSortedOptions, showAll]);
 
   const headerPrompt = useMemo(() => {
     if (scenario?.quoteType === "Purchase") {
@@ -204,137 +295,193 @@ const MortgageOptionsPage = ({
       );
     }
 
-    if (!formattedOptions.length) {
-      return (
-        <div className={styles.errorBox}>
-          <p className={styles.errorTitle}>No options available yet</p>
-          <p className={styles.errorText}>
-            We’ll show your top three refinance matches as soon as pricing is ready.
-          </p>
-        </div>
-      );
-    }
-
     return (
-      <div className={styles.cardGrid}>
-        {formattedOptions.map((option, index) => (
-          <motion.div
-            key={option.id}
-            className={styles.card}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05, duration: 0.2 }}
-          >
-            <div className={styles.cardTop}>
-              <p className={styles.label}>{option.label}</p>
-              <ChatExplainPill
-                prompt={optionPrompt(option)}
-                context={scenarioSummary}
-                className={styles.inlinePill}
-              />
-            </div>
-            <div className={styles.paymentRow}>
-              <span className={styles.paymentValue}>{formatCurrency(option.payment)}</span>
-              <span className={styles.paymentCaption}>Estimated monthly</span>
-            </div>
-            <div className={styles.metrics}>
-              {detailFields.map((field) => (
-                <div key={field.key} className={styles.metric}>
-                  <div className={styles.metricLabelRow}>
-                    <p className={styles.metricLabel}>{field.label}</p>
-                    {field.explainable && (
-                      <ChatExplainPill
-                        prompt={pointsPrompt}
-                        context={scenarioSummary}
-                        className={styles.tinyPill}
-                      />
+      <>
+        {isFallback && (
+          <div className={styles.noticeBox}>
+            <p className={styles.noticeTitle}>Showing sample offers for now</p>
+            <p className={styles.noticeText}>
+              Live pricing isn’t connected yet, so we’re showing example rates to preview the
+              compare experience.
+            </p>
+          </div>
+        )}
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h3 className={styles.sectionTitle}>Recommended options for you</h3>
+            <p className={styles.sectionSubtitle}>Sorted by your selected view.</p>
+          </div>
+          <div className={styles.cardGrid}>
+            {recommendedOptions.map((option, index) => (
+              <motion.div
+                key={option.id}
+                className={styles.card}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05, duration: 0.2 }}
+              >
+                <div className={styles.cardTop}>
+                  <div>
+                    <p className={styles.recommendedBadge}>Recommended</p>
+                    <p className={styles.label}>{option.label}</p>
+                  </div>
+                  <ChatExplainPill
+                    prompt={optionPrompt(option)}
+                    context={scenarioSummary}
+                    className={styles.inlinePill}
+                  />
+                </div>
+                <div className={styles.paymentRow}>
+                  <span className={styles.paymentValue}>{formatCurrency(option.payment)}</span>
+                  <span className={styles.paymentCaption}>Estimated monthly</span>
+                </div>
+                <div className={styles.metrics}>
+                  {detailFields.map((field) => (
+                    <div key={field.key} className={styles.metric}>
+                      <div className={styles.metricLabelRow}>
+                        <p className={styles.metricLabel}>{field.label}</p>
+                        {field.explainable && (
+                          <ChatExplainPill
+                            prompt={pointsPrompt}
+                            context={scenarioSummary}
+                            className={styles.tinyPill}
+                          />
+                        )}
+                      </div>
+                      <p className={styles.metricValue}>{option[field.key]}</p>
+                    </div>
+                  ))}
+                </div>
+                {option.explanation && <p className={styles.explanation}>{option.explanation}</p>}
+
+                <div className={styles.details}>
+                  <div className={styles.cardActions}>
+                    <button
+                      type="button"
+                      className={styles.detailButton}
+                      onClick={() => setSelectedOption(option)}
+                    >
+                      View details
+                    </button>
+                    {onSelectOption && (
+                      <button
+                        type="button"
+                        className={styles.cardCta}
+                        onClick={() => onSelectOption(option)}
+                      >
+                        Apply now
+                      </button>
                     )}
                   </div>
-                  <p className={styles.metricValue}>{option[field.key]}</p>
                 </div>
-              ))}
-            </div>
-            {option.explanation && <p className={styles.explanation}>{option.explanation}</p>}
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
-            <div className={styles.details}>
-              <button
-                className={styles.detailToggle}
-                onClick={() => setOpenDetail(openDetail === option.id ? null : option.id)}
-              >
-                {openDetail === option.id ? "Hide details" : "Show details"}
-              </button>
-              <AnimatePresence initial={false}>
-                {openDetail === option.id && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className={styles.detailContent}
-                  >
-                    {detailFields.map((field) => (
-                      <div key={field.key} className={styles.detailRow}>
-                        <span className={styles.detailLabel}>{field.label}</span>
-                        <span className={styles.detailValue}>{option[field.key]}</span>
-                      </div>
-                    ))}
-                    {scenario?.quoteType === "Purchase" && (
-                      <>
-                        <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>Price</span>
-                          <span className={styles.detailValue}>
-                            {formatCurrency(scenario?.purchasePrice)}
-                          </span>
-                        </div>
-                        <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>Down payment</span>
-                          <span className={styles.detailValue}>
-                            {scenario?.downPayment
-                              ? formatCurrency(scenario.downPayment)
-                              : scenario?.downPaymentPercent
-                                ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
-                                : "—"}
-                          </span>
-                        </div>
-                      </>
-                    )}
-                    <div className={styles.detailRow}>
-                      <span className={styles.detailLabel}>State</span>
-                      <span className={styles.detailValue}>{scenario?.stateSelection || "—"}</span>
-                    </div>
-                    <div className={styles.detailRow}>
-                      <span className={styles.detailLabel}>Credit band</span>
-                      <span className={styles.detailValue}>
-                        {scenario?.creditScore ? `${scenario.creditScore}+` : "—"}
-                      </span>
-                    </div>
-                    {option.lockPeriodDays && (
-                      <div className={styles.detailRow}>
-                        <span className={styles.detailLabel}>Lock period</span>
-                        <span className={styles.detailValue}>{option.lockPeriodDays} days</span>
-                      </div>
-                    )}
-                    {option.cashToClose !== undefined && option.cashToClose !== null && (
-                      <div className={styles.detailRow}>
-                        <span className={styles.detailLabel}>Points / credits impact</span>
-                        <span className={styles.detailValue}>
-                          {formatCurrency(option.cashToClose)}
-                        </span>
-                      </div>
-                    )}
-                    {option.productName && (
-                      <div className={styles.detailRow}>
-                        <span className={styles.detailLabel}>Product</span>
-                        <span className={styles.detailValue}>{option.productName}</span>
-                      </div>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <h3 className={styles.sectionTitle}>Compare more offers</h3>
+              <p className={styles.sectionSubtitle}>
+                Fine-tune your view to pick the right balance of rate and cash to close.
+              </p>
             </div>
-          </motion.div>
-        ))}
-      </div>
+            <div className={styles.sectionControls}>
+              <label className={styles.sortControl}>
+                <span>Sort by</span>
+                <select
+                  className={styles.sortSelect}
+                  value={selectedSort}
+                  onChange={(event) => setSelectedSort(event.target.value)}
+                >
+                  <option value="payment">Lowest payment</option>
+                  <option value="cash">Lowest cash to close</option>
+                  <option value="rate">Lowest rate</option>
+                </select>
+              </label>
+              <button
+                type="button"
+                className={`${styles.filterChip} ${filters.noPoints ? styles.filterChipActive : ""}`}
+                onClick={() => setFilters((prev) => ({ ...prev, noPoints: !prev.noPoints }))}
+              >
+                No points
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.cardGrid}>
+            {visibleOptions.map((option, index) => (
+              <motion.div
+                key={option.id}
+                className={styles.card}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05, duration: 0.2 }}
+              >
+                <div className={styles.cardTop}>
+                  <p className={styles.label}>{option.label}</p>
+                  <ChatExplainPill
+                    prompt={optionPrompt(option)}
+                    context={scenarioSummary}
+                    className={styles.inlinePill}
+                  />
+                </div>
+                <div className={styles.paymentRow}>
+                  <span className={styles.paymentValue}>{formatCurrency(option.payment)}</span>
+                  <span className={styles.paymentCaption}>Estimated monthly</span>
+                </div>
+                <div className={styles.metrics}>
+                  {detailFields.map((field) => (
+                    <div key={field.key} className={styles.metric}>
+                      <div className={styles.metricLabelRow}>
+                        <p className={styles.metricLabel}>{field.label}</p>
+                        {field.explainable && (
+                          <ChatExplainPill
+                            prompt={pointsPrompt}
+                            context={scenarioSummary}
+                            className={styles.tinyPill}
+                          />
+                        )}
+                      </div>
+                      <p className={styles.metricValue}>{option[field.key]}</p>
+                    </div>
+                  ))}
+                </div>
+                {option.explanation && <p className={styles.explanation}>{option.explanation}</p>}
+
+                <div className={styles.details}>
+                  <div className={styles.cardActions}>
+                    <button
+                      type="button"
+                      className={styles.detailButton}
+                      onClick={() => setSelectedOption(option)}
+                    >
+                      View details
+                    </button>
+                    {onSelectOption && (
+                      <button
+                        type="button"
+                        className={styles.cardCta}
+                        onClick={() => onSelectOption(option)}
+                      >
+                        Apply now
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          {!showAll && filteredSortedOptions.length > visibleOptions.length && (
+            <div className={styles.showAllRow}>
+              <button type="button" className={styles.showAllButton} onClick={() => setShowAll(true)}>
+                Show all offers ({filteredSortedOptions.length})
+              </button>
+            </div>
+          )}
+        </section>
+      </>
     );
   };
 
@@ -377,16 +524,30 @@ const MortgageOptionsPage = ({
             <span className={styles.chipValue}>{formatPercent(ltvData.percent)}</span>
           </div>
           {scenario?.quoteType === "Purchase" ? (
-            <div className={styles.chip}>
-              <span className={styles.chipLabel}>Down payment</span>
-              <span className={styles.chipValue}>
-                {scenario.downPayment
-                  ? formatCurrency(scenario.downPayment)
-                  : scenario.downPaymentPercent
-                    ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
-                    : "—"}
-              </span>
-            </div>
+            <>
+              <div className={styles.chip}>
+                <span className={styles.chipLabel}>Price</span>
+                <span className={styles.chipValue}>
+                  {formatCurrency(scenario?.purchasePrice)}
+                </span>
+              </div>
+              <div className={styles.chip}>
+                <span className={styles.chipLabel}>Down payment</span>
+                <span className={styles.chipValue}>
+                  {scenario.downPayment
+                    ? formatCurrency(scenario.downPayment)
+                    : scenario.downPaymentPercent
+                      ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
+                      : "—"}
+                </span>
+              </div>
+              {scenario?.loanProgram && (
+                <div className={styles.chip}>
+                  <span className={styles.chipLabel}>Program</span>
+                  <span className={styles.chipValue}>{scenario.loanProgram}</span>
+                </div>
+              )}
+            </>
           ) : null}
           {scenario?.cashOutAmount ? (
             <div className={styles.chip}>
@@ -417,6 +578,152 @@ const MortgageOptionsPage = ({
       )}
 
       {renderBody()}
+
+      <AnimatePresence>
+        {selectedOption && (
+          <motion.div
+            className={styles.modalOverlay}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedOption(null)}
+          >
+            <motion.div
+              className={styles.modalCard}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                className={styles.modalClose}
+                aria-label="Close details"
+                onClick={() => setSelectedOption(null)}
+              >
+                ×
+              </button>
+              <div className={styles.modalHeader}>
+                <div>
+                  <p className={styles.modalKicker}>Option details</p>
+                  <h3 className={styles.modalTitle}>{selectedOption.label}</h3>
+                </div>
+                <ChatExplainPill
+                  prompt={optionPrompt(selectedOption)}
+                  context={scenarioSummary}
+                  className={styles.inlinePill}
+                />
+              </div>
+              <div className={styles.modalStats}>
+                <div>
+                  <span className={styles.modalStatLabel}>Estimated payment</span>
+                  <span className={styles.modalStatValue}>
+                    {formatCurrency(selectedOption.payment)}
+                  </span>
+                </div>
+                <div>
+                  <span className={styles.modalStatLabel}>Rate / APR</span>
+                  <span className={styles.modalStatValue}>
+                    {selectedOption.rateLabel} / {selectedOption.aprLabel}
+                  </span>
+                </div>
+                <div>
+                  <span className={styles.modalStatLabel}>Points / credits</span>
+                  <span className={styles.modalStatValue}>{selectedOption.pointsLabel}</span>
+                </div>
+              </div>
+              <div className={styles.modalDetails}>
+                {detailFields.map((field) => (
+                  <div key={field.key} className={styles.detailRow}>
+                    <span className={styles.detailLabel}>{field.label}</span>
+                    <span className={styles.detailValue}>{selectedOption[field.key]}</span>
+                  </div>
+                ))}
+                {scenario?.quoteType === "Purchase" && (
+                  <>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Price</span>
+                      <span className={styles.detailValue}>
+                        {formatCurrency(scenario?.purchasePrice)}
+                      </span>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Down payment</span>
+                      <span className={styles.detailValue}>
+                        {scenario?.downPayment
+                          ? formatCurrency(scenario.downPayment)
+                          : scenario?.downPaymentPercent
+                            ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
+                            : "—"}
+                      </span>
+                    </div>
+                    {scenario?.loanProgram && (
+                      <div className={styles.detailRow}>
+                        <span className={styles.detailLabel}>Program</span>
+                        <span className={styles.detailValue}>{scenario.loanProgram}</span>
+                      </div>
+                    )}
+                  </>
+                )}
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>State</span>
+                  <span className={styles.detailValue}>{scenario?.stateSelection || "—"}</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Credit band</span>
+                  <span className={styles.detailValue}>
+                    {scenario?.creditScore ? `${scenario.creditScore}+` : "—"}
+                  </span>
+                </div>
+                {selectedOption.lockPeriodDays && (
+                  <div className={styles.detailRow}>
+                    <span className={styles.detailLabel}>Lock period</span>
+                    <span className={styles.detailValue}>
+                      {selectedOption.lockPeriodDays} days
+                    </span>
+                  </div>
+                )}
+                {selectedOption.cashToClose !== undefined &&
+                  selectedOption.cashToClose !== null && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Cash to close</span>
+                      <span className={styles.detailValue}>
+                        {formatCurrency(selectedOption.cashToClose)}
+                      </span>
+                    </div>
+                  )}
+                {selectedOption.productName && (
+                  <div className={styles.detailRow}>
+                    <span className={styles.detailLabel}>Product</span>
+                    <span className={styles.detailValue}>{selectedOption.productName}</span>
+                  </div>
+                )}
+              </div>
+              {selectedOption.explanation && (
+                <p className={styles.modalExplanation}>{selectedOption.explanation}</p>
+              )}
+              <div className={styles.modalActions}>
+                {onSelectOption && (
+                  <button
+                    type="button"
+                    className={styles.cardCta}
+                    onClick={() => onSelectOption(selectedOption)}
+                  >
+                    Apply now
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={() => setSelectedOption(null)}
+                >
+                  Continue comparing
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
