@@ -10,7 +10,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     alignItems: "center",
     height: isMobile ? "100%" : "90vh", // Use full height for mobile
     background:
-      "radial-gradient(circle at 15% 15%, rgba(26, 107, 255, 0.12), transparent 40%), radial-gradient(circle at 80% 5%, rgba(79, 141, 255, 0.18), transparent 35%), #f5f8ff",
+      "radial-gradient(circle at 18% 20%, rgba(56, 189, 248, 0.18), transparent 42%), radial-gradient(circle at 80% 10%, rgba(52, 211, 153, 0.18), transparent 38%), #070c1a",
     position: "relative",
     overflow: "hidden",
   };
@@ -30,15 +30,16 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     left: "50%",
     transform: "translate(-50%, -50%)",
     zIndex: 1,
-    color: "#13223a",
+    color: "#f8fafc",
     textAlign: "center",
     padding: isMobile ? "1rem" : "1.8rem", // Slightly reduced padding for desktop
     maxWidth: isMobile ? "90%" : "540px", // Reduced width for desktop
     width: "80%",
     borderRadius: "18px",
-    background: "#ffffff",
-    border: "1px solid #e1e8f5",
-    boxShadow: "0 20px 45px rgba(15, 33, 60, 0.18)",
+    background: "rgba(15, 23, 42, 0.85)",
+    border: "1px solid rgba(148, 163, 184, 0.18)",
+    boxShadow: "0 24px 60px rgba(2, 6, 23, 0.6)",
+    backdropFilter: "blur(14px)",
   };
 
   const buttonContainerStyles = {
@@ -54,11 +55,11 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     margin: "0.5rem 0",
     fontSize: isMobile ? "1rem" : "1.1rem", // Reduced font size for desktop
     borderRadius: "999px",
-    border: "1px solid #1a6bff",
+    border: "1px solid rgba(56, 189, 248, 0.8)",
     cursor: "pointer",
-    background: "linear-gradient(90deg, #1a6bff 0%, #4c8dff 100%)",
-    color: "#f5f8ff",
-    boxShadow: "0 14px 34px rgba(26, 107, 255, 0.25)",
+    background: "linear-gradient(100deg, #0ea5e9 0%, #22c55e 100%)",
+    color: "#f8fafc",
+    boxShadow: "0 18px 38px rgba(14, 165, 233, 0.35)",
   };
 
   const iconStyles = {
@@ -91,7 +92,12 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
         <h1 style={{ fontSize: isMobile ? "1.5rem" : "2.25rem" }}>
           Unlock Your Best Rate
         </h1>
-        <p style={{ fontSize: isMobile ? "0.9rem" : "0.95rem", color: "#4b5f84" }}>
+        <p
+          style={{
+            fontSize: isMobile ? "0.9rem" : "0.95rem",
+            color: "#cbd5f5",
+          }}
+        >
           We provide real-time access to premier wholesale lenders, delivering
           wholesale pricing instantly. No Credit Checks, just transparency and
           speed.
@@ -100,7 +106,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
           style={{
             fontStyle: "italic",
             fontSize: isMobile ? "0.8rem" : "0.9rem",
-            color: "#4b5f84",
+            color: "#94a3b8",
           }}
         >
           Get a free custom rate quote in seconds ⟶
@@ -115,7 +121,10 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
           <motion.button
             style={buttonStyles}
             onClick={handleRefinanceClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#1a6bff" }}
+            whileHover={{
+              scale: 1.05,
+              background: "linear-gradient(100deg, #38bdf8, #34d399)",
+            }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
           >
@@ -129,7 +138,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
           style={{
             marginTop: "1rem",
             fontSize: isMobile ? "0.8rem" : "0.85rem", // Slightly reduced font size for desktop
-            color: "#5f6f8e",
+            color: "#94a3b8",
           }}
         >
           No impact on credit score • No hidden costs • No documents required

@@ -9,7 +9,7 @@ const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#1a3b6d"
+    stroke="#e2e8f0"
     strokeLinecap="round"
     {...props}
   />
@@ -73,7 +73,7 @@ const Navbar = ({
 
   // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.05, color: "#1a6bff" },
+    hover: { scale: 1.05, color: "#38bdf8" },
   };
 
   // Handle navigation clicks
@@ -93,13 +93,14 @@ const Navbar = ({
         justifyContent: "space-between",
         alignItems: "center",
         padding: "1rem 2rem",
-        background: "rgba(255, 255, 255, 0.92)",
-        borderBottom: "1px solid #e1e8f5",
+        background:
+          "linear-gradient(135deg, rgba(7, 12, 26, 0.95) 0%, rgba(12, 20, 44, 0.95) 100%)",
+        borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
         position: "sticky",
         top: 0,
         zIndex: 1000,
-        boxShadow: "0 12px 30px rgba(15, 33, 60, 0.12)",
-        backdropFilter: "blur(12px)",
+        boxShadow: "0 18px 40px rgba(2, 6, 23, 0.55)",
+        backdropFilter: "blur(14px)",
       }}
     >
       <div style={leftContainerStyles}>
@@ -149,7 +150,7 @@ const logoStyles = {
   fontSize: "1.5rem",
   fontWeight: "bold",
   cursor: "pointer",
-  color: "#13223a",
+  color: "#f8fafc",
 };
 // Inline Styles (remain the same)
 const leftContainerStyles = {
@@ -174,21 +175,21 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#13223a" : "#4b5f84",
+  color: isActive ? "#f8fafc" : "#cbd5f5",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",
   textDecoration: "none",
-  transition: "color 0.2s ease",
+  transition: "color 0.2s ease, background-color 0.2s ease",
   borderRadius: "999px",
-  backgroundColor: isActive ? "#eef5ff" : "transparent",
+  backgroundColor: isActive ? "rgba(56, 189, 248, 0.16)" : "transparent",
 });
 
 const indicatorBaseStyles = {
   position: "absolute",
   bottom: 0,
   height: "3px",
-  backgroundColor: "#1a6bff",
+  background: "linear-gradient(90deg, #38bdf8, #34d399)",
   borderRadius: "4px",
 };
 
