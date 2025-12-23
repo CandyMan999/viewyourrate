@@ -11,7 +11,6 @@ import {
   Navbar,
   HeroSection,
   RatesSection,
-  PricingWidget,
   RatesSectionMobile,
   NavDrawer,
   Footer,
@@ -25,6 +24,7 @@ import {
   AffordabilityCalc,
   MortgageCalc,
 } from "./components";
+import PricingWidget from "../client/app/components/pricingWidget/PricingWidget";
 import Context from "./context";
 import reducer from "./reducer";
 import { isMobile } from "react-device-detect";
@@ -134,6 +134,9 @@ const App = () => {
   const [showRatesSection, setShowRatesSection] = useState(true);
   const [opacity, setOpacity] = useState(1);
   const [direction, setDirection] = useState(1);
+  const [quoteMode] = useState("Refinance");
+  const [prefillData] = useState(null);
+  const [seedPayment] = useState("$2,500");
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -329,13 +332,17 @@ const App = () => {
 
         <Footer ref={footerRef} />
         <PricingWidget
-          isVisible={state.showPricingWidget}
+          isOpen={state.showPricingWidget}
+          mode={quoteMode}
+          initialPayment={seedPayment}
+          prefillData={prefillData}
           onClose={() =>
             dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
           }
-          onSubmit={() =>
-            dispatch({ type: "SHOW_RATES_VIEW", payload: true })
-          }
+          onComplete={() => {
+            dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
+            dispatch({ type: "SHOW_RATES_VIEW", payload: true });
+          }}
         />
         <AffordabilityCalc
           isVisible={state.showAffordabilityCalculator}
