@@ -1,0 +1,48 @@
+.shell {
+  background: rgba(12, 15, 21, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.38);
+}
+
+.headline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  color: #8da2b5;
+  margin: 0 0 6px;
+}
+
+.title {
+  margin: 0 0 8px;
+  color: #f7f9fb;
+  font-size: 26px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #cfd6dd;
+  line-height: 1.5;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 12px;
+}
+
+@media (max-width: 768px) {
+  .headline {
+    flex-direction: column;
+  }
+}

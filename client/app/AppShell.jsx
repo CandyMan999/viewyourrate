@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useReducer, useState } from "react";
-import HeroSection from "./components/HeroSection";
+import Header from "./components/layout/Header";
+import ResultsScreen from "./components/ResultsScreen";
 import PricingWidget from "./components/pricingWidget/PricingWidget";
 import MortgageOptionsPage from "./components/mortgageResults/MortgageOptionsPage";
 import PurchaseOptionsPage from "./components/purchaseResults/PurchaseOptionsPage";
@@ -32,7 +33,7 @@ function reducer(state, action) {
 
 function AppShell() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [widgetOpen, setWidgetOpen] = useState(false);
+  const [screen, setScreen] = useState("intake");
   const [seedPayment, setSeedPayment] = useState("$2,500");
   const [pricingState, setPricingState] = useState({
     status: "idle",
@@ -45,35 +46,36 @@ function AppShell() {
     setSeedPayment(paymentValue || seedPayment);
     dispatch({ type: "SET_MODE", mode: "Refinance" });
     setPrefillData(null);
-    setWidgetOpen(true);
+    setScreen("intake");
   };
 
   const handleStartPurchase = (paymentValue) => {
     setSeedPayment(paymentValue || seedPayment);
     dispatch({ type: "SET_MODE", mode: "Purchase" });
     setPrefillData(null);
-    setWidgetOpen(true);
+    setScreen("intake");
   };
 
   const handleScenarioComplete = (scenario) => {
     setPricingState({ status: "loading", data: null, error: "" });
     setPrefillData(scenario);
     dispatch({ type: "SET_MORTGAGE_SCENARIO", payload: scenario });
-    setWidgetOpen(false);
+    setScreen("results");
   };
 
-  const handleCloseWidget = () => setWidgetOpen(false);
+  const handleCloseWidget = () => setScreen("results");
 
   const handleResetScenario = () => {
     dispatch({ type: "RESET_SCENARIO" });
     setPricingState({ status: "idle", data: null, error: "" });
     setPrefillData(null);
+    setScreen("intake");
   };
 
   const handleOpenWithPrefill = (overrides = {}) => {
     const baseScenario = state.scenario || {};
     setPrefillData({ ...baseScenario, ...overrides });
-    setWidgetOpen(true);
+    setScreen("intake");
   };
 
   useEffect(() => {
@@ -116,12 +118,6 @@ function AppShell() {
 
   const activeScenario = useMemo(() => state.scenario, [state.scenario]);
 
-  useEffect(() => {
-    if (activeScenario && widgetOpen) {
-      setWidgetOpen(false);
-    }
-  }, [activeScenario, widgetOpen]);
-
   const retryPricing = () => {
     if (activeScenario) {
       setPricingState({ status: "loading", data: null, error: "" });
@@ -145,50 +141,90 @@ function AppShell() {
     }
   };
 
+  const showIntake = screen === "intake";
+  const showResults = screen === "results" && Boolean(activeScenario);
+
   return (
     <div className={styles.appShell}>
-      <HeroSection
-        paymentValue={seedPayment}
-        onPaymentChange={setSeedPayment}
-        onStartRefinance={handleStartRefinance}
-        onStartPurchase={handleStartPurchase}
+      <Header
         activeMode={state.mode}
+        onSelectRefi={() => handleStartRefinance(seedPayment)}
+        onSelectPurchase={() => handleStartPurchase(seedPayment)}
+        onStartOver={handleResetScenario}
+        onShowResults={() => setScreen("results")}
+        hasResults={Boolean(activeScenario)}
       />
 
-      {(!activeScenario || widgetOpen) && (
-        <PricingWidget
-          isOpen={widgetOpen && !activeScenario}
-          mode={state.mode}
-          initialPayment={seedPayment}
-          prefillData={prefillData}
-          onClose={handleCloseWidget}
-          onComplete={handleScenarioComplete}
-        />
-      )}
+      <main className={styles.mainContent}>
+        {showIntake && (
+          <section className={styles.heroCanvas}>
+            <div className={styles.heroCopy}>
+              <p className={styles.eyebrow}>Payment-first journeys</p>
+              <h1 className={styles.heroTitle}>Refi + purchase intake in one modern widget.</h1>
+              <p className={styles.heroSubtitle}>
+                We brought back the original app shell with navigation and a full-width hero,
+                centered on the new refi/purchase intake. Start with your payment, and we’ll carry
+                that intent through pricing.
+              </p>
+              <div className={styles.heroChips}>
+                <span className={styles.heroChip}>Refi &amp; purchase ready</span>
+                <span className={styles.heroChip}>Old results layout preserved</span>
+                <span className={styles.heroChip}>UI matched to the new widget</span>
+              </div>
+            </div>
+            <div className={styles.heroWidget}>
+              <PricingWidget
+                isOpen
+                mode={state.mode}
+                initialPayment={seedPayment}
+                prefillData={prefillData}
+                onClose={handleCloseWidget}
+                onComplete={handleScenarioComplete}
+                variant="inline"
+              />
+            </div>
+          </section>
+        )}
 
-      {activeScenario &&
-        (state.mode === "Purchase" ? (
-          <PurchaseOptionsPage
-            scenario={activeScenario}
-            pricing={pricingState.data}
-            pricingStatus={pricingState.status}
-            pricingError={pricingState.error}
-            onRetryPricing={retryPricing}
-            onEdit={() => handleOpenWithPrefill()}
-            onReset={handleResetScenario}
-          />
-        ) : (
-          <MortgageOptionsPage
-            scenario={activeScenario}
-            pricing={pricingState.data}
-            pricingStatus={pricingState.status}
-            pricingError={pricingState.error}
-            onRetryPricing={retryPricing}
-            onEdit={() => handleOpenWithPrefill()}
-            onFixLtv={handleOpenWithPrefill}
-            onReset={handleResetScenario}
-          />
-        ))}
+        {showResults && (
+          <section className={styles.resultsCanvas}>
+            <ResultsScreen
+              mode={state.mode}
+              scenario={activeScenario}
+              pricing={pricingState.data}
+              pricingStatus={pricingState.status}
+              pricingError={pricingState.error}
+              onRetryPricing={retryPricing}
+              onEdit={() => handleOpenWithPrefill()}
+              onFixLtv={handleOpenWithPrefill}
+              onReset={handleResetScenario}
+            >
+              {state.mode === "Purchase" ? (
+                <PurchaseOptionsPage
+                  scenario={activeScenario}
+                  pricing={pricingState.data}
+                  pricingStatus={pricingState.status}
+                  pricingError={pricingState.error}
+                  onRetryPricing={retryPricing}
+                  onEdit={() => handleOpenWithPrefill()}
+                  onReset={handleResetScenario}
+                />
+              ) : (
+                <MortgageOptionsPage
+                  scenario={activeScenario}
+                  pricing={pricingState.data}
+                  pricingStatus={pricingState.status}
+                  pricingError={pricingState.error}
+                  onRetryPricing={retryPricing}
+                  onEdit={() => handleOpenWithPrefill()}
+                  onFixLtv={handleOpenWithPrefill}
+                  onReset={handleResetScenario}
+                />
+              )}
+            </ResultsScreen>
+          </section>
+        )}
+      </main>
     </div>
   );
 }

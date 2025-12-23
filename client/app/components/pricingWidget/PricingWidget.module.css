@@ -21,6 +21,18 @@
   overflow-y: auto;
 }
 
+.inlineWrapper {
+  width: 100%;
+}
+
+.inlineModal {
+  width: 100%;
+  max-height: none;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.3);
+  background: radial-gradient(circle at 80% 0%, rgba(75, 225, 195, 0.05), transparent 35%),
+    #0f1218;
+}
+
 .header {
   display: flex;
   align-items: center;
