@@ -9,7 +9,7 @@ const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#333"
+    stroke="#1a3b6d"
     strokeLinecap="round"
     {...props}
   />
@@ -73,7 +73,7 @@ const Navbar = ({
 
   // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.05, color: "#dce7ff" },
+    hover: { scale: 1.05, color: "#1a6bff" },
   };
 
   // Handle navigation clicks
@@ -93,14 +93,13 @@ const Navbar = ({
         justifyContent: "space-between",
         alignItems: "center",
         padding: "1rem 2rem",
-        background:
-          "linear-gradient(135deg, rgba(12, 16, 26, 0.92) 0%, rgba(18, 26, 44, 0.92) 100%)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+        background: "rgba(255, 255, 255, 0.92)",
+        borderBottom: "1px solid #e1e8f5",
         position: "sticky",
         top: 0,
         zIndex: 1000,
-        boxShadow: "0 12px 30px rgba(0, 0, 0, 0.35)",
-        backdropFilter: "blur(10px)",
+        boxShadow: "0 12px 30px rgba(15, 33, 60, 0.12)",
+        backdropFilter: "blur(12px)",
       }}
     >
       <div style={leftContainerStyles}>
@@ -150,7 +149,7 @@ const logoStyles = {
   fontSize: "1.5rem",
   fontWeight: "bold",
   cursor: "pointer",
-  color: "#f2f6ff",
+  color: "#13223a",
 };
 // Inline Styles (remain the same)
 const leftContainerStyles = {
@@ -175,21 +174,21 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#fefefe" : "#c6d2f5",
+  color: isActive ? "#13223a" : "#4b5f84",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",
   textDecoration: "none",
-  transition: "color 0.3s ease",
-  borderRadius: "10px",
-  backgroundColor: isActive ? "rgba(255, 255, 255, 0.06)" : "transparent",
+  transition: "color 0.2s ease",
+  borderRadius: "999px",
+  backgroundColor: isActive ? "#eef5ff" : "transparent",
 });
 
 const indicatorBaseStyles = {
   position: "absolute",
   bottom: 0,
   height: "3px",
-  backgroundColor: "#4c8dff",
+  backgroundColor: "#1a6bff",
   borderRadius: "4px",
 };
 
