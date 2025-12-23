@@ -47,15 +47,6 @@ const RatesSection = ({ dispatch, state }) => {
               Customize my scenario
             </button>
           </div>
-          <div className="rates-section__meta">
-            <span className="rates-section__timestamp">
-              <FiClock aria-hidden="true" /> Updated {timestampLabel} ET
-            </span>
-            <span className="rates-section__disclaimer">
-              Scenario assumes 740 FICO, 20% down, and $400k loan amount. Your
-              rate may vary based on credit profile and program details.
-            </span>
-          </div>
         </aside>
 
         <div className="rates-section__cards" role="list">
@@ -64,6 +55,15 @@ const RatesSection = ({ dispatch, state }) => {
               <RateCard {...rate} />
             </div>
           ))}
+        </div>
+        <div className="rates-section__meta">
+          <span className="rates-section__timestamp">
+            <FiClock aria-hidden="true" /> Updated {timestampLabel} ET
+          </span>
+          <span className="rates-section__disclaimer">
+            Scenario assumes 740 FICO, 20% down, and $400k loan amount. Your
+            rate may vary based on credit profile and program details.
+          </span>
         </div>
       </div>
     </section>

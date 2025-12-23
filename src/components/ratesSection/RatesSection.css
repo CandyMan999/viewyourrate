@@ -95,7 +95,9 @@
   gap: 0.2rem;
   font-size: 0.55rem;
   color: rgba(148, 163, 184, 0.88);
-  margin-top: auto;
+  flex: 0 0 180px;
+  align-self: center;
+  text-align: right;
 }
 
 .rates-section__timestamp {
@@ -118,6 +120,7 @@
   padding-bottom: 0.2rem;
   height: 100%;
   align-items: stretch;
+  flex: 1 1 auto;
 }
 
 .rates-section__card {
@@ -137,6 +140,10 @@
 
   .rates-section__sidebar {
     flex-basis: 190px;
+  }
+
+  .rates-section__meta {
+    flex-basis: 150px;
   }
 }
 
