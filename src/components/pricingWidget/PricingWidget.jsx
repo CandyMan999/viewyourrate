@@ -116,7 +116,7 @@ const DotToggle = ({
   );
 };
 
-const PricingWidget = ({ isVisible, onClose }) => {
+const PricingWidget = ({ isVisible, onClose, onSubmit }) => {
   const [quoteType, setQuoteType] = useState("Purchase");
   const [purchasePrice, setPurchasePrice] = useState(550000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
@@ -185,6 +185,22 @@ const PricingWidget = ({ isVisible, onClose }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (onSubmit) {
+      onSubmit({
+        quoteType,
+        purchasePrice,
+        downPaymentPercent,
+        waiveEscrow,
+        occupancy,
+        propertyType,
+        stateSelection,
+        isMilitary,
+        loanAmount,
+      });
+    }
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (

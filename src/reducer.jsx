@@ -10,6 +10,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         showMortgageCalculator: payload,
       };
+    case "SHOW_RATES_VIEW":
+      return {
+        ...state,
+        showRatesView: payload,
+      };
     case "SHOW_AFFORDABILTY_CALCULATOR":
       return {
         ...state,

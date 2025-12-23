@@ -315,6 +315,11 @@ const App = () => {
         )}
         <RateDropNotification />
         <MortgageServices />
+        {state.showRatesView && (
+          <div style={{ padding: "2rem 1rem 4rem", backgroundColor: "#0f1115" }}>
+            <RatesSection dispatch={dispatch} state={state} />
+          </div>
+        )}
         <ApplyNowWidget
           isVisible={state.showApplyNowWidget}
           onClose={() =>
@@ -327,6 +332,9 @@ const App = () => {
           isVisible={state.showPricingWidget}
           onClose={() =>
             dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
+          }
+          onSubmit={() =>
+            dispatch({ type: "SHOW_RATES_VIEW", payload: true })
           }
         />
         <AffordabilityCalc
