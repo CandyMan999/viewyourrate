@@ -269,6 +269,13 @@
   padding-top: 10px;
 }
 
+.cardActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .detailToggle {
   background: none;
   border: none;
@@ -276,6 +283,23 @@
   font-weight: 600;
   cursor: pointer;
   padding: 0;
+}
+
+.cardCta {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #4be1c3, #2faad8);
+  color: #0c1016;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 10px 20px rgba(47, 170, 216, 0.25);
+}
+
+.cardCta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(47, 170, 216, 0.3);
 }
 
 .detailContent {

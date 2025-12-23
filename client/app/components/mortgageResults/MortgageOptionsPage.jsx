@@ -30,6 +30,7 @@ const MortgageOptionsPage = ({
   onFixLtv,
   onReset,
   onRetryPricing,
+  onSelectOption,
 }) => {
   const [openDetail, setOpenDetail] = useState(null);
   const isLoading = pricingStatus === "loading";
@@ -48,6 +49,7 @@ const MortgageOptionsPage = ({
             ? `${Number(scenario.downPaymentPercent).toFixed(0)}% down`
             : null,
         scenario.creditScore ? `credit score around ${scenario.creditScore}+` : null,
+        scenario.loanProgram ? `${scenario.loanProgram} program` : null,
       ].filter(Boolean);
       return parts.join(", ");
     }
@@ -154,7 +156,7 @@ const MortgageOptionsPage = ({
         pointsLabel: formatPoints(option.points),
       };
     });
-  }, [pricing?.options, scenario?.maxMonthlyPayment]);
+  }, [pricing?.options, scenario?.maxMonthlyPayment, scenario?.quoteType]);
 
   const headerPrompt = useMemo(() => {
     if (scenario?.quoteType === "Purchase") {
@@ -209,7 +211,9 @@ const MortgageOptionsPage = ({
         <div className={styles.errorBox}>
           <p className={styles.errorTitle}>No options available yet</p>
           <p className={styles.errorText}>
-            We’ll show your top three refinance matches as soon as pricing is ready.
+            {scenario?.quoteType === "Purchase"
+              ? "We’ll show your top purchase matches as soon as pricing is ready."
+              : "We’ll show your top three refinance matches as soon as pricing is ready."}
           </p>
         </div>
       );
@@ -257,12 +261,23 @@ const MortgageOptionsPage = ({
             {option.explanation && <p className={styles.explanation}>{option.explanation}</p>}
 
             <div className={styles.details}>
-              <button
-                className={styles.detailToggle}
-                onClick={() => setOpenDetail(openDetail === option.id ? null : option.id)}
-              >
-                {openDetail === option.id ? "Hide details" : "Show details"}
-              </button>
+              <div className={styles.cardActions}>
+                <button
+                  className={styles.detailToggle}
+                  onClick={() => setOpenDetail(openDetail === option.id ? null : option.id)}
+                >
+                  {openDetail === option.id ? "Hide details" : "Show details"}
+                </button>
+                {onSelectOption && (
+                  <button
+                    type="button"
+                    className={styles.cardCta}
+                    onClick={() => onSelectOption(option)}
+                  >
+                    Apply now
+                  </button>
+                )}
+              </div>
               <AnimatePresence initial={false}>
                 {openDetail === option.id && (
                   <motion.div
@@ -296,6 +311,12 @@ const MortgageOptionsPage = ({
                                 : "—"}
                           </span>
                         </div>
+                        {scenario?.loanProgram && (
+                          <div className={styles.detailRow}>
+                            <span className={styles.detailLabel}>Program</span>
+                            <span className={styles.detailValue}>{scenario.loanProgram}</span>
+                          </div>
+                        )}
                       </>
                     )}
                     <div className={styles.detailRow}>
@@ -377,16 +398,30 @@ const MortgageOptionsPage = ({
             <span className={styles.chipValue}>{formatPercent(ltvData.percent)}</span>
           </div>
           {scenario?.quoteType === "Purchase" ? (
-            <div className={styles.chip}>
-              <span className={styles.chipLabel}>Down payment</span>
-              <span className={styles.chipValue}>
-                {scenario.downPayment
-                  ? formatCurrency(scenario.downPayment)
-                  : scenario.downPaymentPercent
-                    ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
-                    : "—"}
-              </span>
-            </div>
+            <>
+              <div className={styles.chip}>
+                <span className={styles.chipLabel}>Price</span>
+                <span className={styles.chipValue}>
+                  {formatCurrency(scenario?.purchasePrice)}
+                </span>
+              </div>
+              <div className={styles.chip}>
+                <span className={styles.chipLabel}>Down payment</span>
+                <span className={styles.chipValue}>
+                  {scenario.downPayment
+                    ? formatCurrency(scenario.downPayment)
+                    : scenario.downPaymentPercent
+                      ? `${Number(scenario.downPaymentPercent).toFixed(0)}%`
+                      : "—"}
+                </span>
+              </div>
+              {scenario?.loanProgram && (
+                <div className={styles.chip}>
+                  <span className={styles.chipLabel}>Program</span>
+                  <span className={styles.chipValue}>{scenario.loanProgram}</span>
+                </div>
+              )}
+            </>
           ) : null}
           {scenario?.cashOutAmount ? (
             <div className={styles.chip}>

@@ -70,6 +70,12 @@ function AppShell() {
     setPrefillData(null);
   };
 
+  const handleSelectOption = () => {
+    if (typeof window !== "undefined") {
+      window.open("https://viewyourrate.my1003app.com", "_blank", "noopener,noreferrer");
+    }
+  };
+
   const handleOpenWithPrefill = (overrides = {}) => {
     const baseScenario = state.scenario || {};
     setPrefillData({ ...baseScenario, ...overrides });
@@ -174,6 +180,7 @@ function AppShell() {
             pricingStatus={pricingState.status}
             pricingError={pricingState.error}
             onRetryPricing={retryPricing}
+            onSelectOption={handleSelectOption}
             onEdit={() => handleOpenWithPrefill()}
             onReset={handleResetScenario}
           />
@@ -184,6 +191,7 @@ function AppShell() {
             pricingStatus={pricingState.status}
             pricingError={pricingState.error}
             onRetryPricing={retryPricing}
+            onSelectOption={handleSelectOption}
             onEdit={() => handleOpenWithPrefill()}
             onFixLtv={handleOpenWithPrefill}
             onReset={handleResetScenario}

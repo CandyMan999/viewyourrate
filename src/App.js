@@ -184,6 +184,10 @@ const App = () => {
     setShowCompare(false);
   };
 
+  const handleSelectOption = () => {
+    dispatch({ type: "SHOW_APPLY_NOW_WIDGET", payload: true });
+  };
+
   useEffect(() => {
     if (!activeScenario) return undefined;
     let cancelled = false;
@@ -361,6 +365,7 @@ const App = () => {
             quoteMode={quoteMode}
             pricingState={pricingState}
             onRetryPricing={retryPricing}
+            onSelectOption={handleSelectOption}
             onEdit={() => {
               setPrefillData(activeScenario);
               setShowCompare(false);
@@ -457,6 +462,7 @@ const App = () => {
               pricingStatus={pricingState.status}
               pricingError={pricingState.error}
               onRetryPricing={retryPricing}
+              onSelectOption={handleSelectOption}
               onEdit={() => {
                 setPrefillData(activeScenario);
                 dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
@@ -470,6 +476,7 @@ const App = () => {
               pricingStatus={pricingState.status}
               pricingError={pricingState.error}
               onRetryPricing={retryPricing}
+              onSelectOption={handleSelectOption}
               onEdit={() => {
                 setPrefillData(activeScenario);
                 dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
