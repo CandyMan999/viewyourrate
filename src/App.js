@@ -27,6 +27,7 @@ import {
 import PricingWidget from "../client/app/components/pricingWidget/PricingWidget";
 import MortgageOptionsPage from "../client/app/components/mortgageResults/MortgageOptionsPage";
 import PurchaseOptionsPage from "../client/app/components/purchaseResults/PurchaseOptionsPage";
+import CompareProduct from "./screens/CompareProduct";
 import { request } from "../client/client";
 import {
   GET_PURCHASE_PRICING_QUERY,
@@ -101,6 +102,35 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
     borderRadius: "50%",
   };
 
+  if (showCompare && activeScenario) {
+    return (
+      <Context.Provider value={{ state, dispatch }}>
+        <div style={appStyles} ref={topRef}>
+          <Navbar
+            onNavClick={handleNavClick}
+            toggleDrawer={toggleDrawer}
+            navItems={navItems}
+            activeComponent={state.activeComponent}
+            ref={navbarRef}
+            showHeader
+          />
+          <CompareProduct
+            scenario={activeScenario}
+            quoteMode={quoteMode}
+            pricingState={pricingState}
+            onRetryPricing={retryPricing}
+            onEdit={() => {
+              setPrefillData(activeScenario);
+              setShowCompare(false);
+              dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+            }}
+            onReset={handleResetScenario}
+          />
+        </div>
+      </Context.Provider>
+    );
+  }
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -146,6 +176,7 @@ const App = () => {
   const [seedPayment] = useState("$2,500");
   const [activeScenario, setActiveScenario] = useState(null);
   const [pricingState, setPricingState] = useState({ status: "idle", data: null, error: "" });
+  const [showCompare, setShowCompare] = useState(false);
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -171,6 +202,7 @@ const App = () => {
     setPrefillData(scenario);
     setActiveScenario(scenario);
     setPricingState({ status: "loading", data: null, error: "" });
+    setShowCompare(true);
     dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
   };
 
@@ -178,6 +210,7 @@ const App = () => {
     setActiveScenario(null);
     setPricingState({ status: "idle", data: null, error: "" });
     setPrefillData(null);
+    setShowCompare(false);
   };
 
   useEffect(() => {
