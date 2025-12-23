@@ -1,0 +1,40 @@
+.footer {
+  margin-top: 8px;
+  padding: 14px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #cfd6dd;
+}
+
+.brand {
+  margin: 0 0 4px;
+  color: #f7f9fb;
+  font-weight: 700;
+}
+
+.copy {
+  margin: 0;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.links a {
+  color: #f7f9fb;
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
