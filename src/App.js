@@ -16,7 +16,6 @@ import {
   Footer,
   Calculator,
   Component1,
-  Component2,
   Component3,
   Header,
   MortgageServices,
@@ -41,6 +40,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { FiX } from "react-icons/fi";
 import { dummyRates } from "./data/dummyRates";
+import BeatMyEstimateSection from "./components/beatMyEstimate/BeatMyEstimateSection";
 
 const componentsList = [
   "HeroSection",
@@ -306,7 +306,7 @@ const App = () => {
       case "Component1":
         return <Component1 />;
       case "Beat My Estimate":
-        return <Component2 />;
+        return <BeatMyEstimateSection />;
       case "Component3":
         return <Component3 />;
       default:

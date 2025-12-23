@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { isMobile } from "react-device-detect";
 import Context from "../../context"; // Import the global context
 import ApplyButton from "../applyButton/ApplyButton";
-import BeatMyEstimateButton from "../beatMyEstimate/BeatMyEstimateButton";
 
 // MenuToggle Component for the animated menu button
 const Path = (props) => (
@@ -108,7 +107,6 @@ const Navbar = ({
         <div style={logoStyles}>ViewYourRate</div>
         <ApplyButton mobile={isMobile} />{" "}
         {/* Use the ApplyNowButton component here */}
-        <BeatMyEstimateButton mobile={isMobile} />
       </div>
 
       {/* Navigation Links for desktop */}
