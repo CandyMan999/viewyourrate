@@ -315,7 +315,7 @@ const App = () => {
 
   useEffect(() => {
     const activeComponentName = componentsList[state.activeComponent];
-    const activeNavItem = navItems.find(
+    const activeNavItem = baseNavItems.find(
       (item) => item.name === activeComponentName
     );
     if (activeNavItem) {
