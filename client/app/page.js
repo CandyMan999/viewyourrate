@@ -1,7 +1,7 @@
 "use client";
 
-import AppShell from "./AppShell";
+import LegacyApp from "../../src/App";
 
 export default function HomePage() {
-  return <AppShell />;
+  return <LegacyApp />;
 }
