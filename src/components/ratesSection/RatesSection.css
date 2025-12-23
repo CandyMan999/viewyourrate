@@ -98,6 +98,7 @@
   color: rgba(148, 163, 184, 0.88);
   flex: 0 0 150px;
   align-self: stretch;
+  padding: 0 5px;
   text-align: right;
 }
 
