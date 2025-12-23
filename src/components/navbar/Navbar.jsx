@@ -73,7 +73,7 @@ const Navbar = ({
 
   // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.1, color: "#007bff" },
+    hover: { scale: 1.05, color: "#dce7ff" },
   };
 
   // Handle navigation clicks
@@ -93,13 +93,14 @@ const Navbar = ({
         justifyContent: "space-between",
         alignItems: "center",
         padding: "1rem 2rem",
-        backgroundColor: "#fff",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        background:
+          "linear-gradient(135deg, rgba(12, 16, 26, 0.92) 0%, rgba(18, 26, 44, 0.92) 100%)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
         position: "sticky",
-        // position: showHeader ? "relative" : "sticky",
-
         top: 0,
         zIndex: 1000,
+        boxShadow: "0 12px 30px rgba(0, 0, 0, 0.35)",
+        backdropFilter: "blur(10px)",
       }}
     >
       <div style={leftContainerStyles}>
@@ -149,6 +150,7 @@ const logoStyles = {
   fontSize: "1.5rem",
   fontWeight: "bold",
   cursor: "pointer",
+  color: "#f2f6ff",
 };
 // Inline Styles (remain the same)
 const leftContainerStyles = {
@@ -173,19 +175,21 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#007bff" : "#333",
+  color: isActive ? "#fefefe" : "#c6d2f5",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",
   textDecoration: "none",
   transition: "color 0.3s ease",
+  borderRadius: "10px",
+  backgroundColor: isActive ? "rgba(255, 255, 255, 0.06)" : "transparent",
 });
 
 const indicatorBaseStyles = {
   position: "absolute",
   bottom: 0,
   height: "3px",
-  backgroundColor: "#007bff",
+  backgroundColor: "#4c8dff",
   borderRadius: "4px",
 };
 

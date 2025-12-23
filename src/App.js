@@ -102,35 +102,6 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
     borderRadius: "50%",
   };
 
-  if (showCompare && activeScenario) {
-    return (
-      <Context.Provider value={{ state, dispatch }}>
-        <div style={appStyles} ref={topRef}>
-          <Navbar
-            onNavClick={handleNavClick}
-            toggleDrawer={toggleDrawer}
-            navItems={navItems}
-            activeComponent={state.activeComponent}
-            ref={navbarRef}
-            showHeader
-          />
-          <CompareProduct
-            scenario={activeScenario}
-            quoteMode={quoteMode}
-            pricingState={pricingState}
-            onRetryPricing={retryPricing}
-            onEdit={() => {
-              setPrefillData(activeScenario);
-              setShowCompare(false);
-              dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
-            }}
-            onReset={handleResetScenario}
-          />
-        </div>
-      </Context.Provider>
-    );
-  }
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -368,6 +339,35 @@ const App = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (showCompare && activeScenario) {
+    return (
+      <Context.Provider value={{ state, dispatch }}>
+        <div style={appStyles} ref={topRef}>
+          <Navbar
+            onNavClick={handleNavClick}
+            toggleDrawer={toggleDrawer}
+            navItems={navItems}
+            activeComponent={state.activeComponent}
+            ref={navbarRef}
+            showHeader
+          />
+          <CompareProduct
+            scenario={activeScenario}
+            quoteMode={quoteMode}
+            pricingState={pricingState}
+            onRetryPricing={retryPricing}
+            onEdit={() => {
+              setPrefillData(activeScenario);
+              setShowCompare(false);
+              dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+            }}
+            onReset={handleResetScenario}
+          />
+        </div>
+      </Context.Provider>
+    );
+  }
 
   return (
     <Context.Provider value={{ state, dispatch }}>

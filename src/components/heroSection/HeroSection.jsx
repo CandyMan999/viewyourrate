@@ -9,8 +9,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     justifyContent: "center",
     alignItems: "center",
     height: isMobile ? "100%" : "90vh", // Use full height for mobile
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    background: "radial-gradient(circle at 20% 20%, rgba(60, 83, 255, 0.12), transparent 35%), radial-gradient(circle at 80% 10%, rgba(0, 217, 196, 0.1), transparent 30%), #0f1115",
     position: "relative",
     overflow: "hidden",
   };
@@ -36,8 +35,8 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     maxWidth: isMobile ? "90%" : "540px", // Reduced width for desktop
     width: "80%",
     borderRadius: "10px",
-    background: "rgba(30, 30, 30, 0.85)",
-    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+    background: "linear-gradient(160deg, rgba(20, 26, 44, 0.95) 0%, rgba(12, 18, 32, 0.92) 100%)",
+    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.45)",
   };
 
   const buttonContainerStyles = {
@@ -55,9 +54,9 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     borderRadius: "10px",
     border: "none",
     cursor: "pointer",
-    background: "#007bff",
-    color: "#fff",
-    boxShadow: "0 2px 12px white",
+    background: "linear-gradient(90deg, #1a6bff 0%, #4c8dff 100%)",
+    color: "#f5f8ff",
+    boxShadow: "0 14px 34px rgba(26, 107, 255, 0.35)",
   };
 
   const iconStyles = {
