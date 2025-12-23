@@ -24,6 +24,7 @@ import {
   AffordabilityCalc,
   MortgageCalc,
 } from "./components";
+import BeatMyEstimateWidget from "./components/beatMyEstimate/BeatMyEstimateWidget";
 import PricingWidget from "../client/app/components/pricingWidget/PricingWidget";
 import MortgageOptionsPage from "../client/app/components/mortgageResults/MortgageOptionsPage";
 import PurchaseOptionsPage from "../client/app/components/purchaseResults/PurchaseOptionsPage";
@@ -493,6 +494,12 @@ const App = () => {
           isVisible={state.showApplyNowWidget}
           onClose={() =>
             dispatch({ type: "SHOW_APPLY_NOW_WIDGET", payload: false })
+          }
+        />
+        <BeatMyEstimateWidget
+          isVisible={state.showBeatMyEstimateWidget}
+          onClose={() =>
+            dispatch({ type: "SHOW_BEAT_MY_ESTIMATE_WIDGET", payload: false })
           }
         />
 

@@ -10,6 +10,7 @@ const Context = createContext({
   showAffordabilityCalculator: false,
   showPricingWidget: false,
   showApplyNowWidget: false,
+  showBeatMyEstimateWidget: false,
   showRatesView: false,
   mortgageRates: [],
 });
