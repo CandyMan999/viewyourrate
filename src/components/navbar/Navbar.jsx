@@ -9,7 +9,7 @@ const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#333"
+    stroke="#e2e8f0"
     strokeLinecap="round"
     {...props}
   />
@@ -73,7 +73,7 @@ const Navbar = ({
 
   // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.05, color: "#dce7ff" },
+    hover: { scale: 1.05, color: "#38bdf8" },
   };
 
   // Handle navigation clicks
@@ -94,13 +94,13 @@ const Navbar = ({
         alignItems: "center",
         padding: "1rem 2rem",
         background:
-          "linear-gradient(135deg, rgba(12, 16, 26, 0.92) 0%, rgba(18, 26, 44, 0.92) 100%)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+          "linear-gradient(135deg, rgba(7, 12, 26, 0.95) 0%, rgba(12, 20, 44, 0.95) 100%)",
+        borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
         position: "sticky",
         top: 0,
         zIndex: 1000,
-        boxShadow: "0 12px 30px rgba(0, 0, 0, 0.35)",
-        backdropFilter: "blur(10px)",
+        boxShadow: "0 18px 40px rgba(2, 6, 23, 0.55)",
+        backdropFilter: "blur(14px)",
       }}
     >
       <div style={leftContainerStyles}>
@@ -150,7 +150,7 @@ const logoStyles = {
   fontSize: "1.5rem",
   fontWeight: "bold",
   cursor: "pointer",
-  color: "#f2f6ff",
+  color: "#f8fafc",
 };
 // Inline Styles (remain the same)
 const leftContainerStyles = {
@@ -175,21 +175,21 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#fefefe" : "#c6d2f5",
+  color: isActive ? "#f8fafc" : "#cbd5f5",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",
   textDecoration: "none",
-  transition: "color 0.3s ease",
-  borderRadius: "10px",
-  backgroundColor: isActive ? "rgba(255, 255, 255, 0.06)" : "transparent",
+  transition: "color 0.2s ease, background-color 0.2s ease",
+  borderRadius: "999px",
+  backgroundColor: isActive ? "rgba(56, 189, 248, 0.16)" : "transparent",
 });
 
 const indicatorBaseStyles = {
   position: "absolute",
   bottom: 0,
   height: "3px",
-  backgroundColor: "#4c8dff",
+  background: "linear-gradient(90deg, #38bdf8, #34d399)",
   borderRadius: "4px",
 };
 

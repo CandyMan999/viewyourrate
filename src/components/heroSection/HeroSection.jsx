@@ -9,7 +9,8 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     justifyContent: "center",
     alignItems: "center",
     height: isMobile ? "100%" : "90vh", // Use full height for mobile
-    background: "radial-gradient(circle at 20% 20%, rgba(60, 83, 255, 0.12), transparent 35%), radial-gradient(circle at 80% 10%, rgba(0, 217, 196, 0.1), transparent 30%), #0f1115",
+    background:
+      "radial-gradient(circle at 18% 20%, rgba(56, 189, 248, 0.18), transparent 42%), radial-gradient(circle at 80% 10%, rgba(52, 211, 153, 0.18), transparent 38%), #070c1a",
     position: "relative",
     overflow: "hidden",
   };
@@ -29,14 +30,16 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     left: "50%",
     transform: "translate(-50%, -50%)",
     zIndex: 1,
-    color: "#f0f0f0",
+    color: "#f8fafc",
     textAlign: "center",
     padding: isMobile ? "1rem" : "1.8rem", // Slightly reduced padding for desktop
     maxWidth: isMobile ? "90%" : "540px", // Reduced width for desktop
     width: "80%",
-    borderRadius: "10px",
-    background: "linear-gradient(160deg, rgba(20, 26, 44, 0.95) 0%, rgba(12, 18, 32, 0.92) 100%)",
-    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.45)",
+    borderRadius: "18px",
+    background: "rgba(15, 23, 42, 0.85)",
+    border: "1px solid rgba(148, 163, 184, 0.18)",
+    boxShadow: "0 24px 60px rgba(2, 6, 23, 0.6)",
+    backdropFilter: "blur(14px)",
   };
 
   const buttonContainerStyles = {
@@ -51,12 +54,12 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     padding: isMobile ? "0.75rem" : "0.9rem", // Slightly reduced padding for desktop
     margin: "0.5rem 0",
     fontSize: isMobile ? "1rem" : "1.1rem", // Reduced font size for desktop
-    borderRadius: "10px",
-    border: "none",
+    borderRadius: "999px",
+    border: "1px solid rgba(56, 189, 248, 0.8)",
     cursor: "pointer",
-    background: "linear-gradient(90deg, #1a6bff 0%, #4c8dff 100%)",
-    color: "#f5f8ff",
-    boxShadow: "0 14px 34px rgba(26, 107, 255, 0.35)",
+    backgroundColor: "#0ea5e9",
+    color: "#f8fafc",
+    boxShadow: "0 18px 38px rgba(14, 165, 233, 0.35)",
   };
 
   const iconStyles = {
@@ -89,7 +92,12 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
         <h1 style={{ fontSize: isMobile ? "1.5rem" : "2.25rem" }}>
           Unlock Your Best Rate
         </h1>
-        <p style={{ fontSize: isMobile ? "0.9rem" : "0.95rem" }}>
+        <p
+          style={{
+            fontSize: isMobile ? "0.9rem" : "0.95rem",
+            color: "#cbd5f5",
+          }}
+        >
           We provide real-time access to premier wholesale lenders, delivering
           wholesale pricing instantly. No Credit Checks, just transparency and
           speed.
@@ -98,6 +106,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
           style={{
             fontStyle: "italic",
             fontSize: isMobile ? "0.8rem" : "0.9rem",
+            color: "#94a3b8",
           }}
         >
           Get a free custom rate quote in seconds ⟶
@@ -105,14 +114,26 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
 
         {/* Buttons */}
         <div style={buttonContainerStyles}>
-          <motion.button style={buttonStyles} onClick={handlePurchaseClick}>
+          <motion.button
+            style={buttonStyles}
+            onClick={handlePurchaseClick}
+            whileHover={{
+              scale: 1.05,
+              backgroundColor: "#38bdf8",
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+          >
             I'm looking to purchase
             <FiArrowRight style={iconStyles} />
           </motion.button>
           <motion.button
             style={buttonStyles}
             onClick={handleRefinanceClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
+            whileHover={{
+              scale: 1.05,
+              backgroundColor: "#38bdf8",
+            }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
           >
@@ -126,7 +147,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
           style={{
             marginTop: "1rem",
             fontSize: isMobile ? "0.8rem" : "0.85rem", // Slightly reduced font size for desktop
-            color: "#ccc",
+            color: "#94a3b8",
           }}
         >
           No impact on credit score • No hidden costs • No documents required

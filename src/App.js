@@ -532,10 +532,8 @@ const mainContainerStyles = {
   position: "relative",
   height: "100vh",
   overflow: "hidden",
-  backgroundImage: "url(/background.jpg)",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
+  background:
+    "radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.12), transparent 38%), radial-gradient(circle at 80% 10%, rgba(34, 197, 94, 0.15), transparent 32%), #050812",
 };
 
 // Styles for arrows
@@ -546,14 +544,15 @@ const arrowStyles = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
+  backgroundColor: "rgba(15, 23, 42, 0.85)",
+  border: "1px solid rgba(148, 163, 184, 0.25)",
   borderRadius: "50%",
   cursor: "pointer",
   zIndex: 1000,
   fontSize: "1.5rem",
-  color: "#007bff",
+  color: "#38bdf8",
 
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+  boxShadow: "0 10px 25px rgba(2, 6, 23, 0.45)",
 };
 
 export default App;
