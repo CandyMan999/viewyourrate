@@ -98,7 +98,15 @@ const states = [
 const refiStepOrder = ["payment", "balance", "credit", "advanced"];
 const purchaseStepOrder = ["price", "borrower", "property", "loan"];
 
-const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onComplete }) => {
+const PricingWidget = ({
+  isOpen,
+  mode,
+  initialPayment,
+  prefillData,
+  onClose,
+  onComplete,
+  variant = "modal",
+}) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [downPaymentMode, setDownPaymentMode] = useState("amount");
@@ -125,61 +133,70 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
     desiredLockPeriodDays: "",
   });
 
-  useEffect(() => {
-    if (isOpen) {
-      setStepIndex(0);
-      setShowAdvanced(false);
-      setDownPaymentMode(
-        prefillData?.downPaymentPercent
-          ? "percent"
-          : prefillData?.downPayment
-            ? "amount"
-            : "amount"
-      );
-      setFormData((prev) => ({
-        ...prev,
-        maxMonthlyPayment: prefillData?.maxMonthlyPayment
-          ? formatCurrencyInput(prefillData.maxMonthlyPayment.toString())
-          : initialPayment || prev.maxMonthlyPayment,
-        stateSelection: prefillData?.stateSelection ?? prev.stateSelection,
-        existingLoanBalance: prefillData?.existingLoanBalance
-          ? formatCurrencyInput(prefillData.existingLoanBalance.toString())
-          : prev.existingLoanBalance,
-        estimatedHomeValue: prefillData?.estimatedHomeValue
-          ? formatCurrencyInput(prefillData.estimatedHomeValue.toString())
-          : prev.estimatedHomeValue,
-        creditScore: prefillData?.creditScore ?? prev.creditScore,
-        cashOutAmount: prefillData?.cashOutAmount
-          ? formatCurrencyInput(prefillData.cashOutAmount.toString())
-          : prev.cashOutAmount,
-        occupancy: prefillData?.occupancy ?? prev.occupancy,
-        propertyType: prefillData?.propertyType ?? prev.propertyType,
-        purchasePrice: prefillData?.purchasePrice
-          ? formatCurrencyInput(prefillData.purchasePrice.toString())
-          : prev.purchasePrice,
-        downPayment: prefillData?.downPayment
-          ? formatCurrencyInput(prefillData.downPayment.toString())
-          : prev.downPayment,
-        downPaymentPercent: prefillData?.downPaymentPercent?.toString() ?? prev.downPaymentPercent,
-        propertyZip: prefillData?.propertyZip ?? prev.propertyZip,
-        propertyUnits: prefillData?.propertyUnits ?? prev.propertyUnits,
-        loanProgram: prefillData?.loanProgram ?? prev.loanProgram,
-        termYears: prefillData?.termYears ?? prev.termYears,
-        rateStructure: prefillData?.rateStructure ?? prev.rateStructure,
-        armTerm: prefillData?.armTerm ?? prev.armTerm,
-        firstTimeBuyer: prefillData?.firstTimeBuyer ?? prev.firstTimeBuyer,
-        veteranStatus: prefillData?.veteranStatus ?? prev.veteranStatus,
-        desiredLockPeriodDays:
-          prefillData?.desiredLockPeriodDays?.toString() ?? prev.desiredLockPeriodDays,
-      }));
-    }
-  }, [initialPayment, isOpen, prefillData]);
+  const isInline = variant === "inline";
+  const shouldRender = isInline || isOpen;
 
   useEffect(() => {
-    if (!isOpen && prefillData?.downPaymentPercent) {
+    if (!shouldRender) return;
+
+    setStepIndex(0);
+    setShowAdvanced(false);
+  }, [mode, shouldRender]);
+
+  useEffect(() => {
+    if (!shouldRender) return;
+    setStepIndex(0);
+    setShowAdvanced(false);
+    setDownPaymentMode(
+      prefillData?.downPaymentPercent
+        ? "percent"
+        : prefillData?.downPayment
+          ? "amount"
+          : "amount"
+    );
+    setFormData((prev) => ({
+      ...prev,
+      maxMonthlyPayment: prefillData?.maxMonthlyPayment
+        ? formatCurrencyInput(prefillData.maxMonthlyPayment.toString())
+        : initialPayment || prev.maxMonthlyPayment,
+      stateSelection: prefillData?.stateSelection ?? prev.stateSelection,
+      existingLoanBalance: prefillData?.existingLoanBalance
+        ? formatCurrencyInput(prefillData.existingLoanBalance.toString())
+        : prev.existingLoanBalance,
+      estimatedHomeValue: prefillData?.estimatedHomeValue
+        ? formatCurrencyInput(prefillData.estimatedHomeValue.toString())
+        : prev.estimatedHomeValue,
+      creditScore: prefillData?.creditScore ?? prev.creditScore,
+      cashOutAmount: prefillData?.cashOutAmount
+        ? formatCurrencyInput(prefillData.cashOutAmount.toString())
+        : prev.cashOutAmount,
+      occupancy: prefillData?.occupancy ?? prev.occupancy,
+      propertyType: prefillData?.propertyType ?? prev.propertyType,
+      purchasePrice: prefillData?.purchasePrice
+        ? formatCurrencyInput(prefillData.purchasePrice.toString())
+        : prev.purchasePrice,
+      downPayment: prefillData?.downPayment
+        ? formatCurrencyInput(prefillData.downPayment.toString())
+        : prev.downPayment,
+      downPaymentPercent: prefillData?.downPaymentPercent?.toString() ?? prev.downPaymentPercent,
+      propertyZip: prefillData?.propertyZip ?? prev.propertyZip,
+      propertyUnits: prefillData?.propertyUnits ?? prev.propertyUnits,
+      loanProgram: prefillData?.loanProgram ?? prev.loanProgram,
+      termYears: prefillData?.termYears ?? prev.termYears,
+      rateStructure: prefillData?.rateStructure ?? prev.rateStructure,
+      armTerm: prefillData?.armTerm ?? prev.armTerm,
+      firstTimeBuyer: prefillData?.firstTimeBuyer ?? prev.firstTimeBuyer,
+      veteranStatus: prefillData?.veteranStatus ?? prev.veteranStatus,
+      desiredLockPeriodDays:
+        prefillData?.desiredLockPeriodDays?.toString() ?? prev.desiredLockPeriodDays,
+    }));
+  }, [initialPayment, prefillData, shouldRender]);
+
+  useEffect(() => {
+    if (prefillData?.downPaymentPercent) {
       setDownPaymentMode("percent");
     }
-  }, [isOpen, prefillData]);
+  }, [prefillData]);
 
   const stepOrder = mode === "Purchase" ? purchaseStepOrder : refiStepOrder;
   const currentStep = stepOrder[stepIndex] || stepOrder[0];
@@ -880,6 +897,113 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
 
   const isLastStep = stepIndex === stepOrder.length - 1;
 
+  if (!shouldRender) return null;
+
+  const modalMotionProps = isInline
+    ? { initial: { opacity: 1, scale: 1 }, animate: { opacity: 1, scale: 1 } }
+    : {
+        initial: { scale: 0.96, opacity: 0 },
+        animate: { scale: 1, opacity: 1 },
+        exit: { scale: 0.96, opacity: 0 },
+        transition: { duration: 0.2 },
+      };
+
+  const modalContent = (
+    <motion.div className={`${styles.modal} ${isInline ? styles.inlineModal : ""}`} {...modalMotionProps}>
+      <div className={styles.header}>
+        <div>
+          <p className={styles.modeLabel}>{mode === "Purchase" ? "Purchase" : "Refinance"}</p>
+          <h3 className={styles.modalTitle}>
+            {mode === "Purchase" ? "Purchase intake" : "Refi intake"}
+          </h3>
+        </div>
+        {!isInline && (
+          <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close">
+            ×
+          </button>
+        )}
+      </div>
+
+      <div className={styles.progress}>
+        {stepOrder.map((step, index) => (
+          <div
+            key={step}
+            className={`${styles.progressDot} ${index <= stepIndex ? styles.progressActive : ""}`}
+          />
+        ))}
+      </div>
+
+      {mode !== "Purchase" && currentStep === "balance" && (
+        <div className={styles.ltvBar}>
+          <div className={styles.chipRow}>
+            <div className={`${styles.chip} ${styles[`chip-${ltvInfo.indicator}`]}`}>
+              <span className={styles.chipLabel}>LTV</span>
+              <span className={styles.chipValue}>{ltvChipValue}</span>
+            </div>
+            {parseCurrency(formData.cashOutAmount) ? (
+              <div className={styles.chip}>
+                <span className={styles.chipLabel}>Cash-out</span>
+                <span className={styles.chipValue}>{formatCurrency(parseCurrency(formData.cashOutAmount))}</span>
+              </div>
+            ) : null}
+          </div>
+          <div className={styles.ltvInsight}>
+            <p className={styles.insightTitle}>LTV insight</p>
+            <p className={styles.insightText}>{ltvInfo.insight}</p>
+            {ltvInfo.cashOutNote && <p className={styles.insightText}>{ltvInfo.cashOutNote}</p>}
+          </div>
+        </div>
+      )}
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep + mode}
+          initial={{ opacity: 0, x: 12 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -12 }}
+          transition={{ duration: 0.2 }}
+        >
+          {renderStep()}
+        </motion.div>
+      </AnimatePresence>
+
+      <div className={styles.footer}>
+        <button
+          type="button"
+          className={styles.secondaryButton}
+          onClick={handleBack}
+          disabled={stepIndex === 0}
+        >
+          Back
+        </button>
+        {!isLastStep && (
+          <button
+            type="button"
+            className={styles.primaryButton}
+            disabled={!canContinue}
+            onClick={handleNext}
+          >
+            Continue
+          </button>
+        )}
+        {isLastStep && (
+          <button
+            type="button"
+            className={styles.primaryButton}
+            disabled={!canContinue}
+            onClick={handleSubmit}
+          >
+            See my options
+          </button>
+        )}
+      </div>
+    </motion.div>
+  );
+
+  if (isInline) {
+    return <div className={styles.inlineWrapper}>{modalContent}</div>;
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -889,99 +1013,7 @@ const PricingWidget = ({ isOpen, mode, initialPayment, prefillData, onClose, onC
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.div
-            className={styles.modal}
-            initial={{ scale: 0.96, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.96, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className={styles.header}>
-              <div>
-                <p className={styles.modeLabel}>{mode === "Purchase" ? "Purchase" : "Refinance"}</p>
-                <h3 className={styles.modalTitle}>
-                  {mode === "Purchase" ? "Purchase intake" : "Refi intake"}
-                </h3>
-              </div>
-              <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close">
-                ×
-              </button>
-            </div>
-
-            <div className={styles.progress}>
-              {stepOrder.map((step, index) => (
-                <div
-                  key={step}
-                  className={`${styles.progressDot} ${index <= stepIndex ? styles.progressActive : ""}`}
-                />
-              ))}
-            </div>
-
-            {mode !== "Purchase" && currentStep === "balance" && (
-              <div className={styles.ltvBar}>
-                <div className={styles.chipRow}>
-                  <div className={`${styles.chip} ${styles[`chip-${ltvInfo.indicator}`]}`}>
-                    <span className={styles.chipLabel}>LTV</span>
-                    <span className={styles.chipValue}>{ltvChipValue}</span>
-                  </div>
-                  {parseCurrency(formData.cashOutAmount) ? (
-                    <div className={styles.chip}>
-                      <span className={styles.chipLabel}>Cash-out</span>
-                      <span className={styles.chipValue}>{formatCurrency(parseCurrency(formData.cashOutAmount))}</span>
-                    </div>
-                  ) : null}
-                </div>
-                <div className={styles.ltvInsight}>
-                  <p className={styles.insightTitle}>LTV insight</p>
-                  <p className={styles.insightText}>{ltvInfo.insight}</p>
-                  {ltvInfo.cashOutNote && <p className={styles.insightText}>{ltvInfo.cashOutNote}</p>}
-                </div>
-              </div>
-            )}
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep + mode}
-                initial={{ opacity: 0, x: 12 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }}
-                transition={{ duration: 0.2 }}
-              >
-                {renderStep()}
-              </motion.div>
-            </AnimatePresence>
-
-            <div className={styles.footer}>
-              <button
-                type="button"
-                className={styles.secondaryButton}
-                onClick={handleBack}
-                disabled={stepIndex === 0}
-              >
-                Back
-              </button>
-              {!isLastStep && (
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={!canContinue}
-                  onClick={handleNext}
-                >
-                  Continue
-                </button>
-              )}
-              {isLastStep && (
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={!canContinue}
-                  onClick={handleSubmit}
-                >
-                  See my options
-                </button>
-              )}
-            </div>
-          </motion.div>
+          {modalContent}
         </motion.div>
       )}
     </AnimatePresence>

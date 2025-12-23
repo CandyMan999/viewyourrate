@@ -5,7 +5,370 @@
     #0f1115;
   color: #f5f6f7;
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  padding: 32px 16px 48px;
+  padding: 32px 16px 60px;
+}
+
+.mainContent {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.heroCanvas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.heroCopy {
+  background: rgba(15, 17, 23, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+}
+
+.heroTitle {
+  margin: 6px 0 10px;
+  font-size: clamp(26px, 4vw, 34px);
+  color: #f7f9fb;
+}
+
+.heroSubtitle {
+  margin: 0 0 14px;
+  color: #cfd6dd;
+  line-height: 1.6;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  color: #8da2b5;
+  margin: 0;
+}
+
+.heroChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.heroChip {
+  background: rgba(75, 225, 195, 0.12);
+  border: 1px solid rgba(75, 225, 195, 0.35);
+  color: #dff7f1;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.heroActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.primaryCta,
+.secondaryCta {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+
+.primaryCta {
+  background: linear-gradient(135deg, #4be1c3, #2faad8);
+  color: #0c1016;
+  box-shadow: 0 14px 30px rgba(75, 225, 195, 0.25);
+}
+
+.secondaryCta {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e6ecf3;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.primaryCta:hover,
+.secondaryCta:hover {
+  transform: translateY(-2px);
+}
+
+.heroWidget {
+  min-width: 0;
+}
+
+.section {
+  background: rgba(12, 15, 21, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.sectionKicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  color: #8da2b5;
+  margin: 0 0 6px;
+}
+
+.sectionTitle {
+  margin: 0 0 6px;
+  color: #f7f9fb;
+  font-size: 24px;
+}
+
+.sectionSubtitle {
+  margin: 0;
+  color: #cfd6dd;
+  line-height: 1.5;
+}
+
+.sectionActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.textButton {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e6ecf3;
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.rateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.rateCard {
+  background: radial-gradient(circle at 80% 0%, rgba(75, 225, 195, 0.06), transparent 40%),
+    #0f1218;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rateTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rateLabel {
+  margin: 0;
+  color: #cfd6dd;
+  font-weight: 700;
+}
+
+.ratePayment {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #f5f7fa;
+}
+
+.ratePaymentCaption {
+  font-size: 12px;
+  color: #8da2b5;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.rateMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.metricLabel {
+  margin: 0;
+  color: #8da2b5;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.metricValue {
+  margin: 2px 0 0;
+  color: #f5f7fa;
+  font-weight: 700;
+}
+
+.applyButton {
+  align-self: flex-start;
+  background: linear-gradient(135deg, #4be1c3, #2faad8);
+  border: none;
+  color: #0c1016;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.resultsCanvas {
+  margin-top: 14px;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rateTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.rateTable th,
+.rateTable td {
+  padding: 10px;
+  text-align: left;
+}
+
+.rateTable thead {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.rateTable tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.analyzerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.analyzerCard,
+.analyzerInsight {
+  background: #0f1218;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.analyzerTitle {
+  margin: 0 0 8px;
+  color: #f5f7fa;
+}
+
+.analyzerText {
+  margin: 0 0 12px;
+  color: #cfd6dd;
+  line-height: 1.5;
+}
+
+.calcGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.calcCard {
+  background: #0f1218;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calcHeader {
+  font-weight: 800;
+  margin: 0;
+}
+
+.calcForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-weight: 700;
+  color: #e6ecf3;
+  font-size: 13px;
+}
+
+.input {
+  width: 100%;
+  background: #0c0f15;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #f7f9fb;
+}
+
+.calcResult {
+  font-weight: 800;
+  color: #4be1c3;
+  margin-top: 4px;
+}
+
+.calcText {
+  margin: 0;
+  color: #cfd6dd;
+}
+
+.applyBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.applyButtons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.footer {
+  text-align: center;
+  color: #cfd6dd;
+  margin-top: 12px;
+}
+
+.footerTitle {
+  margin: 0 0 6px;
+  font-weight: 800;
+  color: #f7f9fb;
+}
+
+.footerText {
+  margin: 0;
+  color: #a9b9c9;
 }
 
 @media (min-width: 768px) {
