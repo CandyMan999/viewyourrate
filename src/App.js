@@ -129,7 +129,7 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
 const baseNavItems = [
   { name: "Home", index: 0 },
   { name: "Calculators", index: 1 },
-  { name: "Component1", index: 2 },
+  { name: "Compare Products", index: 2 },
   { name: "Component2", index: 3 },
   { name: "Component3", index: 4 },
   { name: "Contact", index: 5 },
