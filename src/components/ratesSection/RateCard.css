@@ -1,0 +1,158 @@
+.rate-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 200px;
+  padding: 1rem;
+  border-radius: 16px;
+  background: radial-gradient(circle at top left, rgba(32, 41, 72, 0.82), rgba(9, 14, 34, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 16px 28px rgba(5, 10, 25, 0.32);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  color: #f8fafc;
+  gap: 1rem;
+}
+
+.rate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 36px rgba(8, 14, 35, 0.4);
+}
+
+.rate-card--compact {
+  min-width: 170px;
+  padding: 0.85rem;
+  gap: 0.85rem;
+}
+
+.rate-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.78);
+}
+
+.rate-card__purpose {
+  font-weight: 600;
+}
+
+.rate-card__trend-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.12);
+  font-size: 1rem;
+}
+
+.rate-card__trend-icon--up {
+  color: #f97316;
+  background: rgba(248, 113, 38, 0.18);
+}
+
+.rate-card__trend-icon--down {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.rate-card__trend-icon--flat {
+  color: #94a3b8;
+}
+
+.rate-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.rate-card__product {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.rate-card__figures {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.rate-card__figure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.rate-card__label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(226, 232, 240, 0.62);
+}
+
+.rate-card__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.rate-card__divider {
+  width: 1px;
+  height: 36px;
+  background: linear-gradient(
+    180deg,
+    rgba(148, 163, 184, 0) 0%,
+    rgba(148, 163, 184, 0.35) 50%,
+    rgba(148, 163, 184, 0) 100%
+  );
+}
+
+.rate-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.rate-card__change {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+}
+
+.rate-card__change--up {
+  color: #f87171;
+}
+
+.rate-card__change--down {
+  color: #34d399;
+}
+
+.rate-card__change--flat {
+  color: #94a3b8;
+}
+
+.rate-card--compact .rate-card__value {
+  font-size: 1.1rem;
+}
+
+.rate-card--compact .rate-card__footer {
+  font-size: 0.7rem;
+}
+
+.rate-card--compact .rate-card__trend-icon {
+  width: 26px;
+  height: 26px;
+  font-size: 0.9rem;
+}
+
+.rate-card--compact .rate-card__figures {
+  gap: 0.45rem;
+}
