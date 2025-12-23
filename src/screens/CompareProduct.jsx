@@ -1,7 +1,15 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import MortgageOptionsPage from "../../client/app/components/mortgageResults/MortgageOptionsPage";
 import PurchaseOptionsPage from "../../client/app/components/purchaseResults/PurchaseOptionsPage";
 import ExplainPill from "../../client/app/components/pricingWidget/ExplainPill";
+import {
+  ArmsCard,
+  ExampleComparisonCard,
+  LoanTypesCard,
+  PaymentVsTimeCard,
+  RatePointsCreditsCard,
+  RateTrendsCard,
+} from "../components/compareHub";
 
 const containerStyle = {
   padding: "24px 12px 48px",
@@ -48,34 +56,7 @@ const CompareProduct = ({
   onStartPurchase,
   onStartRefinance,
 }) => {
-  const [loanAmount, setLoanAmount] = useState("400000");
-  const [termYears, setTermYears] = useState(30);
-  const [interestRate, setInterestRate] = useState("6.5");
   const [stepIndex, setStepIndex] = useState(0);
-
-  const parsedLoanAmount = useMemo(() => {
-    const numeric = Number(String(loanAmount).replace(/[^0-9.]/g, ""));
-    return Number.isFinite(numeric) && numeric > 0 ? numeric : 0;
-  }, [loanAmount]);
-
-  const parsedRate = useMemo(() => {
-    const numeric = Number(String(interestRate).replace(/[^0-9.]/g, ""));
-    return Number.isFinite(numeric) && numeric >= 0 ? numeric : 0;
-  }, [interestRate]);
-
-  const months = termYears * 12;
-  const monthlyPayment = useMemo(() => {
-    if (!months || parsedLoanAmount === 0) return 0;
-    const monthlyRate = parsedRate / 100 / 12;
-    if (monthlyRate === 0) {
-      return parsedLoanAmount / months;
-    }
-    const factor = Math.pow(1 + monthlyRate, months);
-    return (parsedLoanAmount * monthlyRate * factor) / (factor - 1);
-  }, [months, parsedLoanAmount, parsedRate]);
-
-  const totalPaid = monthlyPayment * months;
-  const totalInterest = totalPaid - parsedLoanAmount;
 
   const steps = [
     {
@@ -85,42 +66,7 @@ const CompareProduct = ({
       description:
         "30-year loans keep monthly payments lower. 15-year loans build equity faster and reduce total interest dramatically.",
       aiPrompt: "Why would someone pick a 15-year fixed mortgage over a 30-year?",
-      content: (
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ fontSize: "0.8rem" }}>Monthly payment</span>
-              <span style={{ fontSize: "0.8rem", color: "#38bdf8" }}>Higher on 15Y</span>
-            </div>
-            <div style={{ backgroundColor: "rgba(148, 163, 184, 0.2)", height: "8px", borderRadius: "999px" }}>
-              <div
-                style={{
-                  width: "70%",
-                  height: "100%",
-                  borderRadius: "999px",
-                  background: "linear-gradient(90deg, #38bdf8, #34d399)",
-                }}
-              />
-            </div>
-          </div>
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ fontSize: "0.8rem" }}>Total interest</span>
-              <span style={{ fontSize: "0.8rem", color: "#fbbf24" }}>Higher on 30Y</span>
-            </div>
-            <div style={{ backgroundColor: "rgba(148, 163, 184, 0.2)", height: "8px", borderRadius: "999px" }}>
-              <div
-                style={{
-                  width: "85%",
-                  height: "100%",
-                  borderRadius: "999px",
-                  background: "linear-gradient(90deg, #fbbf24, #f97316)",
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      ),
+      content: <PaymentVsTimeCard />,
     },
     {
       id: "rate-points-credits",
@@ -129,39 +75,7 @@ const CompareProduct = ({
       description:
         "Points lower your rate by paying upfront. Credits do the opposite: you take a higher rate in exchange for lender money.",
       aiPrompt: "Explain how points and lender credits change APR and monthly payment.",
-      content: (
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          {[
-            { label: "Rate", value: "Lower", width: "35%", color: "#38bdf8" },
-            { label: "Points", value: "Upfront", width: "60%", color: "#a78bfa" },
-            { label: "Credits", value: "Lender help", width: "45%", color: "#34d399" },
-          ].map((item) => (
-            <div key={item.label}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem" }}>
-                <span>{item.label}</span>
-                <span style={{ color: item.color }}>{item.value}</span>
-              </div>
-              <div style={{ backgroundColor: "rgba(148, 163, 184, 0.2)", height: "8px", borderRadius: "999px" }}>
-                <div style={{ width: item.width, height: "100%", borderRadius: "999px", background: item.color }} />
-              </div>
-            </div>
-          ))}
-          <button
-            type="button"
-            style={{
-              borderRadius: "10px",
-              border: "1px solid rgba(148, 163, 184, 0.3)",
-              backgroundColor: "rgba(15, 23, 42, 0.6)",
-              color: "#e2e8f0",
-              padding: "8px 12px",
-              fontSize: "0.85rem",
-              cursor: "pointer",
-            }}
-          >
-            See a $1,000 points example
-          </button>
-        </div>
-      ),
+      content: <RatePointsCreditsCard />,
     },
     {
       id: "loan-types",
@@ -170,38 +84,7 @@ const CompareProduct = ({
       description:
         "Loan types differ by eligibility, insurance, and upfront costs. This quick grid highlights who each fits best.",
       aiPrompt: "Which loan type fits a first-time homebuyer and why?",
-      content: (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-            gap: "12px",
-            fontSize: "0.82rem",
-          }}
-        >
-          {[
-            { label: "Conventional", detail: "Flexible credit, PMI with <20% down" },
-            { label: "FHA", detail: "Lower credit, upfront + monthly MIP" },
-            { label: "VA", detail: "Eligible veterans, no PMI" },
-            { label: "USDA", detail: "Rural areas, income limits" },
-          ].map((item) => (
-            <div
-              key={item.label}
-              style={{
-                padding: "10px",
-                borderRadius: "12px",
-                backgroundColor: "rgba(15, 23, 42, 0.7)",
-                border: "1px solid rgba(148, 163, 184, 0.12)",
-              }}
-            >
-              <div style={{ fontWeight: 600, color: "#f8fafc", marginBottom: "6px" }}>
-                {item.label}
-              </div>
-              <div style={{ color: "#94a3b8", lineHeight: 1.4 }}>{item.detail}</div>
-            </div>
-          ))}
-        </div>
-      ),
+      content: <LoanTypesCard />,
     },
     {
       id: "arms",
@@ -210,40 +93,7 @@ const CompareProduct = ({
       description:
         "ARMs offer a lower initial rate, then adjust later. They work well if you plan to sell or refinance before the adjustment period ends.",
       aiPrompt: "Explain when an adjustable-rate mortgage makes sense.",
-      content: (
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          {["Intro fixed", "Adjustment window", "Long-term"].map((stage, index) => (
-            <div
-              key={stage}
-              style={{
-                padding: "10px",
-                borderRadius: "10px",
-                backgroundColor: index === 0 ? "rgba(56, 189, 248, 0.2)" : "rgba(148, 163, 184, 0.12)",
-                border: "1px solid rgba(148, 163, 184, 0.14)",
-                fontSize: "0.82rem",
-              }}
-            >
-              {stage}
-            </div>
-          ))}
-          <div style={{ marginTop: "4px", display: "flex", gap: "8px" }}>
-            {["3/1 ARM", "5/1 ARM", "7/1 ARM"].map((label) => (
-              <span
-                key={label}
-                style={{
-                  fontSize: "0.75rem",
-                  borderRadius: "999px",
-                  padding: "6px 10px",
-                  border: "1px solid rgba(148, 163, 184, 0.3)",
-                  backgroundColor: "rgba(15, 23, 42, 0.6)",
-                }}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
-        </div>
-      ),
+      content: <ArmsCard />,
     },
     {
       id: "rate-trends",
@@ -252,30 +102,7 @@ const CompareProduct = ({
       description:
         "Instead of raw tables, track direction. A 0.25% rate change can shift payment by roughly $60 per $400k loan.",
       aiPrompt: "Explain how small rate changes affect monthly payment.",
-      content: (
-        <div>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", height: "70px" }}>
-            {[40, 52, 46, 64, 58, 72, 62].map((height, index) => (
-              <div
-                key={`trend-${index}`}
-                style={{
-                  width: "12%",
-                  height: `${height}px`,
-                  borderRadius: "8px",
-                  background:
-                    index > 4
-                      ? "linear-gradient(180deg, #f97316, #fbbf24)"
-                      : "linear-gradient(180deg, #38bdf8, #34d399)",
-                }}
-              />
-            ))}
-          </div>
-          <ul style={{ marginTop: "12px", paddingLeft: "18px", color: "#94a3b8" }}>
-            <li>Rates moved up this month after inflation data cooled.</li>
-            <li>Even small changes can shift affordability fast.</li>
-          </ul>
-        </div>
-      ),
+      content: <RateTrendsCard />,
     },
     {
       id: "example-comparison",
@@ -284,106 +111,7 @@ const CompareProduct = ({
       description:
         "Try a quick sandbox to see how term length and rates affect monthly payments. This is just example math.",
       aiPrompt: "Explain how term length and rate impact payment and total interest.",
-      content: (
-        <div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
-            <label style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.8rem" }}>
-              Loan amount
-              <input
-                type="text"
-                value={loanAmount}
-                onChange={(event) => setLoanAmount(event.target.value)}
-                style={{
-                  padding: "10px",
-                  borderRadius: "10px",
-                  border: "1px solid rgba(148, 163, 184, 0.3)",
-                  backgroundColor: "rgba(15, 23, 42, 0.8)",
-                  color: "#f8fafc",
-                }}
-              />
-            </label>
-            <label style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.8rem" }}>
-              Rate (APR)
-              <input
-                type="text"
-                value={interestRate}
-                onChange={(event) => setInterestRate(event.target.value)}
-                style={{
-                  padding: "10px",
-                  borderRadius: "10px",
-                  border: "1px solid rgba(148, 163, 184, 0.3)",
-                  backgroundColor: "rgba(15, 23, 42, 0.8)",
-                  color: "#f8fafc",
-                }}
-              />
-            </label>
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.8rem" }}>
-              Term
-              <div style={{ display: "flex", gap: "8px" }}>
-                {[15, 30].map((term) => (
-                  <button
-                    key={term}
-                    type="button"
-                    onClick={() => setTermYears(term)}
-                    style={{
-                      flex: 1,
-                      padding: "10px",
-                      borderRadius: "10px",
-                      border: termYears === term ? "1px solid #38bdf8" : "1px solid rgba(148, 163, 184, 0.3)",
-                      backgroundColor: termYears === term ? "rgba(56, 189, 248, 0.2)" : "rgba(15, 23, 42, 0.8)",
-                      color: "#f8fafc",
-                      cursor: "pointer",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {term} year
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: "16px",
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "12px",
-            }}
-          >
-            {[
-              { label: "Estimated monthly", value: monthlyPayment, highlight: true },
-              { label: "Total interest", value: totalInterest },
-              { label: "Total paid", value: totalPaid },
-            ].map((item) => (
-              <div
-                key={item.label}
-                style={{
-                  padding: "12px",
-                  borderRadius: "12px",
-                  backgroundColor: "rgba(15, 23, 42, 0.7)",
-                  border: "1px solid rgba(148, 163, 184, 0.2)",
-                }}
-              >
-                <div style={{ fontSize: "0.75rem", color: "#94a3b8" }}>{item.label}</div>
-                <div
-                  style={{
-                    fontSize: item.highlight ? "1.2rem" : "1rem",
-                    fontWeight: 700,
-                    color: item.highlight ? "#38bdf8" : "#e2e8f0",
-                    marginTop: "4px",
-                  }}
-                >
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  }).format(Number.isFinite(item.value) ? item.value : 0)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ),
+      content: <ExampleComparisonCard />,
     },
   ];
 
