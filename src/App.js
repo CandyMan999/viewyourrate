@@ -442,7 +442,7 @@ const App = () => {
             <FiArrowRight />
           </motion.div>
         </div>
-        {showRatesSection && (
+        {showRatesSection && !state.showPricingWidget && (
           <div style={{ transition: "opacity 0.5s ease", opacity: opacity }}>
             {state.activeComponent === 0 ? (
               isMobile ? (
