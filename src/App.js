@@ -255,6 +255,10 @@ const App = () => {
   };
 
   const handleNavClick = (index) => {
+    if (showCompare) {
+      setShowCompare(false);
+    }
+
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: index });
     if (navItems[index].name === "Contact") {
       scrollToFooter();
