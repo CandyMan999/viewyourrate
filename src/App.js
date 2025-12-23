@@ -25,6 +25,13 @@ import {
   MortgageCalc,
 } from "./components";
 import PricingWidget from "../client/app/components/pricingWidget/PricingWidget";
+import MortgageOptionsPage from "../client/app/components/mortgageResults/MortgageOptionsPage";
+import PurchaseOptionsPage from "../client/app/components/purchaseResults/PurchaseOptionsPage";
+import { request } from "../client/client";
+import {
+  GET_PURCHASE_PRICING_QUERY,
+  GET_REFI_PRICING_QUERY,
+} from "../client/graphQL/queries";
 import Context from "./context";
 import reducer from "./reducer";
 import { isMobile } from "react-device-detect";
@@ -134,9 +141,11 @@ const App = () => {
   const [showRatesSection, setShowRatesSection] = useState(true);
   const [opacity, setOpacity] = useState(1);
   const [direction, setDirection] = useState(1);
-  const [quoteMode] = useState("Refinance");
-  const [prefillData] = useState(null);
+  const [quoteMode, setQuoteMode] = useState("Refinance");
+  const [prefillData, setPrefillData] = useState(null);
   const [seedPayment] = useState("$2,500");
+  const [activeScenario, setActiveScenario] = useState(null);
+  const [pricingState, setPricingState] = useState({ status: "idle", data: null, error: "" });
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -145,6 +154,84 @@ const App = () => {
   const appStyles = {
     fontFamily: "Arial, sans-serif",
     position: "relative",
+  };
+
+  const handleStartRefinance = () => {
+    setQuoteMode("Refinance");
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+  };
+
+  const handleStartPurchase = () => {
+    setQuoteMode("Purchase");
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+  };
+
+  const handleScenarioComplete = (scenario) => {
+    setQuoteMode(scenario?.quoteType === "Purchase" ? "Purchase" : "Refinance");
+    setPrefillData(scenario);
+    setActiveScenario(scenario);
+    setPricingState({ status: "loading", data: null, error: "" });
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
+  };
+
+  const handleResetScenario = () => {
+    setActiveScenario(null);
+    setPricingState({ status: "idle", data: null, error: "" });
+    setPrefillData(null);
+  };
+
+  useEffect(() => {
+    if (!activeScenario) return undefined;
+    let cancelled = false;
+
+    const fetchPricing = async () => {
+      setPricingState({ status: "loading", data: null, error: "" });
+      try {
+        const query =
+          quoteMode === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
+        const data = await request(query, { input: activeScenario });
+        if (cancelled) return;
+        setPricingState({
+          status: "success",
+          data: data?.getPurchasePricing || data?.getRefiPricing || null,
+          error: "",
+        });
+      } catch (error) {
+        if (cancelled) return;
+        setPricingState({
+          status: "error",
+          data: null,
+          error: error?.message || "Unable to fetch pricing right now.",
+        });
+      }
+    };
+
+    fetchPricing();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeScenario, quoteMode]);
+
+  const retryPricing = () => {
+    if (!activeScenario) return;
+    setPricingState({ status: "loading", data: null, error: "" });
+    const query = quoteMode === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
+    request(query, { input: activeScenario })
+      .then((data) =>
+        setPricingState({
+          status: "success",
+          data: data?.getPurchasePricing || data?.getRefiPricing || null,
+          error: "",
+        })
+      )
+      .catch((error) =>
+        setPricingState({
+          status: "error",
+          data: null,
+          error: error?.message || "Unable to fetch pricing right now.",
+        })
+      );
   };
 
   useEffect(() => {
@@ -193,7 +280,14 @@ const App = () => {
   const renderActiveComponent = () => {
     switch (componentsList[state.activeComponent]) {
       case "HeroSection":
-        return <HeroSection state={state} dispatch={dispatch} />;
+        return (
+          <HeroSection
+            state={state}
+            dispatch={dispatch}
+            onStartPurchase={handleStartPurchase}
+            onStartRefinance={handleStartRefinance}
+          />
+        );
       case "Calculator":
         return <Calculator dispatch={dispatch} />;
       case "Component1":
@@ -318,11 +412,38 @@ const App = () => {
         )}
         <RateDropNotification />
         <MortgageServices />
-        {state.showRatesView && (
-          <div style={{ padding: "2rem 1rem 4rem", backgroundColor: "#0f1115" }}>
-            <RatesSection dispatch={dispatch} state={state} />
-          </div>
-        )}
+        {activeScenario &&
+          (quoteMode === "Purchase" ? (
+            <PurchaseOptionsPage
+              scenario={activeScenario}
+              pricing={pricingState.data}
+              pricingStatus={pricingState.status}
+              pricingError={pricingState.error}
+              onRetryPricing={retryPricing}
+              onEdit={() => {
+                setPrefillData(activeScenario);
+                dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+              }}
+              onReset={handleResetScenario}
+            />
+          ) : (
+            <MortgageOptionsPage
+              scenario={activeScenario}
+              pricing={pricingState.data}
+              pricingStatus={pricingState.status}
+              pricingError={pricingState.error}
+              onRetryPricing={retryPricing}
+              onEdit={() => {
+                setPrefillData(activeScenario);
+                dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+              }}
+              onFixLtv={() => {
+                setPrefillData(activeScenario);
+                dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+              }}
+              onReset={handleResetScenario}
+            />
+          ))}
         <ApplyNowWidget
           isVisible={state.showApplyNowWidget}
           onClose={() =>
@@ -339,10 +460,7 @@ const App = () => {
           onClose={() =>
             dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
           }
-          onComplete={() => {
-            dispatch({ type: "SHOW_PRICING_WIDGET", payload: false });
-            dispatch({ type: "SHOW_RATES_VIEW", payload: true });
-          }}
+          onComplete={handleScenarioComplete}
         />
         <AffordabilityCalc
           isVisible={state.showAffordabilityCalculator}

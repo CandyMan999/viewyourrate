@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
 import { isMobile } from "react-device-detect";
 
-const HeroSection = ({ state, dispatch }) => {
+const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => {
   const heroStyles = {
     display: "flex",
     justifyContent: "center",
@@ -64,8 +64,19 @@ const HeroSection = ({ state, dispatch }) => {
     marginLeft: "0.5rem",
   };
 
-  // Handle button clicks to show the PricingWidget
-  const handleButtonClick = () => {
+  const handlePurchaseClick = () => {
+    if (onStartPurchase) {
+      onStartPurchase();
+      return;
+    }
+    dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
+  };
+
+  const handleRefinanceClick = () => {
+    if (onStartRefinance) {
+      onStartRefinance();
+      return;
+    }
     dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
   };
 
@@ -95,13 +106,13 @@ const HeroSection = ({ state, dispatch }) => {
 
         {/* Buttons */}
         <div style={buttonContainerStyles}>
-          <motion.button style={buttonStyles} onClick={handleButtonClick}>
+          <motion.button style={buttonStyles} onClick={handlePurchaseClick}>
             I'm looking to purchase
             <FiArrowRight style={iconStyles} />
           </motion.button>
           <motion.button
             style={buttonStyles}
-            onClick={handleButtonClick}
+            onClick={handleRefinanceClick}
             whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
