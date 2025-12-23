@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiHome, FiPhone, FiPieChart, FiUsers } from "react-icons/fi";
+import { FiHome, FiPhone, FiPieChart, FiTrendingDown } from "react-icons/fi";
 import { FaCalculator } from "react-icons/fa"; // Actual calculator icon
 
 const NavDrawer = ({
@@ -74,8 +74,8 @@ const NavDrawer = ({
         return <FaCalculator />;
       case "Component1":
         return <FiPieChart />;
-      case "Component2":
-        return <FiUsers />;
+      case "Beat My Estimate":
+        return <FiTrendingDown />;
       case "Contact":
         return <FiPhone />;
       default:

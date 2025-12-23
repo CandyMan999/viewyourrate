@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
 import { isMobile } from "react-device-detect";
+import BeatMyEstimateButton from "../beatMyEstimate/BeatMyEstimateButton";
 
 const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => {
   const heroStyles = {
@@ -44,6 +45,11 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
 
   const buttonContainerStyles = {
     marginTop: isMobile ? "1rem" : "1.8rem", // Reduced margin for desktop
+  };
+  const beatEstimateStyles = {
+    marginTop: isMobile ? "1rem" : "1.4rem",
+    display: "flex",
+    justifyContent: "center",
   };
 
   const buttonStyles = {
@@ -140,6 +146,9 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
             I'm looking to refinance
             <FiArrowRight style={iconStyles} />
           </motion.button>
+        </div>
+        <div style={beatEstimateStyles}>
+          <BeatMyEstimateButton mobile={isMobile} />
         </div>
 
         {/* Additional Info */}

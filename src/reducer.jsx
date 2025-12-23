@@ -34,6 +34,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         showApplyNowWidget: payload,
       };
+    case "SHOW_BEAT_MY_ESTIMATE_WIDGET":
+      return {
+        ...state,
+        showBeatMyEstimateWidget: payload,
+      };
     case "SET_MORTGAGE_RATES":
       return { ...state, mortgageRates: payload };
 

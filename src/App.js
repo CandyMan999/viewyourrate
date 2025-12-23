@@ -16,7 +16,6 @@ import {
   Footer,
   Calculator,
   Component1,
-  Component2,
   Component3,
   Header,
   MortgageServices,
@@ -24,6 +23,7 @@ import {
   AffordabilityCalc,
   MortgageCalc,
 } from "./components";
+import BeatMyEstimateWidget from "./components/beatMyEstimate/BeatMyEstimateWidget";
 import PricingWidget from "../client/app/components/pricingWidget/PricingWidget";
 import MortgageOptionsPage from "../client/app/components/mortgageResults/MortgageOptionsPage";
 import PurchaseOptionsPage from "../client/app/components/purchaseResults/PurchaseOptionsPage";
@@ -40,12 +40,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { FiX } from "react-icons/fi";
 import { dummyRates } from "./data/dummyRates";
+import BeatMyEstimateSection from "./components/beatMyEstimate/BeatMyEstimateSection";
 
 const componentsList = [
   "HeroSection",
   "Calculator",
   "Component1",
-  "Component2",
+  "Beat My Estimate",
   "Component3",
 ];
 const ApplyNowWidget = ({ isVisible, onClose }) => {
@@ -130,7 +131,7 @@ const baseNavItems = [
   { name: "Home", index: 0 },
   { name: "Calculators", index: 1 },
   { name: "Compare Products", index: 2 },
-  { name: "Component2", index: 3 },
+  { name: "Beat My Estimate", index: 3 },
   { name: "Component3", index: 4 },
   { name: "Contact", index: 5 },
 ];
@@ -304,8 +305,8 @@ const App = () => {
         return <Calculator dispatch={dispatch} />;
       case "Component1":
         return <Component1 />;
-      case "Component2":
-        return <Component2 />;
+      case "Beat My Estimate":
+        return <BeatMyEstimateSection />;
       case "Component3":
         return <Component3 />;
       default:
@@ -493,6 +494,12 @@ const App = () => {
           isVisible={state.showApplyNowWidget}
           onClose={() =>
             dispatch({ type: "SHOW_APPLY_NOW_WIDGET", payload: false })
+          }
+        />
+        <BeatMyEstimateWidget
+          isVisible={state.showBeatMyEstimateWidget}
+          onClose={() =>
+            dispatch({ type: "SHOW_BEAT_MY_ESTIMATE_WIDGET", payload: false })
           }
         />
 
