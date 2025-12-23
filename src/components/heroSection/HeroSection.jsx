@@ -57,7 +57,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     borderRadius: "999px",
     border: "1px solid rgba(56, 189, 248, 0.8)",
     cursor: "pointer",
-    background: "linear-gradient(100deg, #0ea5e9 0%, #22c55e 100%)",
+    backgroundColor: "#0ea5e9",
     color: "#f8fafc",
     boxShadow: "0 18px 38px rgba(14, 165, 233, 0.35)",
   };
@@ -114,7 +114,16 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
 
         {/* Buttons */}
         <div style={buttonContainerStyles}>
-          <motion.button style={buttonStyles} onClick={handlePurchaseClick}>
+          <motion.button
+            style={buttonStyles}
+            onClick={handlePurchaseClick}
+            whileHover={{
+              scale: 1.05,
+              backgroundColor: "#38bdf8",
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+          >
             I'm looking to purchase
             <FiArrowRight style={iconStyles} />
           </motion.button>
@@ -123,7 +132,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
             onClick={handleRefinanceClick}
             whileHover={{
               scale: 1.05,
-              background: "linear-gradient(100deg, #38bdf8, #34d399)",
+              backgroundColor: "#38bdf8",
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
