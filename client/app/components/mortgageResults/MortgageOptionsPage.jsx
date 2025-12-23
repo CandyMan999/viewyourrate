@@ -89,8 +89,10 @@ const MortgageOptionsPage = ({
   const [filters, setFilters] = useState({
     noPoints: false,
   });
-  const isLoading = pricingStatus === "loading";
-  const hasError = pricingStatus === "error";
+  const hasPricingOptions = Boolean(pricing?.options?.length);
+  const isLoading = pricingStatus === "loading" && hasPricingOptions;
+  const hasError = pricingStatus === "error" && hasPricingOptions;
+  const isFallback = !hasPricingOptions;
 
   const scenarioSummary = useMemo(() => {
     if (!scenario) return "";
@@ -295,6 +297,15 @@ const MortgageOptionsPage = ({
 
     return (
       <>
+        {isFallback && (
+          <div className={styles.noticeBox}>
+            <p className={styles.noticeTitle}>Showing sample offers for now</p>
+            <p className={styles.noticeText}>
+              Live pricing isn’t connected yet, so we’re showing example rates to preview the
+              compare experience.
+            </p>
+          </div>
+        )}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <h3 className={styles.sectionTitle}>Recommended options for you</h3>

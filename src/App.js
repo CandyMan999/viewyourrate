@@ -260,7 +260,7 @@ const App = () => {
 
   const handleNavClick = (index) => {
     if (showCompare) {
-      return;
+      setShowCompare(false);
     }
 
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: index });
@@ -349,15 +349,15 @@ const App = () => {
   }, []);
 
   if (showCompare && activeScenario) {
-    const compareNavItems = [{ name: "Compare Products", index: 0 }];
+    const compareIndex = baseNavItems.findIndex((item) => item.name === "Compare Products");
     return (
       <Context.Provider value={{ state, dispatch }}>
         <div style={appStyles} ref={topRef}>
           <Navbar
             onNavClick={handleNavClick}
             toggleDrawer={toggleDrawer}
-            navItems={compareNavItems}
-            activeComponent={0}
+            navItems={baseNavItems}
+            activeComponent={compareIndex === -1 ? state.activeComponent : compareIndex}
             ref={navbarRef}
             showHeader
           />

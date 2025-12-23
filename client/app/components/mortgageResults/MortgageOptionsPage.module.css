@@ -606,6 +606,26 @@
   color: #cfd6dd;
 }
 
+.noticeBox {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(75, 225, 195, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.noticeTitle {
+  margin: 0 0 6px;
+  font-weight: 700;
+  color: #e9edf3;
+}
+
+.noticeText {
+  margin: 0;
+  color: #cfd6dd;
+  font-size: 14px;
+}
+
 @media (max-width: 640px) {
   .actions {
     width: 100%;
