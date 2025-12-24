@@ -15,7 +15,6 @@ import {
   NavDrawer,
   Footer,
   Calculator,
-  Component1,
   Component3,
   Header,
   MortgageServices,
@@ -42,10 +41,12 @@ import { FiX } from "react-icons/fi";
 import { dummyRates } from "./data/dummyRates";
 import BeatMyEstimateSection from "./components/beatMyEstimate/BeatMyEstimateSection";
 
+const compareNavLabel = "Learn & Compare Loans";
+
 const componentsList = [
   "HeroSection",
   "Calculator",
-  "Component1",
+  compareNavLabel,
   "Beat My Estimate",
   "Component3",
 ];
@@ -127,8 +128,6 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
   );
 };
 
-const compareNavLabel = "Learn & Compare Loans";
-
 const baseNavItems = [
   { name: "Home", index: 0 },
   { name: "Calculators", index: 1 },
@@ -155,6 +154,13 @@ const App = () => {
     error: "",
   });
   const [showCompare, setShowCompare] = useState(false);
+  const isWidgetOpen =
+    state.showPricingWidget ||
+    state.showApplyNowWidget ||
+    state.showBeatMyEstimateWidget ||
+    state.showAffordabilityCalculator ||
+    state.showMortgageCalculator;
+  const shouldShowHeader = showHeader && !isWidgetOpen;
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -297,6 +303,11 @@ const App = () => {
   const handleNext = () => {
     setDirection(1);
     const newIndex = (state.activeComponent + 1) % componentsList.length;
+    if (componentsList[newIndex] === compareNavLabel) {
+      setShowCompare(true);
+      scrollToTop();
+      return;
+    }
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
   };
 
@@ -305,7 +316,39 @@ const App = () => {
     const newIndex =
       (state.activeComponent - 1 + componentsList.length) %
       componentsList.length;
+    if (componentsList[newIndex] === compareNavLabel) {
+      setShowCompare(true);
+      scrollToTop();
+      return;
+    }
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
+  };
+
+  const handleCompareNext = () => {
+    setDirection(1);
+    const compareIndex = componentsList.indexOf(compareNavLabel);
+    if (compareIndex === -1) {
+      setShowCompare(false);
+      return;
+    }
+    const newIndex = (compareIndex + 1) % componentsList.length;
+    setShowCompare(false);
+    dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
+    scrollToTop();
+  };
+
+  const handleComparePrevious = () => {
+    setDirection(-1);
+    const compareIndex = componentsList.indexOf(compareNavLabel);
+    if (compareIndex === -1) {
+      setShowCompare(false);
+      return;
+    }
+    const newIndex =
+      (compareIndex - 1 + componentsList.length) % componentsList.length;
+    setShowCompare(false);
+    dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
+    scrollToTop();
   };
 
   const renderActiveComponent = () => {
@@ -321,8 +364,6 @@ const App = () => {
         );
       case "Calculator":
         return <Calculator dispatch={dispatch} />;
-      case "Component1":
-        return <Component1 />;
       case "Beat My Estimate":
         return <BeatMyEstimateSection />;
       case "Component3":
@@ -374,16 +415,18 @@ const App = () => {
     return (
       <Context.Provider value={{ state, dispatch }}>
         <div style={appStyles} ref={topRef}>
-          <Navbar
-            onNavClick={handleNavClick}
-            toggleDrawer={toggleDrawer}
-            navItems={baseNavItems}
-            activeComponent={
-              compareIndex === -1 ? state.activeComponent : compareIndex
-            }
-            ref={navbarRef}
-            showHeader
-          />
+          {!isWidgetOpen && (
+            <Navbar
+              onNavClick={handleNavClick}
+              toggleDrawer={toggleDrawer}
+              navItems={baseNavItems}
+              activeComponent={
+                compareIndex === -1 ? state.activeComponent : compareIndex
+              }
+              ref={navbarRef}
+              showHeader={!isWidgetOpen}
+            />
+          )}
           <CompareProduct
             scenario={activeScenario}
             quoteMode={quoteMode}
@@ -399,6 +442,73 @@ const App = () => {
             onStartPurchase={handleStartPurchase}
             onStartRefinance={handleStartRefinance}
           />
+          {!isWidgetOpen && (
+            <>
+              <motion.div
+                style={{
+                  margin: isMobile ? 0 : 10,
+                  left: 0,
+                  position: "absolute",
+                  ...arrowStyles,
+                }}
+                onClick={handleComparePrevious}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FiArrowLeft />
+              </motion.div>
+              <motion.div
+                style={{
+                  margin: isMobile ? 0 : 10,
+                  right: 0,
+                  position: "absolute",
+                  ...arrowStyles,
+                }}
+                onClick={handleCompareNext}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FiArrowRight />
+              </motion.div>
+            </>
+          )}
+          <ApplyNowWidget
+            isVisible={state.showApplyNowWidget}
+            onClose={() =>
+              dispatch({ type: "SHOW_APPLY_NOW_WIDGET", payload: false })
+            }
+          />
+          <BeatMyEstimateWidget
+            isVisible={state.showBeatMyEstimateWidget}
+            onClose={() =>
+              dispatch({ type: "SHOW_BEAT_MY_ESTIMATE_WIDGET", payload: false })
+            }
+          />
+          <PricingWidget
+            isOpen={state.showPricingWidget}
+            mode={quoteMode}
+            initialPayment={seedPayment}
+            prefillData={prefillData}
+            onClose={() =>
+              dispatch({ type: "SHOW_PRICING_WIDGET", payload: false })
+            }
+            onComplete={handleScenarioComplete}
+          />
+          <AffordabilityCalc
+            isVisible={state.showAffordabilityCalculator}
+            onClose={() =>
+              dispatch({
+                type: "SHOW_AFFORDABILTY_CALCULATOR",
+                payload: false,
+              })
+            }
+          />
+          <MortgageCalc
+            isVisible={state.showMortgageCalculator}
+            onClose={() =>
+              dispatch({ type: "SHOW_MORTGAGE_CALCULATOR", payload: false })
+            }
+          />
         </div>
       </Context.Provider>
     );
@@ -407,23 +517,27 @@ const App = () => {
   return (
     <Context.Provider value={{ state, dispatch }}>
       <div style={appStyles} ref={topRef}>
-        {!isMobile && <Header />}
-        <Navbar
-          onNavClick={handleNavClick}
-          toggleDrawer={toggleDrawer}
-          navItems={baseNavItems}
-          activeComponent={state.activeComponent}
-          ref={navbarRef}
-          showHeader={showHeader}
-        />
+        {!isWidgetOpen && !isMobile && <Header />}
+        {!isWidgetOpen && (
+          <Navbar
+            onNavClick={handleNavClick}
+            toggleDrawer={toggleDrawer}
+            navItems={baseNavItems}
+            activeComponent={state.activeComponent}
+            ref={navbarRef}
+            showHeader={shouldShowHeader}
+          />
+        )}
 
-        <NavDrawer
-          isOpen={state.isNavDrawerOpen}
-          toggleDrawer={toggleDrawer}
-          active={state.activeComponent}
-          handleNavClick={handleNavClick}
-          navItems={baseNavItems}
-        />
+        {!isWidgetOpen && (
+          <NavDrawer
+            isOpen={state.isNavDrawerOpen}
+            toggleDrawer={toggleDrawer}
+            active={state.activeComponent}
+            handleNavClick={handleNavClick}
+            navItems={baseNavItems}
+          />
+        )}
         {/* Main container with background image */}
         <div style={mainContainerStyles}>
           <motion.div

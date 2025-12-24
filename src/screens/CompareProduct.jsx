@@ -1133,6 +1133,10 @@ const CompareProduct = ({
 
   const currentStep = steps[stepIndex];
 
+  const sandboxPayment = useMemo(() => {
+    return calcMonthlyPI(sandbox.loanAmount, sandbox.rate, sandbox.termYears);
+  }, [sandbox.loanAmount, sandbox.rate, sandbox.termYears]);
+
   // keep your existing scenario-driven results pages untouched
   if (scenario) {
     return (
@@ -1163,10 +1167,6 @@ const CompareProduct = ({
       </div>
     );
   }
-
-  const sandboxPayment = useMemo(() => {
-    return calcMonthlyPI(sandbox.loanAmount, sandbox.rate, sandbox.termYears);
-  }, [sandbox.loanAmount, sandbox.rate, sandbox.termYears]);
 
   const resetSandbox = () => {
     setSandbox({ loanAmount: 400000, termYears: 30, rate: 6.5 });
