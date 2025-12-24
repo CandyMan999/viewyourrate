@@ -22,8 +22,8 @@ const NavDrawer = ({
     right: 0,
     width: "50%",
     height: "100%",
-    backgroundColor: "#fff",
-    boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.3)",
+    backgroundColor: "var(--app-surface-solid)",
+    boxShadow: "-2px 0 10px var(--app-shadow-strong)",
     zIndex: 2001,
     padding: "2rem",
     borderRadius: "10px 0px 0px 0px",
@@ -40,7 +40,7 @@ const NavDrawer = ({
   };
 
   const linkStyles = (isActive) => ({
-    color: isActive ? "#007bff" : "#333",
+    color: isActive ? "var(--app-accent)" : "var(--app-text)",
     cursor: "pointer",
     padding: "0.5rem 1rem",
     textDecoration: "none",
@@ -56,11 +56,13 @@ const NavDrawer = ({
     width: "40px",
     height: "40px",
     borderRadius: "50%",
-    backgroundColor: "rgba(30, 30, 30, 0.85)", // Dark scale background
-    border: `2px solid ${isActive ? "#007bff" : "#fff"}`, // Blue ring if active, white otherwise
+    backgroundColor: "var(--app-surface-strong)", // Dark scale background
+    border: `2px solid ${
+      isActive ? "var(--app-accent)" : "var(--app-border)"
+    }`, // Blue ring if active, white otherwise
 
-    boxShadow: isActive ? "0 0 0 2px #007bff" : "none", // Blue outer ring if active
-    color: "#fff", // White for icons
+    boxShadow: isActive ? "0 0 0 2px var(--app-accent)" : "none", // Blue outer ring if active
+    color: "var(--app-text)", // White for icons
     fontSize: "1.5rem", // Increased icon size
     marginRight: 20,
   });

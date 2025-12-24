@@ -4,8 +4,8 @@ import { FaEnvelope, FaPhoneAlt } from "react-icons/fa"; // Import icons
 const Header = () => {
   const headerBarStyles = {
     width: "100%",
-    backgroundColor: "#007bff",
-    color: "#fff",
+    backgroundColor: "var(--app-header-bg)",
+    color: "var(--app-header-text)",
 
     display: "flex",
     justifyContent: "flex-end",
@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   const headerLinkStyles = {
-    color: "#fff",
+    color: "var(--app-header-text)",
     textDecoration: "none",
     fontSize: "0.9rem",
     display: "flex",

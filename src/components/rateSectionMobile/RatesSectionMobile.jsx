@@ -3,6 +3,7 @@ import { FiSliders, FiClock } from "react-icons/fi";
 import ApplyButton from "../applyButton";
 import RateCard from "../ratesSection/RateCard";
 import { dummyRates } from "../../data/dummyRates";
+import "./RatesSectionMobile.css";
 
 const RatesSectionMobile = ({ state, dispatch }) => {
   const rates = state?.mortgageRates?.length
