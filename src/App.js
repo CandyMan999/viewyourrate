@@ -324,6 +324,33 @@ const App = () => {
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
   };
 
+  const handleCompareNext = () => {
+    setDirection(1);
+    const compareIndex = componentsList.indexOf(compareNavLabel);
+    if (compareIndex === -1) {
+      setShowCompare(false);
+      return;
+    }
+    const newIndex = (compareIndex + 1) % componentsList.length;
+    setShowCompare(false);
+    dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
+    scrollToTop();
+  };
+
+  const handleComparePrevious = () => {
+    setDirection(-1);
+    const compareIndex = componentsList.indexOf(compareNavLabel);
+    if (compareIndex === -1) {
+      setShowCompare(false);
+      return;
+    }
+    const newIndex =
+      (compareIndex - 1 + componentsList.length) % componentsList.length;
+    setShowCompare(false);
+    dispatch({ type: "SET_ACTIVE_COMPONENT", payload: newIndex });
+    scrollToTop();
+  };
+
   const renderActiveComponent = () => {
     switch (componentsList[state.activeComponent]) {
       case "HeroSection":
@@ -415,6 +442,36 @@ const App = () => {
             onStartPurchase={handleStartPurchase}
             onStartRefinance={handleStartRefinance}
           />
+          {!isWidgetOpen && (
+            <>
+              <motion.div
+                style={{
+                  margin: isMobile ? 0 : 10,
+                  left: 0,
+                  position: "absolute",
+                  ...arrowStyles,
+                }}
+                onClick={handleComparePrevious}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FiArrowLeft />
+              </motion.div>
+              <motion.div
+                style={{
+                  margin: isMobile ? 0 : 10,
+                  right: 0,
+                  position: "absolute",
+                  ...arrowStyles,
+                }}
+                onClick={handleCompareNext}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FiArrowRight />
+              </motion.div>
+            </>
+          )}
           <ApplyNowWidget
             isVisible={state.showApplyNowWidget}
             onClose={() =>
