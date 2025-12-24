@@ -3,13 +3,14 @@ import { motion } from "framer-motion";
 import { isMobile } from "react-device-detect";
 import Context from "../../context"; // Import the global context
 import ApplyButton from "../applyButton/ApplyButton";
+import { FiMoon, FiSun } from "react-icons/fi";
 
 // MenuToggle Component for the animated menu button
 const Path = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#e2e8f0"
+    stroke="var(--app-text)"
     strokeLinecap="round"
     {...props}
   />
@@ -56,6 +57,8 @@ const Navbar = ({
   activeComponent,
   navItems,
   showHeader,
+  theme,
+  onToggleTheme,
 }) => {
   const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 });
   const navRefs = useRef([]);
@@ -73,7 +76,7 @@ const Navbar = ({
 
   // Framer Motion variants
   const linkVariants = {
-    hover: { scale: 1.05, color: "#38bdf8" },
+    hover: { scale: 1.05, color: "var(--app-accent)" },
   };
 
   // Handle navigation clicks
@@ -93,13 +96,12 @@ const Navbar = ({
         justifyContent: "space-between",
         alignItems: "center",
         padding: "1rem 2rem",
-        background:
-          "linear-gradient(135deg, rgba(7, 12, 26, 0.95) 0%, rgba(12, 20, 44, 0.95) 100%)",
-        borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
+        background: "var(--app-nav-bg)",
+        borderBottom: "1px solid var(--app-border)",
         position: "sticky",
         top: 0,
         zIndex: 1000,
-        boxShadow: "0 18px 40px rgba(2, 6, 23, 0.55)",
+        boxShadow: "0 18px 40px var(--app-shadow-strong)",
         backdropFilter: "blur(14px)",
       }}
     >
@@ -138,8 +140,26 @@ const Navbar = ({
         </div>
       )}
 
-      {/* Menu Button for Mobile */}
-      {isMobile && <MenuToggle toggle={handleMenuToggle} />}
+      <div style={rightContainerStyles}>
+        <button
+          type="button"
+          onClick={onToggleTheme}
+          style={themeToggleStyles}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          aria-pressed={theme === "light"}
+        >
+          <span style={themeIconStyles}>
+            {theme === "dark" ? <FiSun /> : <FiMoon />}
+          </span>
+          {!isMobile && (
+            <span style={themeLabelStyles}>
+              {theme === "dark" ? "Light" : "Dark"}
+            </span>
+          )}
+        </button>
+        {/* Menu Button for Mobile */}
+        {isMobile && <MenuToggle toggle={handleMenuToggle} />}
+      </div>
     </nav>
   );
 };
@@ -150,7 +170,7 @@ const logoStyles = {
   fontSize: "1.5rem",
   fontWeight: "bold",
   cursor: "pointer",
-  color: "#f8fafc",
+  color: "var(--app-text)",
 };
 // Inline Styles (remain the same)
 const leftContainerStyles = {
@@ -175,21 +195,21 @@ const navLinksStyles = {
 };
 
 const linkStyles = (isActive) => ({
-  color: isActive ? "#f8fafc" : "#cbd5f5",
+  color: isActive ? "var(--app-text)" : "var(--app-text-muted)",
   cursor: "pointer",
   padding: "0.5rem 1rem",
   position: "relative",
   textDecoration: "none",
   transition: "color 0.2s ease, background-color 0.2s ease",
   borderRadius: "999px",
-  backgroundColor: isActive ? "rgba(56, 189, 248, 0.16)" : "transparent",
+  backgroundColor: isActive ? "var(--app-pill-bg)" : "transparent",
 });
 
 const indicatorBaseStyles = {
   position: "absolute",
   bottom: 0,
   height: "3px",
-  background: "linear-gradient(90deg, #38bdf8, #34d399)",
+  background: "linear-gradient(90deg, var(--app-accent), var(--app-accent-2))",
   borderRadius: "4px",
 };
 
@@ -201,6 +221,41 @@ const menuButtonStyles = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+};
+
+const rightContainerStyles = {
+  display: "flex",
+  alignItems: "center",
+  gap: "0.75rem",
+};
+
+const themeToggleStyles = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "0.5rem",
+  padding: "0.45rem 0.8rem",
+  borderRadius: "999px",
+  border: "1px solid var(--app-border)",
+  background: "var(--app-surface)",
+  color: "var(--app-text)",
+  cursor: "pointer",
+  fontWeight: 600,
+  fontSize: "0.85rem",
+  boxShadow: "0 10px 18px var(--app-shadow-soft)",
+  transition:
+    "background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease",
+};
+
+const themeIconStyles = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "1rem",
+  color: "var(--app-accent)",
+};
+
+const themeLabelStyles = {
+  lineHeight: 1,
 };
 
 export default Navbar;

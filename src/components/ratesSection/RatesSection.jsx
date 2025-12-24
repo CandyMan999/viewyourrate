@@ -3,6 +3,7 @@ import { FiClock } from "react-icons/fi";
 import ApplyButton from "../applyButton";
 import RateCard from "./RateCard";
 import { dummyRates } from "../../data/dummyRates";
+import "./RatesSection.css";
 
 const RatesSection = ({ dispatch, state }) => {
   const handleCustomizeClick = () => {

@@ -80,14 +80,14 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
   };
 
   const widget = {
-    backgroundColor: "#fff",
+    backgroundColor: "var(--app-surface-solid)",
     width: "95%",
     maxWidth: "1100px",
     height: "90vh",
     borderRadius: "12px",
     overflow: "hidden",
     position: "relative",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+    boxShadow: "0 4px 20px var(--app-shadow-strong)",
   };
 
   const closeStyle = {
@@ -96,7 +96,7 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
     right: 10,
     zIndex: 10,
     fontSize: "1.5rem",
-    color: "#fff",
+    color: "var(--app-text)",
     cursor: "pointer",
     backgroundColor: "rgba(0, 0, 0, 0.6)",
     padding: "6px",
@@ -155,6 +155,16 @@ const App = () => {
     error: "",
   });
   const [showCompare, setShowCompare] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined") return "dark";
+    const storedTheme = window.localStorage.getItem("viewyourrate-theme");
+    if (storedTheme === "light" || storedTheme === "dark") {
+      return storedTheme;
+    }
+    return window.matchMedia?.("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark";
+  });
 
   const footerRef = useRef(null);
   const topRef = useRef(null);
@@ -163,7 +173,18 @@ const App = () => {
   const appStyles = {
     fontFamily: "Arial, sans-serif",
     position: "relative",
+    minHeight: "100vh",
+    backgroundColor: "var(--app-bg)",
+    color: "var(--app-text)",
+    transition: "background-color 0.3s ease, color 0.3s ease",
   };
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    window.localStorage.setItem("viewyourrate-theme", theme);
+  }, [theme]);
 
   const handleStartRefinance = () => {
     setQuoteMode("Refinance");
@@ -193,6 +214,10 @@ const App = () => {
 
   const handleSelectOption = () => {
     dispatch({ type: "SHOW_APPLY_NOW_WIDGET", payload: true });
+  };
+
+  const handleToggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
   useEffect(() => {
@@ -383,6 +408,8 @@ const App = () => {
             }
             ref={navbarRef}
             showHeader
+            theme={theme}
+            onToggleTheme={handleToggleTheme}
           />
           <CompareProduct
             scenario={activeScenario}
@@ -415,6 +442,8 @@ const App = () => {
           activeComponent={state.activeComponent}
           ref={navbarRef}
           showHeader={showHeader}
+          theme={theme}
+          onToggleTheme={handleToggleTheme}
         />
 
         <NavDrawer
@@ -563,8 +592,7 @@ const mainContainerStyles = {
   position: "relative",
   height: "100vh",
   overflow: "hidden",
-  background:
-    "radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.12), transparent 38%), radial-gradient(circle at 80% 10%, rgba(34, 197, 94, 0.15), transparent 32%), #050812",
+  background: "var(--app-main-bg)",
 };
 
 // Styles for arrows
@@ -575,15 +603,15 @@ const arrowStyles = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "rgba(15, 23, 42, 0.85)",
-  border: "1px solid rgba(148, 163, 184, 0.25)",
+  backgroundColor: "var(--app-surface-strong)",
+  border: "1px solid var(--app-border)",
   borderRadius: "50%",
   cursor: "pointer",
   zIndex: 1000,
   fontSize: "1.5rem",
-  color: "#38bdf8",
+  color: "var(--app-accent)",
 
-  boxShadow: "0 10px 25px rgba(2, 6, 23, 0.45)",
+  boxShadow: "0 10px 25px var(--app-shadow-soft)",
 };
 
 export default App;

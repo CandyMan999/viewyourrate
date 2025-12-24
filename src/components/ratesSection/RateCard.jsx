@@ -4,6 +4,7 @@ import {
   FiArrowUpRight,
   FiMinus,
 } from "react-icons/fi";
+import "./RateCard.css";
 
 const toNumeric = (value) => {
   if (typeof value === "number") return value;

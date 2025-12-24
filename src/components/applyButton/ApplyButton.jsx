@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import Context from "../../context";
+import "./ApplyButton.css";
 
 const ApplyNowButton = ({ mobile = false, className = "" }) => {
   const { dispatch } = useContext(Context);
