@@ -127,10 +127,12 @@ const ApplyNowWidget = ({ isVisible, onClose }) => {
   );
 };
 
+const compareNavLabel = "Learn & Compare Loans";
+
 const baseNavItems = [
   { name: "Home", index: 0 },
   { name: "Calculators", index: 1 },
-  { name: "Compare Products", index: 2 },
+  { name: compareNavLabel, index: 2 },
   { name: "Beat My Estimate", index: 3 },
   { name: "Component3", index: 4 },
   { name: "Contact", index: 5 },
@@ -260,12 +262,19 @@ const App = () => {
   };
 
   const handleNavClick = (index) => {
+    const navItem = baseNavItems[index];
+    if (navItem?.name === compareNavLabel) {
+      setShowCompare(true);
+      scrollToTop();
+      return;
+    }
+
     if (showCompare) {
       setShowCompare(false);
     }
 
     dispatch({ type: "SET_ACTIVE_COMPONENT", payload: index });
-    if (baseNavItems[index].name === "Contact") {
+    if (navItem?.name === "Contact") {
       scrollToFooter();
     } else {
       scrollToTop();
@@ -349,8 +358,8 @@ const App = () => {
     };
   }, []);
 
-  if (showCompare && activeScenario) {
-    const compareIndex = baseNavItems.findIndex((item) => item.name === "Compare Products");
+  if (showCompare) {
+    const compareIndex = baseNavItems.findIndex((item) => item.name === compareNavLabel);
     return (
       <Context.Provider value={{ state, dispatch }}>
         <div style={appStyles} ref={topRef}>
@@ -374,6 +383,8 @@ const App = () => {
               dispatch({ type: "SHOW_PRICING_WIDGET", payload: true });
             }}
             onReset={handleResetScenario}
+            onStartPurchase={handleStartPurchase}
+            onStartRefinance={handleStartRefinance}
           />
         </div>
       </Context.Provider>
