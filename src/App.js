@@ -149,7 +149,11 @@ const App = () => {
   const [prefillData, setPrefillData] = useState(null);
   const [seedPayment] = useState("$2,500");
   const [activeScenario, setActiveScenario] = useState(null);
-  const [pricingState, setPricingState] = useState({ status: "idle", data: null, error: "" });
+  const [pricingState, setPricingState] = useState({
+    status: "idle",
+    data: null,
+    error: "",
+  });
   const [showCompare, setShowCompare] = useState(false);
 
   const footerRef = useRef(null);
@@ -199,7 +203,9 @@ const App = () => {
       setPricingState({ status: "loading", data: null, error: "" });
       try {
         const query =
-          quoteMode === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
+          quoteMode === "Purchase"
+            ? GET_PURCHASE_PRICING_QUERY
+            : GET_REFI_PRICING_QUERY;
         const data = await request(query, { input: activeScenario });
         if (cancelled) return;
         setPricingState({
@@ -227,7 +233,10 @@ const App = () => {
   const retryPricing = () => {
     if (!activeScenario) return;
     setPricingState({ status: "loading", data: null, error: "" });
-    const query = quoteMode === "Purchase" ? GET_PURCHASE_PRICING_QUERY : GET_REFI_PRICING_QUERY;
+    const query =
+      quoteMode === "Purchase"
+        ? GET_PURCHASE_PRICING_QUERY
+        : GET_REFI_PRICING_QUERY;
     request(query, { input: activeScenario })
       .then((data) =>
         setPricingState({
@@ -359,7 +368,9 @@ const App = () => {
   }, []);
 
   if (showCompare) {
-    const compareIndex = baseNavItems.findIndex((item) => item.name === compareNavLabel);
+    const compareIndex = baseNavItems.findIndex(
+      (item) => item.name === compareNavLabel
+    );
     return (
       <Context.Provider value={{ state, dispatch }}>
         <div style={appStyles} ref={topRef}>
@@ -367,7 +378,9 @@ const App = () => {
             onNavClick={handleNavClick}
             toggleDrawer={toggleDrawer}
             navItems={baseNavItems}
-            activeComponent={compareIndex === -1 ? state.activeComponent : compareIndex}
+            activeComponent={
+              compareIndex === -1 ? state.activeComponent : compareIndex
+            }
             ref={navbarRef}
             showHeader
           />
