@@ -60,12 +60,13 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     padding: isMobile ? "0.75rem" : "0.9rem", // Slightly reduced padding for desktop
     margin: "0.5rem 0",
     fontSize: isMobile ? "1rem" : "1.1rem", // Reduced font size for desktop
+    fontWeight: 600,
     borderRadius: "999px",
-    border: "1px solid rgba(56, 189, 248, 0.8)",
+    border: "none",
     cursor: "pointer",
-    backgroundColor: "#0ea5e9",
-    color: "#f8fafc",
-    boxShadow: "0 18px 38px rgba(14, 165, 233, 0.35)",
+    background: "linear-gradient(135deg, #60a5fa, #38bdf8)",
+    color: "#0f172a",
+    boxShadow: "0 10px 20px rgba(56, 189, 248, 0.22)",
   };
 
   const iconStyles = {
@@ -125,7 +126,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
             onClick={handlePurchaseClick}
             whileHover={{
               scale: 1.05,
-              backgroundColor: "#38bdf8",
+              boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
@@ -138,7 +139,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
             onClick={handleRefinanceClick}
             whileHover={{
               scale: 1.05,
-              backgroundColor: "#38bdf8",
+              boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}

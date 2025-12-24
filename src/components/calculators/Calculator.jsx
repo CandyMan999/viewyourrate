@@ -17,38 +17,49 @@ const Calculator = ({ dispatch }) => {
 
   return (
     <div style={calculatorStyles}>
+      <div style={overlayStyles}></div>
       <div
         style={{
           position: "absolute",
-          top: isMobile ? "5%" : "40%",
+          top: isMobile ? "12%" : "35%",
           left: "50%",
           transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
           zIndex: 1,
-          color: "#f0f0f0",
+          color: "#f8fafc",
           textAlign: "center",
-          padding: isMobile ? "1rem" : "2rem", // Reduced padding for mobile
-          maxWidth: isMobile ? "90%" : "600px", // Adjusted width for mobile
+          padding: isMobile ? "1.2rem" : "2rem", // Reduced padding for mobile
+          maxWidth: isMobile ? "92%" : "600px", // Adjusted width for mobile
           width: "80%",
-          borderRadius: "10px",
-          background: "rgba(30, 30, 30, 0.85)",
-          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+          borderRadius: "18px",
+          background: "rgba(15, 23, 42, 0.85)",
+          border: "1px solid rgba(148, 163, 184, 0.18)",
+          boxShadow: "0 24px 60px rgba(2, 6, 23, 0.6)",
+          backdropFilter: "blur(14px)",
         }}
       >
         <FaCalculator
-          size={isMobile ? 60 : 120} // Smaller icon size for mobile
-          style={{ marginBottom: "1rem" }}
+          size={isMobile ? 56 : 96} // Smaller icon size for mobile
+          style={{ marginBottom: "1rem", color: "#38bdf8" }}
         />
-        <h2 style={{ fontSize: isMobile ? "1.5rem" : "2rem" }}>Calculators</h2>
+        <h2 style={{ fontSize: isMobile ? "1.6rem" : "2.2rem" }}>
+          Calculators
+        </h2>
+        <p style={subtitleStyles}>
+          Explore quick tools to estimate monthly payments or affordability.
+        </p>
         {/* Buttons */}
         <div style={buttonContainerStyles}>
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
-              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+              padding: isMobile ? "0.75rem" : "0.95rem", // Reduced padding for mobile
+              fontSize: isMobile ? "1rem" : "1.1rem", // Smaller font size for mobile
             }}
             onClick={handleMortgageClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
+            }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
           >
@@ -69,11 +80,14 @@ const Calculator = ({ dispatch }) => {
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.75rem" : "1rem", // Reduced padding for mobile
-              fontSize: isMobile ? "1rem" : "1.2rem", // Smaller font size for mobile
+              padding: isMobile ? "0.75rem" : "0.95rem", // Reduced padding for mobile
+              fontSize: isMobile ? "1rem" : "1.1rem", // Smaller font size for mobile
             }}
             onClick={handleAffordClick}
-            whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
+            }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
           >
@@ -101,6 +115,18 @@ const calculatorStyles = {
   alignItems: "center",
   height: "100vh",
   width: "100%",
+  position: "relative",
+  overflow: "hidden",
+  background:
+    "radial-gradient(circle at 18% 20%, rgba(56, 189, 248, 0.18), transparent 42%), radial-gradient(circle at 80% 10%, rgba(52, 211, 153, 0.18), transparent 38%), #070c1a",
+};
+
+const overlayStyles = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
 };
 
 const buttonContainerStyles = {
@@ -113,20 +139,27 @@ const buttonStyles = {
   justifyContent: "space-between",
   width: "100%",
   margin: "0.5rem 0",
-  borderRadius: "10px",
+  borderRadius: "999px",
   border: "none",
+  fontWeight: 600,
   cursor: "pointer",
-  background: "#007bff",
-  color: "#fff",
-  boxShadow: "0 2px 12px white",
+  background: "linear-gradient(135deg, #60a5fa, #38bdf8)",
+  color: "#0f172a",
+  boxShadow: "0 10px 20px rgba(56, 189, 248, 0.22)",
 };
 
 const iconStyles = {
   marginLeft: "0.5rem",
 };
 
+const subtitleStyles = {
+  fontSize: isMobile ? "0.9rem" : "1rem",
+  color: "#cbd5f5",
+  margin: "0.4rem 0 0",
+};
+
 const descriptionStyles = {
-  color: "#ccc",
+  color: "#94a3b8",
   margin: "0.5rem 0 1.5rem",
 };
 
