@@ -57,9 +57,9 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
-    padding: isMobile ? "0.55rem 1rem" : "0.45rem 1.1rem",
+    padding: isMobile ? "0.75rem" : "0.9rem", // Slightly reduced padding for desktop
     margin: "0.5rem 0",
-    fontSize: isMobile ? "0.85rem" : "0.78rem",
+    fontSize: isMobile ? "1rem" : "1.1rem", // Reduced font size for desktop
     fontWeight: 600,
     borderRadius: "999px",
     border: "none",
@@ -125,7 +125,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
             style={buttonStyles}
             onClick={handlePurchaseClick}
             whileHover={{
-              y: -2,
+              scale: 1.05,
               boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
             }}
             whileTap={{ scale: 0.95 }}
@@ -138,7 +138,7 @@ const HeroSection = ({ state, dispatch, onStartPurchase, onStartRefinance }) => 
             style={buttonStyles}
             onClick={handleRefinanceClick}
             whileHover={{
-              y: -2,
+              scale: 1.05,
               boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
             }}
             whileTap={{ scale: 0.95 }}

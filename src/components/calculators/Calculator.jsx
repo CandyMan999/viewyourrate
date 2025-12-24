@@ -52,12 +52,12 @@ const Calculator = ({ dispatch }) => {
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.55rem 1rem" : "0.45rem 1.1rem",
-              fontSize: isMobile ? "0.85rem" : "0.78rem",
+              padding: isMobile ? "0.75rem" : "0.95rem", // Reduced padding for mobile
+              fontSize: isMobile ? "1rem" : "1.1rem", // Smaller font size for mobile
             }}
             onClick={handleMortgageClick}
             whileHover={{
-              y: -2,
+              scale: 1.05,
               boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
             }}
             whileTap={{ scale: 0.95 }}
@@ -80,12 +80,12 @@ const Calculator = ({ dispatch }) => {
           <motion.button
             style={{
               ...buttonStyles,
-              padding: isMobile ? "0.55rem 1rem" : "0.45rem 1.1rem",
-              fontSize: isMobile ? "0.85rem" : "0.78rem",
+              padding: isMobile ? "0.75rem" : "0.95rem", // Reduced padding for mobile
+              fontSize: isMobile ? "1rem" : "1.1rem", // Smaller font size for mobile
             }}
             onClick={handleAffordClick}
             whileHover={{
-              y: -2,
+              scale: 1.05,
               boxShadow: "0 16px 26px rgba(56, 189, 248, 0.28)",
             }}
             whileTap={{ scale: 0.95 }}
