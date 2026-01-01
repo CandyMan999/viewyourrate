@@ -1,0 +1,1 @@
+export {default as CompareProduct} from "./compareProducts/CompareProduct"

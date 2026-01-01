@@ -1,7 +1,7 @@
 "use client";
 
-import LegacyApp from "../../src/App";
+import App from "./src/App";
 
 export default function HomePage() {
-  return <LegacyApp />;
+  return <App />;
 }
